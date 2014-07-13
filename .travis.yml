@@ -1,0 +1,85 @@
+language: python
+matrix:
+  include:
+    - python: 2.6
+      env: PEEWEE='>=2.2,<2.2.99'
+    - python: 2.6
+      env: PONY='>=0.5,<0.5.99'
+    - python: 2.6
+      env: SQLALCHEMY='>=0.8,<0.8.99'
+    - python: 2.6
+      env: SQLALCHEMY='>=0.9,<0.9.99'
+    - python: 2.6
+      env: DJANGO='>=1.4,<1.4.99'
+    - python: 2.6
+      env: DJANGO='>=1.5,<1.5.99'
+    - python: 2.6
+      env: DJANGO='>=1.6,<1.6.99'
+
+    - python: 2.7
+      env: PEEWEE='>=2.2,<2.2.99'
+    - python: 2.7
+      env: PONY='>=0.5,<0.5.99'
+    - python: 2.7
+      env: SQLALCHEMY='>=0.8,<0.8.99'
+    - python: 2.7
+      env: SQLALCHEMY='>=0.9,<0.9.99'
+    - python: 2.7
+      env: DJANGO='>=1.4,<1.4.99'
+    - python: 2.7
+      env: DJANGO='>=1.5,<1.5.99'
+    - python: 2.7
+      env: DJANGO='>=1.6,<1.6.99'
+    - python: 2.7
+      env: DJANGO=https://www.djangoproject.com/download/1.7c1/tarball
+
+    - python: 3.2
+      env: PEEWEE='>=2.2,<2.2.99'
+    - python: 3.2
+      env: SQLALCHEMY='>=0.8,<0.8.99'
+    - python: 3.2
+      env: SQLALCHEMY='>=0.9,<0.9.99'
+    - python: 3.2
+      env: DJANGO='>=1.5,<1.5.99'
+    - python: 3.2
+      env: DJANGO='>=1.6,<1.6.99'
+    - python: 3.2
+      env: DJANGO=https://www.djangoproject.com/download/1.7c1/tarball
+
+    - python: 3.3
+      env: PEEWEE='>=2.2,<2.2.99'
+    - python: 3.3
+      env: SQLALCHEMY='>=0.8,<0.8.99'
+    - python: 3.3
+      env: SQLALCHEMY='>=0.9,<0.9.99'
+    - python: 3.3
+      env: DJANGO='>=1.5,<1.5.99'
+    - python: 3.3
+      env: DJANGO='>=1.6,<1.6.99'
+    - python: 3.3
+      env: DJANGO=https://www.djangoproject.com/download/1.7c1/tarball
+
+    - python: 3.4
+      env: PEEWEE='>=2.2,<2.2.99'
+    - python: 3.4
+      env: SQLALCHEMY='>=0.8,<0.8.99'
+    - python: 3.4
+      env: SQLALCHEMY='>=0.9,<0.9.99'
+    - python: 3.4
+      env: DJANGO='>=1.5,<1.5.99'
+    - python: 3.4
+      env: DJANGO='>=1.6,<1.6.99'
+    - python: 3.4
+      env: DJANGO=https://www.djangoproject.com/download/1.7c1/tarball
+install:
+  - pip install -q -r tests/requirements.txt --use-mirrors
+  - pip install -q coveralls --use-mirrors
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install -q unittest2 argparse --use-mirrors; fi
+  - if [[ $DJANGO ]]; then pip install -q 'django$DJANGO' --use-mirrors; fi
+  - if [[ $PEEWEE ]]; then pip install -q 'peewee$PEEWEE' --use-mirrors; fi
+  - if [[ $PONY ]]; then pip install -q 'pony$PONY' --use-mirrors; fi
+  - if [[ $SQLALCHEMY ]]; then pip install -q 'sqlalchemy$SQLALCHEMY' --use-mirrors; fi
+script:
+  - nosetests --with-coverage --cover-erase --cover-package=architect
+after_success:
+  - coveralls
