@@ -46,45 +46,45 @@ higher.
 
 * Not all partitioning types are supported. New types will be added in future releases of Architect.
 
-.. raw:: html
+..  .. raw:: html
 
-    <h2 id="mysql">
-        MySQL
-        <a class="headerlink" href="#mysql" title="Permalink to this headline">¶</a>
-    </h2>
+        <h2 id="mysql">
+            MySQL
+            <a class="headerlink" href="#mysql" title="Permalink to this headline">¶</a>
+        </h2>
 
-MySQL's partitioning implementation in Architect is done in a mixed way, half at the python level and
-half at the database level. Unfortunately MySQL doesn't support dynamic sql in triggers or functions
-that are called within triggers, so the only way to create partitions automatically is to calculate
-everything at the python level, then to create needed sql statements based on calculations and issue
-that statement into the database.
+    MySQL's partitioning implementation in Architect is done in a mixed way, half at the python level and
+    half at the database level. Unfortunately MySQL doesn't support dynamic sql in triggers or functions
+    that are called within triggers, so the only way to create partitions automatically is to calculate
+    everything at the python level, then to create needed sql statements based on calculations and issue
+    that statement into the database.
 
-.. raw:: html
+    .. raw:: html
 
-    <h3 id="mysql-partitioning-types">
-        Supported partitioning types
-        <a class="headerlink" href="#mysql-partitioning-types" title="Permalink to this headline">¶</a>
-    </h3>
+        <h3 id="mysql-partitioning-types">
+            Supported partitioning types
+            <a class="headerlink" href="#mysql-partitioning-types" title="Permalink to this headline">¶</a>
+        </h3>
 
-* Range partitioning by date/datetime for the following periods:
+    * Range partitioning by date/datetime for the following periods:
 
-  - day
-  - week
-  - month
-  - year
+      - day
+      - week
+      - month
+      - year
 
-.. raw:: html
+    .. raw:: html
 
-    <h3 id="mysql-limitations">
-        Limitations
-        <a class="headerlink" href="#mysql-limitations" title="Permalink to this headline">¶</a>
-    </h3>
+        <h3 id="mysql-limitations">
+            Limitations
+            <a class="headerlink" href="#mysql-limitations" title="Permalink to this headline">¶</a>
+        </h3>
 
-* Not all partitioning types are supported. New types will be added in future releases of Architect.
-* New partitions can be created only from lower to higher, you can overcome this with MySQL's special
-  command REORGANIZE PARTITION which you have to issue from the database console. You can read more
-  about it at the MySQL's documentation. We plan to remove this limitation in one of the future releases
-  of Architect.
+    * Not all partitioning types are supported. New types will be added in future releases of Architect.
+    * New partitions can be created only from lower to higher, you can overcome this with MySQL's special
+      command REORGANIZE PARTITION which you have to issue from the database console. You can read more
+      about it at the MySQL's documentation. We plan to remove this limitation in one of the future releases
+      of Architect.
 
 .. raw:: html
 
