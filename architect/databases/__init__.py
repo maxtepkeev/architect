@@ -7,7 +7,6 @@ class BasePartition(object):
         self.model = kwargs['model']
         self.table = kwargs['table']
         self.pks = kwargs['pk'] if isinstance(kwargs['pk'], list) else [kwargs['pk']]
-        print(self.pks)
 
     def prepare(self):
         """Prepares everything that is needed to initialize partitioning"""
