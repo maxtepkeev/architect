@@ -1,0 +1,7 @@
+[run]
+source = architect
+
+[report]
+omit =
+    */python?.?/*
+    */site-packages/*
