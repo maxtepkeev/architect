@@ -1,19 +1,19 @@
 Architect
 =========
 
-.. .. image:: https://badge.fury.io/py/architect.svg
+.. image:: https://badge.fury.io/py/architect.svg
     :target: http://badge.fury.io/py/architect
 
-.. .. image:: https://pypip.in/d/architect/badge.svg
+.. image:: https://pypip.in/d/architect/badge.svg
     :target: https://crate.io/packages/architect
 
-.. .. image:: https://travis-ci.org/maxtepkeev/architect.svg?branch=master
+.. image:: https://travis-ci.org/maxtepkeev/architect.svg?branch=master
     :target: https://travis-ci.org/maxtepkeev/architect
 
-.. .. image:: http://img.shields.io/coveralls/maxtepkeev/architect/master.svg
+.. image:: http://img.shields.io/coveralls/maxtepkeev/architect/master.svg
     :target: https://coveralls.io/r/maxtepkeev/architect?branch=master
 
-.. |
+|
 
 Architect is a set of tools which enhances ORMs written in Python with more features and simplifies
 different database related complex tasks.
