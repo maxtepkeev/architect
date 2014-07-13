@@ -13,8 +13,6 @@ Architect
 .. image:: http://img.shields.io/coveralls/maxtepkeev/architect/master.svg
     :target: https://coveralls.io/r/maxtepkeev/architect?branch=master
 
-|
-
 Architect is a set of tools which enhances ORMs written in Python with more features and simplifies
 different database related complex tasks.
 
