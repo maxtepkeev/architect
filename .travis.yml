@@ -72,13 +72,13 @@ matrix:
     - python: 3.4
       env: DJANGO=https://www.djangoproject.com/download/1.7c1/tarball
 install:
-  - pip install -q -r tests/requirements.txt --use-mirrors
-  - pip install -q coveralls --use-mirrors
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install -q unittest2 argparse --use-mirrors; fi
-  - if [[ $DJANGO ]]; then pip install -q $DJANGO --use-mirrors; fi
-  - if [[ $PEEWEE ]]; then pip install -q $PEEWEE --use-mirrors; fi
-  - if [[ $PONY ]]; then pip install -q $PONY --use-mirrors; fi
-  - if [[ $SQLALCHEMY ]]; then pip install -q $SQLALCHEMY --use-mirrors; fi
+  - pip install -r tests/requirements.txt
+  - pip install coveralls
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2 argparse; fi
+  - if [[ $DJANGO ]]; then pip install $DJANGO; fi
+  - if [[ $PEEWEE ]]; then pip install $PEEWEE; fi
+  - if [[ $PONY ]]; then pip install $PONY; fi
+  - if [[ $SQLALCHEMY ]]; then pip install $SQLALCHEMY; fi
 script:
   - nosetests --with-coverage --cover-erase --cover-package=architect
 after_success:
