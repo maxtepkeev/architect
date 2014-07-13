@@ -1,5 +1,3 @@
-@import "theme.css";
-
 .feature-matrix {width:100%;margin-bottom:24px}
 .feature-matrix td{background-color:#f3f6f6;padding:10px 5px;border:1px solid #e1e4e5}
 .feature-matrix th{font-weight:normal;padding:10px 5px;border:1px solid #e1e4e5}

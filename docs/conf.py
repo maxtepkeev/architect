@@ -124,8 +124,8 @@ html_theme = 'default'
 # pixels large.
 #html_favicon = None
 
-# Default css stylesheet for the current theme
-html_style = 'css/architect.css'
+# Scripts and css to add to the current theme
+html_context = {'css_files': ['_static/css/architect.css']}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
