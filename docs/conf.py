@@ -126,7 +126,7 @@ html_theme = 'default'
 
 # Scripts and css to add to the current theme
 def setup(app):
-    app.add_stylesheet("css/architect.css")
+    app.add_stylesheet('css/architect.css')
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
