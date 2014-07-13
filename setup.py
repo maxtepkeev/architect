@@ -13,7 +13,7 @@ except ImportError:
 setup(
     name='architect',
     version=__version__,
-    packages=find_packages(include=('architect', 'architect.*')),
+    packages=find_packages(exclude=('tests', 'tests.*')),
     url='https://github.com/maxtepkeev/architect',
     license=open('LICENSE').read(),
     author='Max Tepkeev',
