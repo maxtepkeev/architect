@@ -1,13 +1,6 @@
-import sys
-from contextlib import contextmanager
+from tests import sys, unittest, capture
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO
-
-from tests import unittest
-from architect.commands import main, commands
+from architect.commands import commands
 from architect.exceptions import (
     ImportProblemError,
     CommandError,
@@ -16,47 +9,38 @@ from architect.exceptions import (
 )
 
 
-@contextmanager
-def capture():
-    out, sys.stderr = sys.stderr, StringIO()
-
-    try:
-        main()
-    except SystemExit:
-        pass
-
-    sys.stderr.seek(0)
-    yield sys.stderr.read().strip()
-    sys.stderr = out
-
-
 class CommandLineTestCase(unittest.TestCase):
     def setUp(self):
         sys.argv = ['architect']
 
     def test_no_command_provided_error(self):
-        with capture() as output:
-            self.assertIn(str(CommandNotProvidedError(allowed=commands.keys())).lower(), output)
+        with capture() as (_, err):
+            self.assertIn(str(CommandNotProvidedError(allowed=commands.keys())).lower(), err)
 
     def test_invalid_command_error(self):
         sys.argv.append('foobar')
-        with capture() as output:
-            self.assertIn(str(CommandError(current='foobar', allowed=commands.keys())).lower(), output)
+        with capture() as (_, err):
+            self.assertIn(str(CommandError(current='foobar', allowed=commands.keys())).lower(), err)
 
     def test_command_invalid_argument(self):
         sys.argv.extend(['partition', '-m', 'foobar', '-foo', 'bar'])
-        with capture() as output:
-            self.assertIn(str(CommandArgumentError(current='-foo bar', allowed='')).lower(), output)
+        with capture() as (_, err):
+            self.assertIn(str(CommandArgumentError(current='-foo bar', allowed='')).lower(), err)
 
     def test_partition_command_required_arguments_error(self):
         sys.argv.extend(['partition'])
-        with capture() as output:
-            self.assertIn('-m/--module', output)
+        with capture() as (_, err):
+            self.assertIn('-m/--module', err)
 
     def test_partition_command_module_import_error(self):
         sys.argv.extend(['partition', '-m', 'foobar'])
-        with capture() as output:
-            self.assertIn(str(ImportProblemError('no module named')), output)
+        with capture() as (_, err):
+            self.assertIn(str(ImportProblemError('no module named')), err)
+
+    def test_partition_command_no_models_error(self):
+        sys.argv.extend(['partition', '-m', 'tests.models'])
+        with capture() as (out, _):
+            self.assertIn('unable to find any partitionable models in a module', out)
 
     def tearDown(self):
         sys.argv = []
