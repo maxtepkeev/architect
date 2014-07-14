@@ -1,4 +1,8 @@
-from tests import sys, unittest, capture
+from tests import os, sys, unittest, capture
+
+if not os.environ.get('PONY'):
+    raise unittest.SkipTest('Not a Pony build')
+
 from tests.models.pony import *
 
 
