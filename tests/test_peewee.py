@@ -1,12 +1,13 @@
-from tests import os, sys, unittest, capture
+import os
+import sys
+import datetime
+
+from tests import unittest, capture
 
 if not os.environ.get('PEEWEE'):
     raise unittest.SkipTest('Not a Peewee build')
 
-import datetime
-
 from tests.models.peewee import *
-from architect.exceptions import PartitionColumnError
 
 
 class PeeweePartitionTestCase(unittest.TestCase):
@@ -18,6 +19,7 @@ class PeeweePartitionTestCase(unittest.TestCase):
             assert search in out, '{0} not in {1}'.format(search, out)
 
     def test_raises_partition_column_error(self):
+        from architect.exceptions import PartitionColumnError
         RangeDateDay.PartitionableMeta.partition_column = 'foo'
 
         with self.assertRaises(PartitionColumnError):

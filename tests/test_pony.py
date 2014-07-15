@@ -1,4 +1,8 @@
-from tests import os, sys, unittest, capture
+import os
+import sys
+import datetime
+
+from tests import unittest, capture
 
 if not os.environ.get('PONY'):
     raise unittest.SkipTest('Not a Pony build')
