@@ -20,7 +20,7 @@ setup(
     author_email='tepkeev@gmail.com',
     description='A set of tools which enhances ORMs written in Python with more features',
     long_description=open('README.rst').read() + '\n\n' + open('CHANGELOG.rst').read(),
-    keywords='architect,django,pony,peewee,sqlalchemy,partition,database,table',
+    keywords='architect,django,pony,peewee,sqlalchemy,partition,partitioning,database,table',
     zip_safe=False,
     install_requires=requirements,
     entry_points={'console_scripts': ['architect = architect.commands:main']},
