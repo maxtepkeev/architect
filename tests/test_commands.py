@@ -38,7 +38,7 @@ class CommandLineTestCase(unittest.TestCase):
             self.assertIn(str(ImportProblemError('no module named')), err)
 
     def test_partition_command_no_models_error(self):
-        sys.argv.extend(['partition', '-m', 'tests.models'])
+        sys.argv.extend(['partition', '-m', 'contextlib'])
         with capture() as (out, _):
             self.assertIn('unable to find any partitionable models in a module', out)
 
