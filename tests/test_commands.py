@@ -11,10 +11,15 @@ from architect.exceptions import (
 )
 
 
-class CommandLineTestCase(unittest.TestCase):
+class BaseCommandTestCase(object):
     def setUp(self):
         sys.argv = ['architect']
 
+    def tearDown(self):
+        sys.argv = []
+
+
+class CommonCommandTestCase(BaseCommandTestCase, unittest.TestCase):
     def test_no_command_provided_error(self):
         with capture() as (_, err):
             self.assertIn(str(CommandNotProvidedError(allowed=commands.keys())).lower(), err)
@@ -29,20 +34,22 @@ class CommandLineTestCase(unittest.TestCase):
         with capture() as (_, err):
             self.assertIn(str(CommandArgumentError(current='-foo bar', allowed='')).lower(), err)
 
-    def test_partition_command_required_arguments_error(self):
+
+class PartitionCommandTestCase(BaseCommandTestCase, unittest.TestCase):
+    def setUp(self):
+        BaseCommandTestCase.setUp(self)
         sys.argv.extend(['partition'])
+
+    def test_required_arguments_error(self):
         with capture() as (_, err):
             self.assertIn('-m/--module', err)
 
-    def test_partition_command_module_import_error(self):
-        sys.argv.extend(['partition', '-m', 'foobar'])
+    def test_module_import_error(self):
+        sys.argv.extend(['-m', 'foobar'])
         with capture() as (_, err):
             self.assertIn(str(ImportProblemError('no module named')), err)
 
-    def test_partition_command_no_models_error(self):
-        sys.argv.extend(['partition', '-m', 'contextlib'])
+    def test_no_models_in_module_error(self):
+        sys.argv.extend(['-m', 'contextlib'])
         with capture() as (out, _):
             self.assertIn('unable to find any partitionable models in a module', out)
-
-    def tearDown(self):
-        sys.argv = []
