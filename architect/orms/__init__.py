@@ -43,7 +43,7 @@ class BasePartitionableMixin(object):
         raise NotImplementedError('Property "model_meta" not implemented in: {0}'.format(self.__class__.__name__))
 
     def get_cursor(self):
-        """Returns database cursor in autocommit mode"""
+        """Returns database cursor"""
         raise NotImplementedError('Method "get_cursor" not implemented in: {0}'.format(self.__class__.__name__))
 
     @classmethod

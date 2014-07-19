@@ -28,8 +28,8 @@ class PartitionableMixin(BasePartitionableMixin):
         }
 
     def get_cursor(self):
-        """Returns database cursor in autocommit mode"""
-        return self.database.execution_options(autocommit=True).connect().connection.cursor()
+        """Returns database cursor"""
+        return self.database.engine.raw_connection().cursor()
 
     @classmethod
     def get_empty_instance(cls, dsn=None):

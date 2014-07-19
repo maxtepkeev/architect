@@ -1,4 +1,4 @@
-from tests import unittest
+from tests import unittest, mock
 
 from architect.databases import BasePartition
 from architect.orms import BasePartitionableMixin
@@ -10,7 +10,7 @@ class BasePartitionTestCase(unittest.TestCase):
         cls.Partition = type('Partition', (BasePartition,), {})(
             column_value=None,
             partition_column=None,
-            cursor=None,
+            cursor=mock.Mock(autocommit=True),
             model=None,
             table=None,
             pk=None

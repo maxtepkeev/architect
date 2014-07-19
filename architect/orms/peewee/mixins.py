@@ -29,7 +29,7 @@ class PartitionableMixin(BasePartitionableMixin):
         }
 
     def get_cursor(self):
-        """Returns database cursor in autocommit mode"""
+        """Returns database cursor"""
         return self._meta.database.get_cursor()
 
     @classmethod

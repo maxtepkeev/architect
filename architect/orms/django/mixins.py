@@ -28,7 +28,7 @@ class PartitionableMixin(BasePartitionableMixin):
         }
 
     def get_cursor(self):
-        """Returns database cursor in autocommit mode"""
+        """Returns database cursor"""
         try:
             autocommit = transaction.atomic  # Django >= 1.6
         except AttributeError:

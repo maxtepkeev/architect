@@ -29,7 +29,7 @@ class PartitionableMixin(BasePartitionableMixin):
         }
 
     def get_cursor(self):
-        """Returns database cursor in autocommit mode"""
+        """Returns database cursor"""
         with db_session:
             return self._database_._get_cache().prepare_connection_for_query_execution().cursor()
 

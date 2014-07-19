@@ -7,11 +7,12 @@ from pony.orm import *
 from architect.orms.pony.mixins import PartitionableMixin
 
 databases = {
-    'postgresql': Database('postgres', user='postgres', password='', host='localhost', database='architect'),
-    'mysql': Database('mysql', user='root', host='localhost', database='architect')
+    'postgresql': {'type': 'postgres', 'user': 'postgres'},
+    'mysql': {'type': 'mysql', 'user': 'root'}
 }
 
-db = databases[os.environ.get('DB')]
+current = os.environ.get('DB')
+db = Database(databases[current].pop('type'), **dict(host='localhost', database='architect', **databases[current]))
 
 # Generation of entities for date range partitioning
 for item in ('day', 'week', 'month', 'year'):
