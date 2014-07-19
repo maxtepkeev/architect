@@ -23,7 +23,6 @@ try:
 except ImportError:
     pass
 
-from unittest import SkipTest
 from architect.commands import main
 
 
@@ -51,7 +50,7 @@ def skip(reason):
     def decorator(test_item):
         @functools.wraps(test_item)
         def skip_wrapper(*args, **kwargs):
-            raise SkipTest(reason)
+            raise unittest.SkipTest(reason)
 
         test_item = skip_wrapper
         test_item.__unittest_skip__ = True

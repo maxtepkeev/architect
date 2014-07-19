@@ -99,7 +99,7 @@ class MysqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, unittest
         self.session.commit()
 
         object2 = self.session.query(RangeDateDay).from_statement(
-            'SELECT * FROM test_rangedateday PARTITION(test_rangedateday_y2014d105) WHERE id =:id'
+            'SELECT * FROM test_rangedateday WHERE id =:id'
         ).params(id=object1.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -110,7 +110,7 @@ class MysqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, unittest
         self.session.commit()
 
         object2 = self.session.query(RangeDateWeek).from_statement(
-            'SELECT * FROM test_rangedateweek PARTITION(test_rangedateweek_y2014w16) WHERE id =:id'
+            'SELECT * FROM test_rangedateweek WHERE id =:id'
         ).params(id=object1.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -121,7 +121,7 @@ class MysqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, unittest
         self.session.commit()
 
         object2 = self.session.query(RangeDateMonth).from_statement(
-            'SELECT * FROM test_rangedatemonth PARTITION(test_rangedatemonth_y2014m04) WHERE id =:id'
+            'SELECT * FROM test_rangedatemonth WHERE id =:id'
         ).params(id=object1.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -132,7 +132,7 @@ class MysqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, unittest
         self.session.commit()
 
         object2 = self.session.query(RangeDateYear).from_statement(
-            'SELECT * FROM test_rangedateyear PARTITION(test_rangedateyear_y2014) WHERE id =:id'
+            'SELECT * FROM test_rangedateyear WHERE id =:id'
         ).params(id=object1.id).first()
 
         self.assertTrue(object1.name, object2.name)

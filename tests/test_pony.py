@@ -70,7 +70,7 @@ class MysqlPonyPartitionTestCase(BasePonyPartitionTestCase, unittest.TestCase):
             object1 = RangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
             commit()
             object2 = RangeDateDay.get_by_sql(
-                'SELECT * FROM test_rangedateday PARTITION(test_rangedateday_y2014d105) WHERE id = $object1.id')
+                'SELECT * FROM test_rangedateday WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)
 
@@ -79,7 +79,7 @@ class MysqlPonyPartitionTestCase(BasePonyPartitionTestCase, unittest.TestCase):
             object1 = RangeDateWeek(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
             commit()
             object2 = RangeDateWeek.get_by_sql(
-                'SELECT * FROM test_rangedateweek PARTITION(test_rangedateweek_y2014w16) WHERE id = $object1.id')
+                'SELECT * FROM test_rangedateweek WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)
 
@@ -88,7 +88,7 @@ class MysqlPonyPartitionTestCase(BasePonyPartitionTestCase, unittest.TestCase):
             object1 = RangeDateMonth(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
             commit()
             object2 = RangeDateMonth.get_by_sql(
-                'SELECT * FROM test_rangedatemonth PARTITION(test_rangedatemonth_y2014m04) WHERE id = $object1.id')
+                'SELECT * FROM test_rangedatemonth WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)
 
@@ -97,6 +97,6 @@ class MysqlPonyPartitionTestCase(BasePonyPartitionTestCase, unittest.TestCase):
             object1 = RangeDateYear(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
             commit()
             object2 = RangeDateYear.get_by_sql(
-                'SELECT * FROM test_rangedateyear PARTITION(test_rangedateyear_y2014) WHERE id = $object1.id')
+                'SELECT * FROM test_rangedateyear WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)
