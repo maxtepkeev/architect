@@ -31,6 +31,7 @@ Features
 * Supported DBs
 
   - PostgreSQL
+  - MySQL
 
 * Supports Python 2.6 - 3.4
 * Extensively documented

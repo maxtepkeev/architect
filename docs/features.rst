@@ -38,10 +38,10 @@ feature status matrix of the Architect’s latest development version which can 
         <tr>
             <td class="database" rowspan="5">MySQL</td>
             <td class="subfeature">Range</td>
-            <td class="not-implemented">NO</td>
-            <td class="not-implemented">NO</td>
-            <td class="not-implemented">NO</td>
-            <td class="not-implemented">NO</td>
+            <td class="implemented">YES</td>
+            <td class="implemented">YES</td>
+            <td class="implemented">YES</td>
+            <td class="implemented">YES</td>
         </tr>
         <tr>
             <td class="subfeature">List</td>
