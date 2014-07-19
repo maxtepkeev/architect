@@ -1,9 +1,13 @@
+from architect.databases.utilities import Database
+
+
 class BasePartition(object):
     """Base partition class. All databases should inherit from it"""
     def __init__(self, **kwargs):
+        self.dialect = self.__module__.split('.')[-2]
+        self.database = Database(kwargs['cursor'])
         self.column_value = kwargs['column_value']
         self.column_name = kwargs['partition_column']
-        self.execute = kwargs['execute']
         self.model = kwargs['model']
         self.table = kwargs['table']
         self.pks = kwargs['pk'] if isinstance(kwargs['pk'], list) else [kwargs['pk']]

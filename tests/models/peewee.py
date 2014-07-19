@@ -1,9 +1,16 @@
 from __future__ import absolute_import
 
+import os
+
 from peewee import *
 from architect.orms.peewee.mixins import PartitionableMixin
 
-db = PostgresqlDatabase('architect', user='postgres')
+databases = {
+    'postgresql': PostgresqlDatabase('architect', user='postgres'),
+    'mysql': MySQLDatabase('architect', user='root')
+}
+
+db = databases[os.environ.get('DB')]
 
 # Generation of entities for date range partitioning
 for item in ('day', 'week', 'month', 'year'):

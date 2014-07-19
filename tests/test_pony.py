@@ -10,7 +10,7 @@ if not os.environ.get('PONY'):
 from tests.models.pony import *
 
 
-class PonyPartitionTestCase(unittest.TestCase):
+class BasePonyPartitionTestCase(object):
     @classmethod
     def setUpClass(cls):
         sys.argv = ['architect', 'partition', '--module', 'tests.models.pony']
@@ -27,6 +27,9 @@ class PonyPartitionTestCase(unittest.TestCase):
 
         RangeDateDay.PartitionableMeta.partition_column = 'created'
 
+
+@unittest.skipUnless(os.environ.get('DB') == 'postgresql', 'Not a PostgreSQL build')
+class PostgresqlPonyPartitionTestCase(BasePonyPartitionTestCase, unittest.TestCase):
     def test_range_date_day(self):
         with db_session:
             object1 = RangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
@@ -56,5 +59,44 @@ class PonyPartitionTestCase(unittest.TestCase):
             object1 = RangeDateYear(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
             commit()
             object2 = RangeDateYear.get_by_sql('SELECT * FROM test_rangedateyear_y2014 WHERE id = $object1.id')
+
+        self.assertTrue(object1.name, object2.name)
+
+
+@unittest.skipUnless(os.environ.get('DB') == 'mysql', 'Not a MySQL build')
+class MysqlPonyPartitionTestCase(BasePonyPartitionTestCase, unittest.TestCase):
+    def test_range_date_day(self):
+        with db_session:
+            object1 = RangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+            commit()
+            object2 = RangeDateDay.get_by_sql(
+                'SELECT * FROM test_rangedateday PARTITION(test_rangedateday_y2014d105) WHERE id = $object1.id')
+
+        self.assertTrue(object1.name, object2.name)
+
+    def test_range_date_week(self):
+        with db_session:
+            object1 = RangeDateWeek(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+            commit()
+            object2 = RangeDateWeek.get_by_sql(
+                'SELECT * FROM test_rangedateweek PARTITION(test_rangedateweek_y2014w16) WHERE id = $object1.id')
+
+        self.assertTrue(object1.name, object2.name)
+
+    def test_range_date_month(self):
+        with db_session:
+            object1 = RangeDateMonth(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+            commit()
+            object2 = RangeDateMonth.get_by_sql(
+                'SELECT * FROM test_rangedatemonth PARTITION(test_rangedatemonth_y2014m04) WHERE id = $object1.id')
+
+        self.assertTrue(object1.name, object2.name)
+
+    def test_range_date_year(self):
+        with db_session:
+            object1 = RangeDateYear(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+            commit()
+            object2 = RangeDateYear.get_by_sql(
+                'SELECT * FROM test_rangedateyear PARTITION(test_rangedateyear_y2014) WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)

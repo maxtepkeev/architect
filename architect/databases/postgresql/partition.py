@@ -8,8 +8,8 @@ using any kind of the ORM or anything else.
 
 from architect.databases import BasePartition
 from architect.exceptions import (
-    PartitionRangeError,
-    PartitionRangeSubtypeError
+    PartitionRangeSubtypeError,
+    PartitionRangeError
 )
 
 
@@ -17,7 +17,7 @@ class Partition(BasePartition):
     """Common methods for all partition types"""
     def prepare(self):
         """Prepares needed triggers and functions for those triggers"""
-        return self.execute("""
+        return self.database.execute("""
             -- We need to create a before insert function
             CREATE OR REPLACE FUNCTION {parent_table}_insert_child()
             RETURNS TRIGGER AS $$
@@ -92,7 +92,7 @@ class RangePartition(Partition):
             import re
             raise PartitionRangeSubtypeError(
                 model=self.model,
-                database=self.__module__.split('.')[-2],
+                dialect=self.dialect,
                 current=self.partition_subtype,
                 allowed=[re.match('_get_(\w+)_partition_function', c).group(1) for c in dir(
                     self) if re.match('_get_\w+_partition_function', c) is not None]
@@ -112,7 +112,7 @@ class RangePartition(Partition):
         except KeyError:
             raise PartitionRangeError(
                 model=self.model,
-                database=self.__module__.split('.')[-2],
+                dialect=self.dialect,
                 current=self.partition_range,
                 allowed=patterns.keys()
             )

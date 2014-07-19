@@ -1,19 +1,19 @@
 from __future__ import absolute_import
 
+import os
 import sys
 
 from django.conf import settings
 
+databases = {
+    'postgresql': {'ENGINE': 'django.db.backends.postgresql_psycopg2', 'NAME': 'architect', 'USER': 'postgres'},
+    'mysql': {'ENGINE': 'django.db.backends.mysql', 'NAME': 'architect', 'USER': 'root'}
+}
+
 settings.configure(
     MIDDLEWARE_CLASSES=(),
     INSTALLED_APPS=('test',),
-    DATABASES={
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'architect',
-            'USER': 'postgres',
-        }
-    }
+    DATABASES={'default': databases[os.environ.get('DB')]}
 )
 
 # We don't have a real app with models, so we have to fake it

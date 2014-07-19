@@ -23,19 +23,19 @@ class PartitionableMixin(BasePartitionableMixin):
         return {
             'table': self._meta.db_table,
             'pk': self._meta.pk.name,
-            'database': connection.vendor,
+            'dialect': connection.vendor,
             'column_value': column_value,
         }
 
-    def execute_raw_sql(self, sql):
-        """Executes given SQL"""
+    def get_cursor(self):
+        """Returns database cursor in autocommit mode"""
         try:
             autocommit = transaction.atomic  # Django >= 1.6
         except AttributeError:
             autocommit = transaction.commit_on_success  # Django <= 1.5
 
         with autocommit():
-            return connection.cursor().execute(sql)
+            return connection.cursor()
 
     @classmethod
     def get_empty_instance(cls, dsn=None):

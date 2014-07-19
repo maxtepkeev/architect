@@ -69,7 +69,7 @@ class BaseDatabaseError(BaseArchitectError):
         super(BaseDatabaseError, self).__init__(
             message.format(
                 model=kwargs.get('model', ''),
-                database=kwargs.get('database', ''),
+                dialect=kwargs.get('dialect', ''),
             ),
             **kwargs
         )
@@ -99,7 +99,7 @@ class PartitionTypeError(BaseDatabaseError):
     def __init__(self, **kwargs):
         super(PartitionTypeError, self).__init__(
             'Unsupported partition type "{{current}}" in model "{model}", '
-            'supported types for "{database}" database are: {{allowed}}',
+            'supported types for "{dialect}" database are: {{allowed}}',
             **kwargs
         )
 
@@ -109,7 +109,7 @@ class PartitionRangeError(BaseDatabaseError):
     def __init__(self, **kwargs):
         super(PartitionRangeError, self).__init__(
             'Unsupported partition range "{{current}}" in "{model}" model, '
-            'supported partition ranges for "{database}" database are: {{allowed}}',
+            'supported partition ranges for "{dialect}" database are: {{allowed}}',
             **kwargs
         )
 
@@ -119,6 +119,16 @@ class PartitionRangeSubtypeError(BaseDatabaseError):
     def __init__(self, **kwargs):
         super(PartitionRangeSubtypeError, self).__init__(
             'Unsupported partition range subtype "{{current}}" in "{model}" model, '
-            'supported range subtypes for "{database}" database are: {{allowed}}',
+            'supported range subtypes for "{dialect}" database are: {{allowed}}',
+            **kwargs
+        )
+
+
+class PartitionFunctionError(BaseDatabaseError):
+    """Unsupported partition function"""
+    def __init__(self, **kwargs):
+        super(PartitionFunctionError, self).__init__(
+            'Unsupported partition function for column type "{{current}}" in "{model}" '
+            'model, supported column types for "{dialect}" backend are: {{allowed}}',
             **kwargs
         )

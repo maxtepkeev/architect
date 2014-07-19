@@ -23,13 +23,13 @@ class PartitionableMixin(BasePartitionableMixin):
         return {
             'table': self.__table__.name,
             'pk': self.__table__.primary_key.columns.keys(),
-            'database': self.database.dialect.name,
+            'dialect': self.database.dialect.name,
             'column_value': column_value,
         }
 
-    def execute_raw_sql(self, sql):
-        """Executes given SQL"""
-        return self.database.execution_options(autocommit=True).execute(sql)
+    def get_cursor(self):
+        """Returns database cursor in autocommit mode"""
+        return self.database.execution_options(autocommit=True).connect().connection.cursor()
 
     @classmethod
     def get_empty_instance(cls, dsn=None):

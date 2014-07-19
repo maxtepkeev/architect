@@ -7,12 +7,12 @@ class BasePartitionableMixin(object):
     def get_database(self):
         """Returns requested database module"""
         try:
-            return __import__('architect.databases.{0}'.format(self.model_meta['database']), fromlist='*')
+            return __import__('architect.databases.{0}'.format(self.model_meta['dialect']), fromlist='*')
         except ImportError:
             import os
             import pkgutil
             raise DatabaseError(
-                current=self.model_meta['database'],
+                current=self.model_meta['dialect'],
                 allowed=[name for _, name, is_package in pkgutil.iter_modules(
                     [os.path.join(os.path.dirname(__file__), '..', 'databases')]) if is_package]
             )
@@ -23,7 +23,7 @@ class BasePartitionableMixin(object):
 
         try:
             return getattr(self.get_database().partition, '{0}Partition'.format(meta.partition_type.capitalize()))(
-                execute=self.execute_raw_sql,
+                cursor=self.get_cursor(),
                 model=self.__class__.__name__,
                 **dict(((k, v) for k, v in meta.__dict__.items() if not k.startswith('__')), **self.model_meta)
             )
@@ -31,7 +31,7 @@ class BasePartitionableMixin(object):
             import re
             raise PartitionTypeError(
                 model=self.__class__.__name__,
-                database=self.model_meta['database'],
+                dialect=self.model_meta['dialect'],
                 current=meta.partition_type,
                 allowed=[c.replace('Partition', '').lower() for c in dir(
                     self.get_database().partition) if re.match('\w+Partition', c) is not None and 'Base' not in c]
@@ -42,9 +42,9 @@ class BasePartitionableMixin(object):
         """Returns dictionary of model meta attributes under common names"""
         raise NotImplementedError('Property "model_meta" not implemented in: {0}'.format(self.__class__.__name__))
 
-    def execute_raw_sql(self, sql):
-        """Executes given SQL"""
-        raise NotImplementedError('Method "execute_raw_sql" not implemented in: {0}'.format(self.__class__.__name__))
+    def get_cursor(self):
+        """Returns database cursor in autocommit mode"""
+        raise NotImplementedError('Method "get_cursor" not implemented in: {0}'.format(self.__class__.__name__))
 
     @classmethod
     def get_empty_instance(cls, dsn=None):

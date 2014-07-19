@@ -1,4 +1,5 @@
 import sys
+import functools
 from contextlib import contextmanager
 
 try:
@@ -16,6 +17,13 @@ try:
 except ImportError:
     import mock
 
+try:
+    import pymysql
+    pymysql.install_as_MySQLdb()
+except ImportError:
+    pass
+
+from unittest import SkipTest
 from architect.commands import main
 
 
@@ -35,3 +43,20 @@ def capture():
 
     sys.stdout = out
     sys.stderr = err
+
+
+# For some reason unittest's skip decorator doesn't allow
+# to skip a class which is very annoying. This one does.
+def skip(reason):
+    def decorator(test_item):
+        @functools.wraps(test_item)
+        def skip_wrapper(*args, **kwargs):
+            raise SkipTest(reason)
+
+        test_item = skip_wrapper
+        test_item.__unittest_skip__ = True
+        test_item.__unittest_skip_why__ = reason
+        return test_item
+    return decorator
+
+unittest.case.skip = skip
