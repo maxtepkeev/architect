@@ -128,17 +128,21 @@ class RangePartition(Partition):
                 IF NOT EXISTS(
                     SELECT 1 FROM information_schema.tables WHERE table_name=tablename)
                 THEN
-                    SELECT data_type INTO columntype
-                    FROM information_schema.columns
-                    WHERE table_name = '{parent_table}' AND column_name = '{partition_column}';
+                    BEGIN
+                        SELECT data_type INTO columntype
+                        FROM information_schema.columns
+                        WHERE table_name = '{parent_table}' AND column_name = '{partition_column}';
 
-                    EXECUTE 'CREATE TABLE ' || tablename || ' (
-                        CHECK (
-                            {partition_column} >= ''' || startdate || '''::' || columntype || ' AND
-                            {partition_column} < ''' || (startdate + '1 {partition_range}'::interval) || '''::' || columntype || '
-                        ),
-                        LIKE "{parent_table}" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES
-                    ) INHERITS ("{parent_table}");';
+                        EXECUTE 'CREATE TABLE ' || tablename || ' (
+                            CHECK (
+                                {partition_column} >= ''' || startdate || '''::' || columntype || ' AND
+                                {partition_column} < ''' || (startdate + '1 {partition_range}'::interval) || '''::' || columntype || '
+                            ),
+                            LIKE "{parent_table}" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES
+                        ) INHERITS ("{parent_table}");';
+                    EXCEPTION WHEN duplicate_table THEN
+                        -- pass
+                    END;
                 END IF;
 
                 EXECUTE 'INSERT INTO ' || tablename || ' VALUES (($1).*);' USING NEW;
