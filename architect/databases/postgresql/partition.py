@@ -39,29 +39,6 @@ class Partition(BasePartition):
             END IF;
             END $$;
 
-            -- Then we create a function to delete duplicate row from the master table after insert
-            CREATE OR REPLACE FUNCTION {parent_table}_delete_master()
-            RETURNS TRIGGER AS $$
-                BEGIN
-                    DELETE FROM ONLY "{parent_table}" WHERE {pk};
-                    RETURN NEW;
-                END;
-            $$ LANGUAGE plpgsql;
-
-            -- Lastly we create the after insert trigger that calls the after insert function
-            DO $$
-            BEGIN
-            IF NOT EXISTS(
-                SELECT 1
-                FROM information_schema.triggers
-                WHERE event_object_table = '{parent_table}'
-                AND trigger_name = 'after_insert_{parent_table}_trigger'
-            ) THEN
-                CREATE TRIGGER after_insert_{parent_table}_trigger
-                    AFTER INSERT ON "{parent_table}"
-                    FOR EACH ROW EXECUTE PROCEDURE {parent_table}_delete_master();
-            END IF;
-            END $$;
         """.format(
             pk=' AND '.join('{pk} = NEW.{pk}'.format(pk=pk) for pk in self.pks),
             parent_table=self.table,
@@ -146,7 +123,9 @@ class RangePartition(Partition):
                 END IF;
 
                 EXECUTE 'INSERT INTO ' || tablename || ' VALUES (($1).*);' USING NEW;
-                RETURN NEW;
+                
+                -- nothing to insert into parent table
+                RETURN NULL;
             END;
         """.format(
             parent_table=self.table,
@@ -195,7 +174,9 @@ class RangePartition(Partition):
                 END IF;
 
                 EXECUTE 'INSERT INTO ' || tablename || ' VALUES (($1).*);' USING NEW;
-                RETURN NEW;
+                
+                -- nothing to insert into parent table
+                RETURN NULL;
             END;
         """.format(
             parent_table=self.table,

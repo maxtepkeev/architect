@@ -45,6 +45,28 @@ for item in ('day', 'week', 'month', 'year'):
         'PartitionableMeta': PartitionableMeta
     })
 
+# Generation of entities for bigint range partitioning
+for item in ('1', '5', '10', '100'):
+    class Meta:
+        app_label = 'test'
+        db_table = 'test_rangebigint{0}'.format(item)
+
+    class PartitionableMeta:
+        partition_type = 'range'
+        partition_subtype = 'bigint'
+        partition_range = item
+        partition_column = 'created'
+
+    name = 'RangeBigint{0}'.format(item)
+
+    locals()[name] = type(name, (PartitionableMixin, models.Model), {
+        '__module__': 'test.models',
+        'name': models.CharField(max_length=255),
+        'created': models.BigIntegerField(),
+        'Meta': Meta,
+        'PartitionableMeta': PartitionableMeta
+    })
+
 # Django >= 1.7 needs this
 try:
     from django import setup
