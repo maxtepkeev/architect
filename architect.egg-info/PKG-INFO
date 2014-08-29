@@ -1,0 +1,131 @@
+Metadata-Version: 1.1
+Name: architect
+Version: 0.2.0
+Summary: A set of tools which enhances ORMs written in Python with more features
+Home-page: https://github.com/maxtepkeev/architect
+Author: Max Tepkeev
+Author-email: tepkeev@gmail.com
+License: Copyright 2014 Max Tepkeev
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+Description: Architect
+        =========
+        
+        .. image:: https://badge.fury.io/py/architect.svg
+            :target: https://badge.fury.io/py/architect
+        
+        .. image:: https://pypip.in/d/architect/badge.svg
+            :target: https://crate.io/packages/architect
+        
+        .. image:: https://travis-ci.org/maxtepkeev/architect.svg?branch=master
+            :target: https://travis-ci.org/maxtepkeev/architect
+        
+        .. image:: https://img.shields.io/coveralls/maxtepkeev/architect/master.svg
+            :target: https://coveralls.io/r/maxtepkeev/architect?branch=master
+        
+        Architect is a set of tools which enhances ORMs written in Python with more features and simplifies
+        different database related complex tasks.
+        
+        Features
+        --------
+        
+        * Supported ORMs
+        
+          - Django
+          - Peewee
+          - Pony
+          - SQLAlchemy
+        
+        * Supported DBs
+        
+          - PostgreSQL
+          - MySQL
+        
+        * Supports Python 2.6 - 3.4
+        * Extensively documented
+        
+        Dependencies
+        ------------
+        
+        Architect has no required external dependencies except for the ORM it will be used with.
+        
+        Installation
+        ------------
+        
+        To install Architect, simply:
+        
+        .. code-block:: bash
+        
+            $ pip install architect
+        
+        or:
+        
+        .. code-block:: bash
+        
+            $ easy_install architect
+        
+        Documentation
+        -------------
+        
+        Documentation is available at http://architect.readthedocs.org.
+        
+        Contacts and Support
+        --------------------
+        
+        I will be glad to get your feedback, `pull requests <https://github.com/maxtepkeev/architect/pulls>`_,
+        `issues <https://github.com/maxtepkeev/architect/issues>`_, whatever. Feel free to contact me for any
+        questions.
+        
+        Donations
+        ---------
+        
+        If you like this project and want to support it, please `GITTIP <https://www.gittip.com/maxtepkeev/>`_
+        it's author.
+        
+        Copyright and License
+        ---------------------
+        
+        Architect is licensed under Apache 2.0 license. Check the `LICENSE
+        <https://github.com/maxtepkeev/architect/blob/master/LICENSE>`_ for details.
+        
+        
+        Changelog
+        ---------
+        
+        0.2.0 (2014-07-19)
+        ++++++++++++++++++
+        
+        - Added: MySQL range partitioning support
+        
+        0.1.0 (2014-07-13)
+        ++++++++++++++++++
+        
+        - Initial release
+        
+Keywords: architect,django,pony,peewee,sqlalchemy,partition,partitioning,database,table
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Database
+Classifier: Topic :: Utilities
+Classifier: Intended Audience :: Developers
+Classifier: Environment :: Console
+Classifier: Environment :: Web Environment
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: SQL
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
