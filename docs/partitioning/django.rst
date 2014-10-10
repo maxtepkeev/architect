@@ -43,7 +43,13 @@ to:
             partition_range = 'month'
             partition_column = 'added'
 
-4. Lastly initialize some database stuff, to do that execute the following command:
+4. Set the Django settings module you're using:
+
+.. code-block:: bash
+
+    $ export DJANGO_SETTINGS_MODULE=mysite.settings
+
+5. Lastly initialize some database stuff, to do that execute the following command:
 
 .. code-block:: bash
 

@@ -16,6 +16,8 @@ commands = {}
 for _, name, _ in pkgutil.iter_modules([os.path.dirname(__file__)]):
     commands[name] = {'module': __import__('architect.commands.{0}'.format(name), fromlist=['architect.commands'])}
 
+sys.path.append(os.getcwd())
+
 
 class ArgumentParser(argparse.ArgumentParser):
     def result(self, message):
