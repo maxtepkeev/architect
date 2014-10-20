@@ -12,8 +12,8 @@ env:
   - PEEWEE='peewee>=2.3.0,<2.4.0' DB=mysql
   - PEEWEE='peewee>=2.4.0,<2.5.0' DB=postgresql
   - PEEWEE='peewee>=2.4.0,<2.5.0' DB=mysql
-  - PONY='pony>=0.5.0,<0.6.0' DB=postgresql
-  - PONY='pony>=0.5.0,<0.6.0' DB=mysql
+  - PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=postgresql
+  - PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=mysql
   - SQLALCHEMY='sqlalchemy>=0.8.0,<0.9.0' DB=postgresql
   - SQLALCHEMY='sqlalchemy>=0.8.0,<0.9.0' DB=mysql
   - SQLALCHEMY='sqlalchemy>=0.9.0,<0.10.0' DB=postgresql
@@ -46,17 +46,17 @@ matrix:
     - python: 3.4
       env: DJANGO='django>=1.4.0,<1.5.0' DB=mysql
     - python: 3.2
-      env: PONY='pony>=0.5.0,<0.6.0' DB=postgresql
+      env: PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=postgresql
     - python: 3.2
-      env: PONY='pony>=0.5.0,<0.6.0' DB=mysql
+      env: PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=mysql
     - python: 3.3
-      env: PONY='pony>=0.5.0,<0.6.0' DB=postgresql
+      env: PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=postgresql
     - python: 3.3
-      env: PONY='pony>=0.5.0,<0.6.0' DB=mysql
+      env: PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=mysql
     - python: 3.4
-      env: PONY='pony>=0.5.0,<0.6.0' DB=postgresql
+      env: PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=postgresql
     - python: 3.4
-      env: PONY='pony>=0.5.0,<0.6.0' DB=mysql
+      env: PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=mysql
 before_script:
   - if [[ $DB == postgresql ]]; then psql -c 'create database architect;' -U postgres; fi
   - if [[ $DB == mysql ]]; then mysql -e 'create database architect;' -u root; fi
