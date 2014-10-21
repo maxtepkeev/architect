@@ -61,7 +61,7 @@ matrix:
       env: PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=mysql
     - python: 3.2
       env: PONY='https://github.com/ponyorm/pony/archive/0.6rc2.tar.gz' DB=postgresql
-    - python 3.2:
+    - python 3.2
       env: PONY='https://github.com/ponyorm/pony/archive/0.6rc2.tar.gz' DB=mysql
   allow_failures:
     - env: PONY='https://github.com/ponyorm/pony/archive/0.6rc2.tar.gz' DB=postgresql
