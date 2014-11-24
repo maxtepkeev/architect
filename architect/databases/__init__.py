@@ -5,7 +5,7 @@ class BasePartition(object):
     """Base partition class. All databases should inherit from it"""
     def __init__(self, **kwargs):
         self.dialect = self.__module__.split('.')[-2]
-        self.database = Database(kwargs['cursor'])
+        self.database = Database(kwargs['cursor'], self.dialect)
         self.column_value = kwargs['column_value']
         self.column_name = kwargs['partition_column']
         self.model = kwargs['model']

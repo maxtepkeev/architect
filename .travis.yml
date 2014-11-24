@@ -22,12 +22,16 @@ env:
   - SQLALCHEMY='sqlalchemy>=0.9,<0.9.99' DB=mysql
   - DJANGO='django>=1.4,<1.4.99' DB=postgresql
   - DJANGO='django>=1.4,<1.4.99' DB=mysql
+  - DJANGO='django>=1.4,<1.4.99' DB=sqlite
   - DJANGO='django>=1.5,<1.5.99' DB=postgresql
   - DJANGO='django>=1.5,<1.5.99' DB=mysql
+  - DJANGO='django>=1.5,<1.5.99' DB=sqlite
   - DJANGO='django>=1.6,<1.6.99' DB=postgresql
   - DJANGO='django>=1.6,<1.6.99' DB=mysql
+  - DJANGO='django>=1.6,<1.6.99' DB=sqlite
   - DJANGO='django>=1.7,<1.7.99' DB=postgresql
   - DJANGO='django>=1.7,<1.7.99' DB=mysql
+  - DJANGO='django>=1.7,<1.7.99' DB=sqlite
 matrix:
   fast_finish: true
   exclude:
@@ -35,18 +39,26 @@ matrix:
       env: DJANGO='django>=1.7,<1.7.99' DB=postgresql
     - python: 2.6
       env: DJANGO='django>=1.7,<1.7.99' DB=mysql
+    - python: 2.6
+      env: DJANGO='django>=1.7,<1.7.99' DB=sqlite
     - python: 3.2
       env: DJANGO='django>=1.4,<1.4.99' DB=postgresql
     - python: 3.2
       env: DJANGO='django>=1.4,<1.4.99' DB=mysql
+    - python: 3.2
+      env: DJANGO='django>=1.4,<1.4.99' DB=sqlite
     - python: 3.3
       env: DJANGO='django>=1.4,<1.4.99' DB=postgresql
     - python: 3.3
       env: DJANGO='django>=1.4,<1.4.99' DB=mysql
+    - python: 3.3
+      env: DJANGO='django>=1.4,<1.4.99' DB=sqlite
     - python: 3.4
       env: DJANGO='django>=1.4,<1.4.99' DB=postgresql
     - python: 3.4
       env: DJANGO='django>=1.4,<1.4.99' DB=mysql
+    - python: 3.4
+      env: DJANGO='django>=1.4,<1.4.99' DB=sqlite
     - python: 3.2
       env: PONY='pony>=0.5,<0.5.99' DB=postgresql
     - python: 3.2

@@ -7,7 +7,8 @@ from django.conf import settings
 
 databases = {
     'postgresql': {'ENGINE': 'django.db.backends.postgresql_psycopg2', 'NAME': 'architect', 'USER': 'postgres'},
-    'mysql': {'ENGINE': 'django.db.backends.mysql', 'NAME': 'architect', 'USER': 'root'}
+    'mysql': {'ENGINE': 'django.db.backends.mysql', 'NAME': 'architect', 'USER': 'root'},
+    'sqlite': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': './tests/architect.db'}
 }
 
 settings.configure(
