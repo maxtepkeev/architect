@@ -5,8 +5,7 @@ class Database(object):
     """Provides helpers for query execution via database cursor"""
     def __init__(self, cursor, dialect):
         if dialect == 'sqlite':
-            if not cursor.connection.isolation_level:
-                cursor.connection.isolation_level = None
+            cursor.connection.isolation_level = None
         else:
             if not cursor.connection.autocommit:
                 cursor.connection.autocommit = True
