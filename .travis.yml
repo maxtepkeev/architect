@@ -20,7 +20,7 @@ env:
   - SQLALCHEMY='sqlalchemy>=0.8,<0.8.99' DB=mysql
   - SQLALCHEMY='sqlalchemy>=0.9,<0.9.99' DB=postgresql
   - SQLALCHEMY='sqlalchemy>=0.9,<0.9.99' DB=mysql
-  - DJANGO='django>=1.4,<1.4.99 DB=postgresql
+  - DJANGO='django>=1.4,<1.4.99' DB=postgresql
   - DJANGO='django>=1.4,<1.4.99' DB=mysql
   - DJANGO='django>=1.5,<1.5.99' DB=postgresql
   - DJANGO='django>=1.5,<1.5.99' DB=mysql
@@ -51,6 +51,10 @@ matrix:
       env: PONY='pony>=0.5,<0.5.99' DB=postgresql
     - python: 3.2
       env: PONY='pony>=0.5,<0.5.99' DB=mysql
+    - python: 3.2
+      env: PONY='pony>=0.6,<0.6.99' DB=postgresql
+    - python: 3.2
+      env: PONY='pony>=0.6,<0.6.99' DB=mysql
     - python: 3.3
       env: PONY='pony>=0.5,<0.5.99' DB=postgresql
     - python: 3.3
