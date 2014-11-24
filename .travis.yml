@@ -6,66 +6,59 @@ python:
   - 3.3
   - 3.4
 env:
-  - PEEWEE='peewee>=2.2.0,<2.3.0' DB=postgresql
-  - PEEWEE='peewee>=2.2.0,<2.3.0' DB=mysql
-  - PEEWEE='peewee>=2.3.0,<2.4.0' DB=postgresql
-  - PEEWEE='peewee>=2.3.0,<2.4.0' DB=mysql
-  - PEEWEE='peewee>=2.4.0,<2.5.0' DB=postgresql
-  - PEEWEE='peewee>=2.4.0,<2.5.0' DB=mysql
-  - PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=postgresql
-  - PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=mysql
-  - PONY='https://github.com/ponyorm/pony/archive/0.6rc2.tar.gz' DB=postgresql
-  - PONY='https://github.com/ponyorm/pony/archive/0.6rc2.tar.gz' DB=mysql
-  - SQLALCHEMY='sqlalchemy>=0.8.0,<0.9.0' DB=postgresql
-  - SQLALCHEMY='sqlalchemy>=0.8.0,<0.9.0' DB=mysql
-  - SQLALCHEMY='sqlalchemy>=0.9.0,<0.10.0' DB=postgresql
-  - SQLALCHEMY='sqlalchemy>=0.9.0,<0.10.0' DB=mysql
-  - DJANGO='django>=1.4.0,<1.5.0' DB=postgresql
-  - DJANGO='django>=1.4.0,<1.5.0' DB=mysql
-  - DJANGO='django>=1.5.0,<1.6.0' DB=postgresql
-  - DJANGO='django>=1.5.0,<1.6.0' DB=mysql
-  - DJANGO='django>=1.6.0,<1.7.0' DB=postgresql
-  - DJANGO='django>=1.6.0,<1.7.0' DB=mysql
-  - DJANGO='django>=1.7.0,<1.8.0' DB=postgresql
-  - DJANGO='django>=1.7.0,<1.8.0' DB=mysql
+  - PEEWEE='peewee>=2.2,<2.2.99' DB=postgresql
+  - PEEWEE='peewee>=2.2,<2.2.99' DB=mysql
+  - PEEWEE='peewee>=2.3,<2.3.99' DB=postgresql
+  - PEEWEE='peewee>=2.3,<2.3.99' DB=mysql
+  - PEEWEE='peewee>=2.4,<2.4.99' DB=postgresql
+  - PEEWEE='peewee>=2.4,<2.4.99' DB=mysql
+  - PONY='pony>=0.5,<0.5.99' DB=postgresql
+  - PONY='pony>=0.5,<0.5.99' DB=mysql
+  - PONY='pony>=0.6,<0.6.99' DB=postgresql
+  - PONY='pony>=0.6,<0.6.99' DB=mysql
+  - SQLALCHEMY='sqlalchemy>=0.8,<0.8.99' DB=postgresql
+  - SQLALCHEMY='sqlalchemy>=0.8,<0.8.99' DB=mysql
+  - SQLALCHEMY='sqlalchemy>=0.9,<0.9.99' DB=postgresql
+  - SQLALCHEMY='sqlalchemy>=0.9,<0.9.99' DB=mysql
+  - DJANGO='django>=1.4,<1.4.99 DB=postgresql
+  - DJANGO='django>=1.4,<1.4.99' DB=mysql
+  - DJANGO='django>=1.5,<1.5.99' DB=postgresql
+  - DJANGO='django>=1.5,<1.5.99' DB=mysql
+  - DJANGO='django>=1.6,<1.6.99' DB=postgresql
+  - DJANGO='django>=1.6,<1.6.99' DB=mysql
+  - DJANGO='django>=1.7,<1.7.99' DB=postgresql
+  - DJANGO='django>=1.7,<1.7.99' DB=mysql
 matrix:
   fast_finish: true
   exclude:
     - python: 2.6
-      env: DJANGO='django>=1.7.0,<1.8.0' DB=postgresql
+      env: DJANGO='django>=1.7,<1.7.99' DB=postgresql
     - python: 2.6
-      env: DJANGO='django>=1.7.0,<1.8.0' DB=mysql
+      env: DJANGO='django>=1.7,<1.7.99' DB=mysql
     - python: 3.2
-      env: DJANGO='django>=1.4.0,<1.5.0' DB=postgresql
+      env: DJANGO='django>=1.4,<1.4.99' DB=postgresql
     - python: 3.2
-      env: DJANGO='django>=1.4.0,<1.5.0' DB=mysql
+      env: DJANGO='django>=1.4,<1.4.99' DB=mysql
     - python: 3.3
-      env: DJANGO='django>=1.4.0,<1.5.0' DB=postgresql
+      env: DJANGO='django>=1.4,<1.4.99' DB=postgresql
     - python: 3.3
-      env: DJANGO='django>=1.4.0,<1.5.0' DB=mysql
+      env: DJANGO='django>=1.4,<1.4.99' DB=mysql
     - python: 3.4
-      env: DJANGO='django>=1.4.0,<1.5.0' DB=postgresql
+      env: DJANGO='django>=1.4,<1.4.99' DB=postgresql
     - python: 3.4
-      env: DJANGO='django>=1.4.0,<1.5.0' DB=mysql
+      env: DJANGO='django>=1.4,<1.4.99' DB=mysql
     - python: 3.2
-      env: PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=postgresql
+      env: PONY='pony>=0.5,<0.5.99' DB=postgresql
     - python: 3.2
-      env: PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=mysql
+      env: PONY='pony>=0.5,<0.5.99' DB=mysql
     - python: 3.3
-      env: PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=postgresql
+      env: PONY='pony>=0.5,<0.5.99' DB=postgresql
     - python: 3.3
-      env: PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=mysql
+      env: PONY='pony>=0.5,<0.5.99' DB=mysql
     - python: 3.4
-      env: PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=postgresql
+      env: PONY='pony>=0.5,<0.5.99' DB=postgresql
     - python: 3.4
-      env: PONY='pony>=0.5.0,<0.6.0,!=0.5.4' DB=mysql
-    - python: 3.2
-      env: PONY='https://github.com/ponyorm/pony/archive/0.6rc2.tar.gz' DB=postgresql
-    - python 3.2
-      env: PONY='https://github.com/ponyorm/pony/archive/0.6rc2.tar.gz' DB=mysql
-  allow_failures:
-    - env: PONY='https://github.com/ponyorm/pony/archive/0.6rc2.tar.gz' DB=postgresql
-    - env: PONY='https://github.com/ponyorm/pony/archive/0.6rc2.tar.gz' DB=mysql
+      env: PONY='pony>=0.5,<0.5.99' DB=mysql
 before_script:
   - if [[ $DB == postgresql ]]; then psql -c 'create database architect;' -U postgres; fi
   - if [[ $DB == mysql ]]; then mysql -e 'create database architect;' -u root; fi
