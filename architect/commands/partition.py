@@ -27,7 +27,7 @@ def run(args):
         raise ImportProblemError(str(e))
 
     for cls in mod_clss:
-        if issubclass(cls, BasePartitionableMixin) and not 'architect.orms' in cls.__module__:
+        if issubclass(cls, BasePartitionableMixin) and 'architect.orms' not in cls.__module__:
             model_instance = cls.get_empty_instance(args['connection'])
             model_instance.get_partition().prepare()
             names.append(cls.__name__)
