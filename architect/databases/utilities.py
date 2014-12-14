@@ -4,8 +4,6 @@ from datetime import date, datetime, timedelta
 class Database(object):
     """Provides helpers for query execution via database cursor"""
     def __init__(self, cursor):
-        if not cursor.connection.autocommit:
-            cursor.connection.autocommit = True
         self.cursor = cursor
 
     def execute(self, sql):
