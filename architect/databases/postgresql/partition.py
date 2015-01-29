@@ -224,7 +224,7 @@ class RangePartition(Partition):
             DECLARE columntype TEXT;
             DECLARE postfix TEXT;
             BEGIN
-                postfix := substring(NEW.{partition_column} from 1 for {partition_range});
+                postfix := lower(substring(NEW.{partition_column} from 1 for {partition_range}));
                 tablename := '{parent_table}_' || postfix;
                 IF NOT EXISTS(
                     SELECT 1 FROM information_schema.tables WHERE table_name=tablename)
@@ -235,7 +235,7 @@ class RangePartition(Partition):
                         WHERE table_name = '{parent_table}' AND column_name = '{partition_column}';
                         EXECUTE 'CREATE TABLE ' || tablename || ' (
                             CHECK (
-                                substring({partition_column}, 1, {partition_range}) = ''' || postfix || '''::' || columntype || '
+                                lower(substring({partition_column}, 1, {partition_range})) = ''' || postfix || '''::' || columntype || '
                             ),
                             LIKE "{parent_table}" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES
                         ) INHERITS ("{parent_table}");';
