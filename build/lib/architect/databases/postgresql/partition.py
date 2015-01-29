@@ -199,6 +199,7 @@ class RangePartition(Partition):
 
                 EXECUTE 'INSERT INTO ' || tablename || ' VALUES (($1).*);' USING NEW;
                 
+
                 RETURN NEW;
             END;
         """.format(
