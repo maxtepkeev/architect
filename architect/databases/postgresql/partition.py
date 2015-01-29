@@ -199,7 +199,51 @@ class RangePartition(Partition):
 
                 EXECUTE 'INSERT INTO ' || tablename || ' VALUES (($1).*);' USING NEW;
                 
+                RETURN NEW;
+            END;
+        """.format(
+            parent_table=self.table,
+            partition_range=self.partition_range,
+            partition_column=self.column_name
+        )
 
+
+    def _get_string_partition_function(self):
+        """Contains a before insert function body for string partition subtype"""
+
+        if self.partition_range < 1:
+            raise PartitionRangeError(
+                model=self.model,
+                dialect=self.dialect,
+                current=self.partition_range,
+                allowed=[]
+            )
+
+        return """
+            DECLARE tablename TEXT;
+            DECLARE columntype TEXT;
+            DECLARE postfix TEXT;
+            BEGIN
+                postfix := lower(substring(NEW.{partition_column} from 1 for {partition_range}));
+                tablename := '{parent_table}_' || postfix;
+                IF NOT EXISTS(
+                    SELECT 1 FROM information_schema.tables WHERE table_name=tablename)
+                THEN
+                    BEGIN
+                        SELECT data_type INTO columntype
+                        FROM information_schema.columns
+                        WHERE table_name = '{parent_table}' AND column_name = '{partition_column}';
+                        EXECUTE 'CREATE TABLE ' || tablename || ' (
+                            CHECK (
+                                lower(substring({partition_column}, 1, {partition_range})) = ''' || postfix || '''::' || columntype || '
+                            ),
+                            LIKE "{parent_table}" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES
+                        ) INHERITS ("{parent_table}");';
+                    EXCEPTION WHEN duplicate_table THEN
+                        -- pass
+                    END;
+                END IF;
+                EXECUTE 'INSERT INTO ' || tablename || ' VALUES (($1).*);' USING NEW;
                 RETURN NEW;
             END;
         """.format(

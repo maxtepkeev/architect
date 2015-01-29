@@ -1,3 +1,0 @@
-[console_scripts]
-architect = architect.commands:main
-
