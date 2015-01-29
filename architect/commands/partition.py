@@ -1,5 +1,7 @@
 from architect.orms import BasePartitionableMixin
 from architect.exceptions import ImportProblemError
+import sys
+import os
 
 arguments = [
     {('-m', '--module'): {
@@ -20,6 +22,8 @@ def run(args):
     """Partition command. Prepares models from the specified module for partitioning"""
     names = []
     mod = args['module']
+    sys.path.append(os.getcwd())
+   
 
     try:
         mod_clss = filter(lambda obj: isinstance(obj, type), __import__(mod, fromlist=mod).__dict__.values())

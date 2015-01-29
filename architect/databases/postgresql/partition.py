@@ -62,6 +62,7 @@ class Partition(BasePartition):
                     FOR EACH ROW EXECUTE PROCEDURE {parent_table}_delete_master();
             END IF;
             END $$;
+
         """.format(
             pk=' AND '.join('{pk} = NEW.{pk}'.format(pk=pk) for pk in self.pks),
             parent_table=self.table,
@@ -96,7 +97,7 @@ class RangePartition(Partition):
                 current=self.partition_subtype,
                 allowed=[re.match('_get_(\w+)_partition_function', c).group(1) for c in dir(
                     self) if re.match('_get_\w+_partition_function', c) is not None]
-            )
+            )        
 
     def _get_date_partition_function(self):
         """Contains a before insert function body for date partition subtype"""
@@ -146,6 +147,8 @@ class RangePartition(Partition):
                 END IF;
 
                 EXECUTE 'INSERT INTO ' || tablename || ' VALUES (($1).*);' USING NEW;
+                
+
                 RETURN NEW;
             END;
         """.format(
@@ -153,4 +156,98 @@ class RangePartition(Partition):
             partition_range=self.partition_range,
             partition_column=self.column_name,
             partition_pattern=partition_pattern,
+        )
+        
+    def _get_bigint_partition_function(self):
+        """Contains a before insert function body for bigint partition subtype"""
+
+        if self.partition_range<1:
+            raise PartitionRangeError(
+                model=self.model,
+                dialect=self.dialect,
+                current=self.partition_range,
+                allowed=[]
+            )
+
+        return """
+            DECLARE tablename TEXT;
+            DECLARE columntype TEXT;
+            DECLARE startbigint BIGINT;
+            BEGIN
+                startbigint := ((NEW.{partition_column}-1)/{partition_range}) * {partition_range} + 1;
+                tablename := '{parent_table}_' || (((NEW.{partition_column}-1)/{partition_range}) + 1);
+
+                IF NOT EXISTS(
+                    SELECT 1 FROM information_schema.tables WHERE table_name=tablename)
+                THEN
+                    BEGIN
+                        SELECT data_type INTO columntype
+                        FROM information_schema.columns
+                        WHERE table_name = '{parent_table}' AND column_name = '{partition_column}';
+
+                        EXECUTE 'CREATE TABLE ' || tablename || ' (
+                            CHECK (
+                                {partition_column} >= ''' || startbigint || '''::' || columntype || ' AND
+                                {partition_column} < ''' || (startbigint + {partition_range}) || '''::' || columntype || '
+                            ),
+                            LIKE "{parent_table}" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES
+                        ) INHERITS ("{parent_table}");';
+                    EXCEPTION WHEN duplicate_table THEN
+                        -- pass
+                    END;
+                END IF;
+
+                EXECUTE 'INSERT INTO ' || tablename || ' VALUES (($1).*);' USING NEW;
+                
+                RETURN NEW;
+            END;
+        """.format(
+            parent_table=self.table,
+            partition_range=self.partition_range,
+            partition_column=self.column_name
+        )
+
+
+    def _get_string_partition_function(self):
+        """Contains a before insert function body for string partition subtype"""
+
+        if self.partition_range < 1:
+            raise PartitionRangeError(
+                model=self.model,
+                dialect=self.dialect,
+                current=self.partition_range,
+                allowed=[]
+            )
+
+        return """
+            DECLARE tablename TEXT;
+            DECLARE columntype TEXT;
+            DECLARE postfix TEXT;
+            BEGIN
+                postfix := lower(substring(NEW.{partition_column} from 1 for {partition_range}));
+                tablename := '{parent_table}_' || postfix;
+                IF NOT EXISTS(
+                    SELECT 1 FROM information_schema.tables WHERE table_name=tablename)
+                THEN
+                    BEGIN
+                        SELECT data_type INTO columntype
+                        FROM information_schema.columns
+                        WHERE table_name = '{parent_table}' AND column_name = '{partition_column}';
+                        EXECUTE 'CREATE TABLE ' || tablename || ' (
+                            CHECK (
+                                lower(substring({partition_column}, 1, {partition_range})) = ''' || postfix || '''::' || columntype || '
+                            ),
+                            LIKE "{parent_table}" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES
+                        ) INHERITS ("{parent_table}");';
+                    EXCEPTION WHEN duplicate_table THEN
+                        -- pass
+                    END;
+                END IF;
+                EXECUTE 'INSERT INTO ' || tablename || ' VALUES (($1).*);' USING NEW;
+                RETURN NEW;
+            END;
+        """.format(
+            parent_table=self.table,
+            partition_range=self.partition_range,
+            partition_column=self.column_name
         )
