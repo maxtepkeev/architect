@@ -2,7 +2,7 @@ from architect.exceptions import DatabaseError, PartitionTypeError
 
 
 class BasePartitionableMixin(object):
-    """Base partitionable mixin class. All orms should inherit from it"""
+    """Base partitionable mixin class. All ORMs should inherit from it"""
 
     def get_database(self):
         """Returns requested database module"""
