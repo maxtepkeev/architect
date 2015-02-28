@@ -1,134 +1,129 @@
+"""
+Architect tries it's best to provide human readable errors in all situations.
+This is a list of all exceptions that Architect can throw.
+"""
+
+
 class BaseArchitectError(Exception):
-    """Base exception class. All architect exceptions should inherit from it"""
-    def __init__(self, message, **kwargs):
+    """
+    Base exception class. All Architect exceptions should inherit from it.
+    """
+    def __init__(self, message, **kw):
         super(BaseArchitectError, self).__init__(
-            message.format(
-                current=kwargs.get('current', ''),
-                allowed=', '.join(list(kwargs.get('allowed', [])))
-            )
-        )
+            message.format(current=kw.get('current', ''), allowed=', '.join(list(kw.get('allowed', [])))))
 
 
 class CommandNotProvidedError(BaseArchitectError):
-    """Command not provided"""
-    def __init__(self, **kwargs):
-        super(CommandNotProvidedError, self).__init__(
-            'Command not provided, available commands are: {allowed}',
-            **kwargs
-        )
+    """
+    Command not provided.
+    """
+    def __init__(self, **kw):
+        super(CommandNotProvidedError, self).__init__('Command not provided, available commands are: {allowed}', **kw)
 
 
 class CommandError(BaseArchitectError):
-    """Unrecognized command"""
-    def __init__(self, **kwargs):
-        super(CommandError, self).__init__(
-            'Command "{current}" not recognized, available commands are: {allowed}',
-            **kwargs
-        )
+    """
+    Unrecognized command.
+    """
+    def __init__(self, **kw):
+        super(CommandError, self).__init__('Unknown command "{current}", available commands are: {allowed}', **kw)
 
 
 class CommandArgumentError(BaseArchitectError):
-    """Unrecognized command argument"""
-    def __init__(self, **kwargs):
+    """
+    Unrecognized command argument.
+    """
+    def __init__(self, **kw):
         super(CommandArgumentError, self).__init__(
-            'Argument(s) "{current}" not recognized, available arguments are: {allowed}',
-            **kwargs
-        )
+            'Argument(s) "{current}" not recognized, available arguments are: {allowed}', **kw)
 
 
 class DsnNotProvidedError(BaseArchitectError):
-    """Data Source Name not provided"""
-    def __init__(self, **kwargs):
-        super(DsnNotProvidedError, self).__init__(
-            "Can't proceed with an empty DSN",
-            **kwargs
-        )
+    """
+    Data Source Name not provided.
+    """
+    def __init__(self, **kw):
+        super(DsnNotProvidedError, self).__init__("Can't proceed with an empty DSN", **kw)
 
 
 class DsnParseError(BaseArchitectError):
-    """Unable to parse given Data Source Name"""
-    def __init__(self, **kwargs):
-        super(DsnParseError, self).__init__(
-            'Unable to parse given DSN: "{current}"',
-            **kwargs
-        )
+    """
+    Unable to parse given Data Source Name.
+    """
+    def __init__(self, **kw):
+        super(DsnParseError, self).__init__('Unable to parse given DSN: "{current}"', **kw)
 
 
 class ImportProblemError(BaseArchitectError):
-    """Wrapper for ImportError"""
-    def __init__(self, message, **kwargs):
-        super(ImportProblemError, self).__init__(
-            message,
-            **kwargs
-        )
+    """
+    Wrapper for ImportError.
+    """
+    def __init__(self, message, **kw):
+        super(ImportProblemError, self).__init__(message, **kw)
 
 
 class BaseDatabaseError(BaseArchitectError):
-    """Base exception class for all database exceptions"""
-    def __init__(self, message, **kwargs):
+    """
+    Base exception class for all database exceptions.
+    """
+    def __init__(self, message, **kw):
         super(BaseDatabaseError, self).__init__(
-            message.format(
-                model=kwargs.get('model', ''),
-                dialect=kwargs.get('dialect', ''),
-            ),
-            **kwargs
-        )
+            message.format(model=kw.get('model', ''), dialect=kw.get('dialect', '')), **kw)
 
 
 class DatabaseError(BaseDatabaseError):
-    """Unsupported database"""
-    def __init__(self, **kwargs):
+    """
+    Unsupported database.
+    """
+    def __init__(self, **kw):
         super(DatabaseError, self).__init__(
-            'Unsupported database "{{current}}", supported databases are: {{allowed}}',
-            **kwargs
-        )
+            'Unsupported database "{{current}}", supported databases are: {{allowed}}', **kw)
 
 
 class PartitionColumnError(BaseDatabaseError):
-    """Unrecognized partition column"""
-    def __init__(self, **kwargs):
+    """
+    Unrecognized partition column.
+    """
+    def __init__(self, **kw):
         super(PartitionColumnError, self).__init__(
-            'Partition column "{{current}}" wasn\'t found in model '
-            '"{model}", available columns are: {{allowed}}',
-            **kwargs
-        )
+            'Partition column "{{current}}" wasn\'t found in model "{model}", available columns are: {{allowed}}', **kw)
 
 
 class PartitionTypeError(BaseDatabaseError):
-    """Unsupported partition type"""
-    def __init__(self, **kwargs):
+    """
+    Unsupported partition type.
+    """
+    def __init__(self, **kw):
         super(PartitionTypeError, self).__init__(
             'Unsupported partition type "{{current}}" in model "{model}", '
-            'supported types for "{dialect}" database are: {{allowed}}',
-            **kwargs
-        )
+            'supported types for "{dialect}" database are: {{allowed}}', **kw)
 
 
 class PartitionRangeError(BaseDatabaseError):
-    """Unsupported partition range"""
-    def __init__(self, **kwargs):
+    """
+    Unsupported partition range.
+    """
+    def __init__(self, **kw):
         super(PartitionRangeError, self).__init__(
             'Unsupported partition range "{{current}}" in "{model}" model, '
-            'supported partition ranges for "{dialect}" database are: {{allowed}}',
-            **kwargs
-        )
+            'supported partition ranges for "{dialect}" database are: {{allowed}}', **kw)
 
 
 class PartitionRangeSubtypeError(BaseDatabaseError):
-    """Unsupported partition range subtype"""
-    def __init__(self, **kwargs):
+    """
+    Unsupported partition range subtype.
+    """
+    def __init__(self, **kw):
         super(PartitionRangeSubtypeError, self).__init__(
             'Unsupported partition range subtype "{{current}}" in "{model}" model, '
-            'supported range subtypes for "{dialect}" database are: {{allowed}}',
-            **kwargs
-        )
+            'supported range subtypes for "{dialect}" database are: {{allowed}}', **kw)
 
 
 class PartitionFunctionError(BaseDatabaseError):
-    """Unsupported partition function"""
-    def __init__(self, **kwargs):
+    """
+    Unsupported partition function.
+    """
+    def __init__(self, **kw):
         super(PartitionFunctionError, self).__init__(
             'Unsupported partition function for column type "{{current}}" in "{model}" '
-            'model, supported column types for "{dialect}" backend are: {{allowed}}',
-            **kwargs
-        )
+            'model, supported column types for "{dialect}" backend are: {{allowed}}', **kw)
