@@ -1,5 +1,8 @@
-from architect.orms import BasePartitionableMixin
-from architect.exceptions import ImportProblemError
+"""
+Partition command implementation.
+"""
+
+from ..exceptions import ImportProblemError
 
 arguments = [
     {('-m', '--module'): {
@@ -17,22 +20,26 @@ arguments = [
 
 
 def run(args):
-    """Partition command. Prepares models from the specified module for partitioning"""
+    """
+    Prepares models from specified module for partitioning.
+
+    :param dictionary args: (required). Dictionary of command arguments.
+    """
     names = []
-    mod = args['module']
+    module = args['module']
 
     try:
-        mod_clss = filter(lambda obj: isinstance(obj, type), __import__(mod, fromlist=mod).__dict__.values())
+        module_clss = filter(lambda obj: isinstance(obj, type), __import__(module, fromlist=module).__dict__.values())
     except ImportError as e:
         raise ImportProblemError(str(e))
 
-    for cls in mod_clss:
-        if issubclass(cls, BasePartitionableMixin) and 'architect.orms' not in cls.__module__:
-            model_instance = cls.get_empty_instance(args['connection'])
-            model_instance.get_partition().prepare()
+    for cls in module_clss:
+        if hasattr(cls, 'architect') and hasattr(cls.architect, 'partition'):
+            model = cls.architect.partition.model_empty_instance(args['connection'])
+            model.architect.partition.get_partition().prepare()
             names.append(cls.__name__)
 
     if not names:
-        return 'unable to find any partitionable models in a module: {0}'.format(mod)
+        return 'unable to find any partitionable models in a module: {0}'.format(module)
     else:
         return 'successfully (re)configured the database for the following models: {0}'.format(', '.join(names))
