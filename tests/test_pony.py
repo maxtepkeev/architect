@@ -6,11 +6,7 @@ from . import unittest, capture
 if not os.environ.get('PONY'):
     raise unittest.SkipTest('Not a Pony build')
 
-try:
-    from pony import __version__
-except ImportError:
-    __version__ = '0.4'  # something from 0.4.x branch
-
+from pony import __version__
 from distutils.version import LooseVersion
 
 # All PonyORM versions between 0.5.3 and 0.6.2 have a bug with PyMySQL

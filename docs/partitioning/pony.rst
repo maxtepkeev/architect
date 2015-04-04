@@ -4,7 +4,7 @@ Pony
 Requirements
 ------------
 
-* `Pony <http://ponyorm.com>`_ >= 0.4.8
+* `Pony <http://ponyorm.com>`_ >= 0.5.0
 
 Configuration
 -------------
