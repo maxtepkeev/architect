@@ -6,12 +6,16 @@ from . import unittest, capture
 if not os.environ.get('PONY'):
     raise unittest.SkipTest('Not a Pony build')
 
-from pony import __version__
+try:
+    from pony import __version__
+except ImportError:
+    __version__ = '0.4'  # something from 0.4.x branch
+
 from distutils.version import LooseVersion
 
 # All PonyORM versions between 0.5.3 and 0.6.2 have a bug with PyMySQL
 # see https://github.com/ponyorm/pony/issues/87#issuecomment-88564346
-if LooseVersion('0.5.3') < LooseVersion(__version__) < LooseVersion('0.6.2'):
+if os.environ.get('DB') == 'mysql' and LooseVersion('0.5.3') < LooseVersion(__version__) < LooseVersion('0.6.2'):
     del sys.modules['MySQLdb']
     del sys.modules['_mysql']
 
