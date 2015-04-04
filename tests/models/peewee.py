@@ -3,9 +3,10 @@ from __future__ import absolute_import
 import os
 
 from peewee import *
-from architect.orms.peewee.mixins import PartitionableMixin
+from architect import install
 
 databases = {
+    'sqlite': SqliteDatabase(':memory:'),
     'postgresql': PostgresqlDatabase('architect', user='postgres'),
     'mysql': MySQLDatabase('architect', user='root')
 }
@@ -14,23 +15,17 @@ db = databases[os.environ.get('DB')]
 
 # Generation of entities for date range partitioning
 for item in ('day', 'week', 'month', 'year'):
-    class Meta:
+    class Meta(object):
         database = db
         db_table = 'test_rangedate{0}'.format(item)
 
-    class PartitionableMeta:
-        partition_type = 'range'
-        partition_subtype = 'date'
-        partition_range = item
-        partition_column = 'created'
-
     name = 'RangeDate{0}'.format(item.capitalize())
+    partition = install('partition', type='range', subtype='date', range=item, column='created')
 
-    locals()[name] = type(name, (PartitionableMixin, Model), {
+    locals()[name] = partition(type(name, (Model,), {
         'name': CharField(),
         'created': DateTimeField(),
         'Meta': Meta,
-        'PartitionableMeta': PartitionableMeta
-    })
+    }))
 
     locals()[name].create_table(True)

@@ -38,22 +38,6 @@ class CommandArgumentError(BaseArchitectError):
             'Argument(s) "{current}" not recognized, available arguments are: {allowed}', **kw)
 
 
-class DsnNotProvidedError(BaseArchitectError):
-    """
-    Data Source Name not provided.
-    """
-    def __init__(self, **kw):
-        super(DsnNotProvidedError, self).__init__("Can't proceed with an empty DSN", **kw)
-
-
-class DsnParseError(BaseArchitectError):
-    """
-    Unable to parse given Data Source Name.
-    """
-    def __init__(self, **kw):
-        super(DsnParseError, self).__init__('Unable to parse given DSN: "{current}"', **kw)
-
-
 class ImportProblemError(BaseArchitectError):
     """
     Wrapper for ImportError.
@@ -71,6 +55,43 @@ class BaseDatabaseError(BaseArchitectError):
             message.format(model=kw.get('model', ''), dialect=kw.get('dialect', '')), **kw)
 
 
+class ORMError(BaseDatabaseError):
+    """
+    Unsupported ORM.
+    """
+    def __init__(self, **kw):
+        super(ORMError, self).__init__(
+            'Unsupported ORM "{{current}}" requested for model "{model}", available ORMs are: {{allowed}}', **kw)
+
+
+class FeatureInstallError(BaseDatabaseError):
+    """
+    Unsupported feature.
+    """
+    def __init__(self, **kw):
+        super(FeatureInstallError, self).__init__(
+            'Unsupported feature "{{current}}" for model "{model}", supported features are: {{allowed}}', **kw)
+
+
+class FeatureUninstallError(BaseDatabaseError):
+    """
+    Can't uninstall feature that isn't installed.
+    """
+    def __init__(self, **kw):
+        super(FeatureUninstallError, self).__init__(
+            'Can\'t uninstall feature "{{current}}" from model "{model}" because it\'s '
+            'not even installed, valid installed features are: {{allowed}}', **kw)
+
+
+class MethodAutoDecorateError(BaseDatabaseError):
+    """
+    Unable to autodecorate method.
+    """
+    def __init__(self, **kw):
+        super(MethodAutoDecorateError, self).__init__(
+            'Unable to autodecorate method "{{current}}" in model "{model}", method not found', **kw)
+
+
 class DatabaseError(BaseDatabaseError):
     """
     Unsupported database.
@@ -78,6 +99,23 @@ class DatabaseError(BaseDatabaseError):
     def __init__(self, **kw):
         super(DatabaseError, self).__init__(
             'Unsupported database "{{current}}", supported databases are: {{allowed}}', **kw)
+
+
+class OptionNotSetError(BaseDatabaseError):
+    """
+    Option not set.
+    """
+    def __init__(self, **kw):
+        kw['current'] = str(kw.get('current', '')).replace("'", '')
+        super(OptionNotSetError, self).__init__('Option "{{current}}" isn\'t set for model "{model}"', **kw)
+
+
+class DsnParseError(BaseDatabaseError):
+    """
+    Unable to parse given Data Source Name.
+    """
+    def __init__(self, **kw):
+        super(DsnParseError, self).__init__('Invalid DSN "{{current}}" provided for model "{model}"', **kw)
 
 
 class PartitionColumnError(BaseDatabaseError):

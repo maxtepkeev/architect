@@ -1,13 +1,12 @@
 import os
-import sys
 import datetime
 
-from tests import unittest, capture
+from . import unittest, capture
 
 if not os.environ.get('DJANGO'):
     raise unittest.SkipTest('Not a Django build')
 
-from tests.models.django import *
+from .models.django import *
 
 
 class BaseDjangoPartitionTestCase(object):
@@ -18,14 +17,33 @@ class BaseDjangoPartitionTestCase(object):
             search = 'successfully (re)configured the database for the following models'
             assert search in out, '{0} not in {1}'.format(search, out)
 
+    def test_raises_option_not_set_error(self):
+        from architect.exceptions import OptionNotSetError
+        del RangeDateDay.architect.partition.options['column']
+
+        with self.assertRaises(OptionNotSetError):
+            RangeDateDay.objects.create(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+
+        RangeDateDay.architect.partition.options['column'] = 'created'
+
     def test_raises_partition_column_error(self):
         from architect.exceptions import PartitionColumnError
-        RangeDateDay.PartitionableMeta.partition_column = 'foo'
+        RangeDateDay.architect.partition.options['column'] = 'foo'
 
         with self.assertRaises(PartitionColumnError):
             RangeDateDay.objects.create(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
 
-        RangeDateDay.PartitionableMeta.partition_column = 'created'
+        RangeDateDay.architect.partition.options['column'] = 'created'
+
+
+@unittest.skipUnless(os.environ.get('DB') == 'sqlite', 'Not a SQLite build')
+class SQLiteDjangoPartitionTestCase(BaseDjangoPartitionTestCase, unittest.TestCase):
+    def test_dummy(self):
+        object1 = RangeDateDay.objects.create(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+        object2 = RangeDateDay.objects.raw(
+            'SELECT * FROM test_rangedateday WHERE id = %s', [object1.id])[0]
+
+        self.assertTrue(object1.name, object2.name)
 
 
 @unittest.skipUnless(os.environ.get('DB') == 'postgresql', 'Not a PostgreSQL build')

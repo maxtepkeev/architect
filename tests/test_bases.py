@@ -1,20 +1,13 @@
-from tests import unittest, mock
+from . import unittest, mock
 
-from architect.databases import BasePartition
-from architect.orms import BasePartitionableMixin
+from architect.databases.bases import BasePartition
+from architect.orms.bases import BaseOperationFeature, BasePartitionFeature
 
 
 class BasePartitionTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.Partition = type('Partition', (BasePartition,), {})(
-            column_value=None,
-            partition_column=None,
-            cursor=mock.Mock(autocommit=True),
-            model=None,
-            table=None,
-            pk=None
-        )
+        cls.Partition = BasePartition(mock.Mock(), table=None, column_value=None, column=None, pk=None)
 
     def test_prepare_not_implemented(self):
         self.assertRaises(NotImplementedError, lambda: self.Partition.prepare())
@@ -25,40 +18,45 @@ class BasePartitionTestCase(unittest.TestCase):
     def test_create_not_implemented(self):
         self.assertRaises(NotImplementedError, lambda: self.Partition.create())
 
-    def test_get_name_not_implemented(self):
-        self.assertRaises(NotImplementedError, lambda: self.Partition._get_name())
 
-    def test_get_partition_function_not_implemented(self):
-        self.assertRaises(NotImplementedError, lambda: self.Partition._get_partition_function())
+class BaseOperationFeatureTestCase(unittest.TestCase):
+    def setUp(self):
+        self.OperationFeature = BaseOperationFeature(mock.Mock(), mock.Mock(__name__='Foo'), **{})
+
+    def test_execute_not_implemented(self):
+        self.assertRaises(NotImplementedError, lambda: self.OperationFeature.execute(''))
 
 
-class BasePartitionableMixinTestCase(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.PartitionableMixinCls = type('PartitionableMixin', (BasePartitionableMixin,), {})
-        cls.PartitionableMixin = cls.PartitionableMixinCls()
+class BasePartitionFeatureTestCase(unittest.TestCase):
+    def setUp(self):
+        self.PartitionFeatureCls = type('PartitionFeature', (BasePartitionFeature,), {})
+        self.PartitionFeature = self.PartitionFeatureCls(mock.Mock(), mock.Mock(__name__='Foo'), **{})
 
-    def test_raises_database_error(self):
+    def test_get_partition_raises_database_error(self):
         from architect.exceptions import DatabaseError
-        self.PartitionableMixinCls.model_meta = property(lambda self: {'dialect': 'foo'})
-        self.assertRaises(DatabaseError, lambda: self.PartitionableMixinCls().get_database())
+        self.PartitionFeatureCls.model_meta = property(lambda obj: {'dialect': 'foo'})
+        self.assertRaises(DatabaseError, lambda: self.PartitionFeature.get_partition())
 
-    def test_raises_partition_type_error(self):
+    def test_get_partition_raises_option_not_set_error(self):
+        from architect.exceptions import OptionNotSetError
+        self.PartitionFeatureCls.model_meta = property(lambda obj: {'dialect': 'sqlite'})
+        self.assertRaises(OptionNotSetError, lambda: self.PartitionFeature.get_partition())
+
+    def test_get_partition_raises_partition_type_error(self):
         from architect.exceptions import PartitionTypeError
-        self.PartitionableMixinCls.model_meta = property(lambda self: {'dialect': 'sqlite'})
-        self.assertRaises(PartitionTypeError, lambda: self.PartitionableMixin.get_partition())
-
-    def test_partitionable_meta_defaults(self):
-        self.assertEqual(self.PartitionableMixin.PartitionableMeta.partition_type, 'None')
-        self.assertEqual(self.PartitionableMixin.PartitionableMeta.partition_subtype, 'None')
-        self.assertEqual(self.PartitionableMixin.PartitionableMeta.partition_range, 'None')
-        self.assertEqual(self.PartitionableMixin.PartitionableMeta.partition_column, 'None')
+        self.PartitionFeatureCls.model_meta = property(lambda obj: {'dialect': 'sqlite'})
+        self.PartitionFeature.options = {'type': 'foo'}
+        self.assertRaises(PartitionTypeError, lambda: self.PartitionFeature.get_partition())
 
     def test_model_meta_not_implemented(self):
-        self.assertRaises(NotImplementedError, lambda: self.PartitionableMixin.model_meta)
+        self.assertRaises(NotImplementedError, lambda: self.PartitionFeature.model_meta)
 
-    def test_get_cursor_not_implemented(self):
-        self.assertRaises(NotImplementedError, lambda: self.PartitionableMixin.get_cursor())
+    def test_column_value_raises_option_not_set_error(self):
+        from architect.exceptions import OptionNotSetError
+        self.assertRaises(OptionNotSetError, lambda: self.PartitionFeature._column_value([]))
 
-    def test_get_empty_instance_not_implemented(self):
-        self.assertRaises(NotImplementedError, lambda: self.PartitionableMixin.get_empty_instance())
+    def test_column_value_raises_partition_column_error(self):
+        from architect.exceptions import PartitionColumnError
+        self.PartitionFeature.options = {'column': 'foo'}
+        self.PartitionFeature.model_obj = mock.Mock(spec=[])
+        self.assertRaises(PartitionColumnError, lambda: self.PartitionFeature._column_value([]))

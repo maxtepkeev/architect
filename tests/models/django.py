@@ -6,6 +6,7 @@ import sys
 from django.conf import settings
 
 databases = {
+    'sqlite': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': ':memory:'},
     'postgresql': {'ENGINE': 'django.db.backends.postgresql_psycopg2', 'NAME': 'architect', 'USER': 'postgres'},
     'mysql': {'ENGINE': 'django.db.backends.mysql', 'NAME': 'architect', 'USER': 'root'}
 }
@@ -21,29 +22,23 @@ sys.modules['test.models'] = type('test.models', (object,), {'__dict__': '', '__
 
 from django.db import models
 from django.core import management
-from architect.orms.django.mixins import PartitionableMixin
+from architect import install
 
 # Generation of entities for date range partitioning
 for item in ('day', 'week', 'month', 'year'):
-    class Meta:
+    class Meta(object):
         app_label = 'test'
         db_table = 'test_rangedate{0}'.format(item)
 
-    class PartitionableMeta:
-        partition_type = 'range'
-        partition_subtype = 'date'
-        partition_range = item
-        partition_column = 'created'
-
     name = 'RangeDate{0}'.format(item.capitalize())
+    partition = install('partition', type='range', subtype='date', range=item, column='created')
 
-    locals()[name] = type(name, (PartitionableMixin, models.Model), {
+    locals()[name] = partition(type(name, (models.Model,), {
         '__module__': 'test.models',
         'name': models.CharField(max_length=255),
         'created': models.DateTimeField(),
         'Meta': Meta,
-        'PartitionableMeta': PartitionableMeta
-    })
+    }))
 
 # Django >= 1.7 needs this
 try:

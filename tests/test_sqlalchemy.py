@@ -2,46 +2,69 @@ import os
 import sys
 import datetime
 
-from tests import unittest, capture
+from . import unittest, capture
 
 if not os.environ.get('SQLALCHEMY'):
     raise unittest.SkipTest('Not a SQLAlchemy build')
 
-from tests.models.sqlalchemy import *
+from .models.sqlalchemy import *
 from sqlalchemy.orm import sessionmaker
 
 
 class BaseSqlAlchemyPartitionTestCase(object):
     @classmethod
     def setUpClass(cls):
-        sys.argv = ['architect', 'partition', '--module', 'tests.models.sqlalchemy', '--connection', dsn]
+        sys.argv = ['architect', 'partition', '--module', 'tests.models.sqlalchemy']
         with capture() as (out, _):
             search = 'successfully (re)configured the database for the following models'
             assert search in out, '{0} not in {1}'.format(search, out)
         cls.session = sessionmaker(bind=engine)()
 
-    def test_dsn_not_provided_error(self):
-        from architect.exceptions import DsnNotProvidedError
-        sys.argv = ['architect', 'partition', '--module', 'tests.models.sqlalchemy']
-        with capture() as (_, err):
-            self.assertIn(str(DsnNotProvidedError()).lower(), err.lower())
+    def test_bound_metadata(self):
+        url = RangeDateDay.architect.partition.options.pop('dsn')
+        RangeDateDay.metadata.bind = engine
+        self.session.add(RangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23)))
+        self.session.commit()
+        self.session.rollback()
+        RangeDateDay.metadata.bind = None
+        RangeDateDay.architect.partition.options['dsn'] = url
 
-    def test_bad_dsn_provided_error(self):
+    def test_raises_bad_dsn_provided_error(self):
         from architect.exceptions import DsnParseError
-        sys.argv = ['architect', 'partition', '--module', 'tests.models.sqlalchemy', '--connection', 'foobar']
-        with capture() as (_, err):
-            self.assertIn(str(DsnParseError(current='foobar')).lower(), err.lower())
+        url = RangeDateDay.architect.partition.options['dsn']
+        RangeDateDay.architect.partition.options['dsn'] = 'foo'
 
-    def test_raises_partition_column_error(self):
-        from architect.exceptions import PartitionColumnError
-        RangeDateDay.PartitionableMeta.partition_column = 'foo'
-
-        with self.assertRaises(PartitionColumnError):
+        with self.assertRaises(DsnParseError):
             self.session.add(RangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23)))
             self.session.commit()
 
         self.session.rollback()
-        RangeDateDay.PartitionableMeta.partition_column = 'created'
+        RangeDateDay.architect.partition.options['dsn'] = url
+
+    def test_raises_dsn_not_provided_error(self):
+        from architect.exceptions import OptionNotSetError
+        url = RangeDateDay.architect.partition.options.pop('dsn')
+
+        with self.assertRaises(OptionNotSetError):
+            self.session.add(RangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23)))
+            self.session.commit()
+
+        self.session.rollback()
+        RangeDateDay.architect.partition.options['dsn'] = url
+
+
+@unittest.skipUnless(os.environ.get('DB') == 'sqlite', 'Not a SQLite build')
+class SQLiteSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, unittest.TestCase):
+    def test_dummy(self):
+        object1 = RangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+        self.session.add(object1)
+        self.session.commit()
+
+        object2 = self.session.query(RangeDateDay).from_statement(
+            'SELECT * FROM test_rangedateday WHERE id = :id'
+        ).params(id=object1.id).first()
+
+        self.assertTrue(object1.name, object2.name)
 
 
 @unittest.skipUnless(os.environ.get('DB') == 'postgresql', 'Not a PostgreSQL build')

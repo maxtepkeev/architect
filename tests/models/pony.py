@@ -4,31 +4,26 @@ import os
 import datetime
 
 from pony.orm import *
-from architect.orms.pony.mixins import PartitionableMixin
+from architect import install
 
 databases = {
-    'postgresql': {'type': 'postgres', 'user': 'postgres'},
-    'mysql': {'type': 'mysql', 'user': 'root'}
+    'sqlite': {'type': 'sqlite', 'args': (':memory:',), 'kwargs': {}},
+    'postgresql': {'type': 'postgres', 'args': (), 'kwargs': {'user': 'postgres', 'database': 'architect'}},
+    'mysql': {'type': 'mysql', 'args': (), 'kwargs': {'user': 'root', 'database': 'architect'}}
 }
 
 current = os.environ.get('DB')
-db = Database(databases[current].pop('type'), **dict(host='localhost', database='architect', **databases[current]))
+db = Database(databases[current].pop('type'), *databases[current]['args'], **databases[current]['kwargs'])
 
 # Generation of entities for date range partitioning
 for item in ('day', 'week', 'month', 'year'):
-    class PartitionableMeta:
-        partition_type = 'range'
-        partition_subtype = 'date'
-        partition_range = item
-        partition_column = 'created'
-
     name = 'RangeDate{0}'.format(item.capitalize())
+    partition = install('partition', type='range', subtype='date', range=item, column='created')
 
-    locals()[name] = type(name, (PartitionableMixin, db.Entity), {
+    locals()[name] = partition(type(name, (db.Entity,), {
         '_table_': 'test_rangedate{0}'.format(item),
         'name': Required(unicode),
         'created': Required(datetime.datetime),
-        'PartitionableMeta': PartitionableMeta
-    })
+    }))
 
 db.generate_mapping(create_tables=True)

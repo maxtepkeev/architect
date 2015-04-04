@@ -2,12 +2,12 @@ import os
 import sys
 import datetime
 
-from tests import unittest, capture
+from . import unittest, capture
 
 if not os.environ.get('PEEWEE'):
     raise unittest.SkipTest('Not a Peewee build')
 
-from tests.models.peewee import *
+from .models.peewee import *
 
 
 class BasePeeweePartitionTestCase(object):
@@ -18,14 +18,15 @@ class BasePeeweePartitionTestCase(object):
             search = 'successfully (re)configured the database for the following models'
             assert search in out, '{0} not in {1}'.format(search, out)
 
-    def test_raises_partition_column_error(self):
-        from architect.exceptions import PartitionColumnError
-        RangeDateDay.PartitionableMeta.partition_column = 'foo'
 
-        with self.assertRaises(PartitionColumnError):
-            RangeDateDay.create(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+@unittest.skipUnless(os.environ.get('DB') == 'sqlite', 'Not a SQLite build')
+class SQLitePeeweePartitionTestCase(BasePeeweePartitionTestCase, unittest.TestCase):
+    def test_dummy(self):
+        object1 = RangeDateDay.create(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+        object2 = list(RangeDateDay.raw(
+            'SELECT * FROM test_rangedateday WHERE id = ?', object1.id))[0]
 
-        RangeDateDay.PartitionableMeta.partition_column = 'created'
+        self.assertTrue(object1.name, object2.name)
 
 
 @unittest.skipUnless(os.environ.get('DB') == 'postgresql', 'Not a PostgreSQL build')

@@ -9,12 +9,6 @@ arguments = [
         'dest': 'module',
         'required': True,
         'help': 'path to the module with models to be partitioned'
-    }},
-    {('-c', '--connection'): {
-        'dest': 'connection',
-        'required': False,
-        'metavar': 'DSN',
-        'help': 'database connection string in the form of dsn'
     }}
 ]
 
@@ -35,8 +29,7 @@ def run(args):
 
     for cls in module_clss:
         if hasattr(cls, 'architect') and hasattr(cls.architect, 'partition'):
-            model = cls.architect.partition.model_empty_instance(args['connection'])
-            model.architect.partition.get_partition().prepare()
+            cls.architect.partition.get_partition().prepare()
             names.append(cls.__name__)
 
     if not names:

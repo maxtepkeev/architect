@@ -1,6 +1,6 @@
 import sys
 import functools
-from contextlib import contextmanager
+import contextlib
 
 try:
     from cStringIO import StringIO
@@ -26,7 +26,7 @@ except ImportError:
 from architect.commands import main
 
 
-@contextmanager
+@contextlib.contextmanager
 def capture():
     out, err, sys.stderr, sys.stdout = sys.stdout, sys.stderr, StringIO(), StringIO()
 

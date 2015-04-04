@@ -6,22 +6,23 @@ partitioning, one can safely work with it via raw SQL statements without
 using any kind of the ORM or anything else.
 """
 
-from architect.databases import BasePartition
-from architect.exceptions import (
+from ..bases import BasePartition
+from ...exceptions import (
     PartitionRangeSubtypeError,
     PartitionRangeError
 )
 
 
 class Partition(BasePartition):
-    """Common methods for all partition types"""
     def prepare(self):
-        """Prepares needed triggers and functions for those triggers"""
+        """
+        Prepares needed triggers and functions for those triggers.
+        """
         return self.database.execute("""
             -- We need to create a before insert function
             CREATE OR REPLACE FUNCTION {parent_table}_insert_child()
             RETURNS TRIGGER AS $$
-                {partition_function}
+                {function}
             $$ LANGUAGE plpgsql;
 
             -- Then we create a trigger which calls the before insert function
@@ -65,41 +66,50 @@ class Partition(BasePartition):
         """.format(
             pk=' AND '.join('{pk} = NEW.{pk}'.format(pk=pk) for pk in self.pks),
             parent_table=self.table,
-            partition_function=self._get_partition_function()
+            function=self._get_function()
         ))
 
     def exists(self):
-        """Checks if partition exists. Not used in this backend because everything is done at the database level"""
-        return True
+        """
+        Checks if partition exists. Not used in this backend because everything is done at the database level.
+        """
+        return False
 
     def create(self):
-        """Creates new partition. Not used in this backend because everything is done at the database level"""
+        """
+        Creates new partition. Not used in this backend because everything is done at the database level.
+        """
         pass
 
 
 class RangePartition(Partition):
-    """Range partition type implementation"""
-    def __init__(self, **kwargs):
-        super(RangePartition, self).__init__(**kwargs)
-        self.partition_range = kwargs['partition_range']
-        self.partition_subtype = kwargs['partition_subtype']
+    """
+    Range partition type implementation.
+    """
+    def __init__(self, model, **meta):
+        super(RangePartition, self).__init__(model, **meta)
+        self.range = meta['range']
+        self.subtype = meta['subtype']
 
-    def _get_partition_function(self):
-        """Dynamically loads needed before insert function body depending on the partition subtype"""
+    def _get_function(self):
+        """
+        Dynamically loads needed before insert function body depending on the partition subtype.
+        """
         try:
-            return getattr(self, '_get_{0}_partition_function'.format(self.partition_subtype))()
+            return getattr(self, '_get_{0}_function'.format(self.subtype))()
         except AttributeError:
             import re
+            expression = '_get_(\w+)_function'
             raise PartitionRangeSubtypeError(
-                model=self.model,
+                model=self.model.__name__,
                 dialect=self.dialect,
-                current=self.partition_subtype,
-                allowed=[re.match('_get_(\w+)_partition_function', c).group(1) for c in dir(
-                    self) if re.match('_get_\w+_partition_function', c) is not None]
-            )
+                current=self.subtype,
+                allowed=[re.match(expression, c).group(1) for c in dir(self) if re.match(expression, c) is not None])
 
-    def _get_date_partition_function(self):
-        """Contains a before insert function body for date partition subtype"""
+    def _get_date_function(self):
+        """
+        Contains a before insert function body for date partition subtype.
+        """
         patterns = {
             'day': '"y"YYYY"d"DDD',
             'week': '"y"IYYY"w"IW',
@@ -108,22 +118,21 @@ class RangePartition(Partition):
         }
 
         try:
-            partition_pattern = patterns[self.partition_range]
+            pattern = patterns[self.range]
         except KeyError:
             raise PartitionRangeError(
-                model=self.model,
+                model=self.model.__name__,
                 dialect=self.dialect,
-                current=self.partition_range,
-                allowed=patterns.keys()
-            )
+                current=self.range,
+                allowed=patterns.keys())
 
         return """
             DECLARE tablename TEXT;
             DECLARE columntype TEXT;
             DECLARE startdate TIMESTAMP;
             BEGIN
-                startdate := date_trunc('{partition_range}', NEW.{partition_column});
-                tablename := '{parent_table}_' || to_char(NEW.{partition_column}, '{partition_pattern}');
+                startdate := date_trunc('{range}', NEW.{column});
+                tablename := '{parent_table}_' || to_char(NEW.{column}, '{pattern}');
 
                 IF NOT EXISTS(
                     SELECT 1 FROM information_schema.tables WHERE table_name=tablename)
@@ -131,12 +140,12 @@ class RangePartition(Partition):
                     BEGIN
                         SELECT data_type INTO columntype
                         FROM information_schema.columns
-                        WHERE table_name = '{parent_table}' AND column_name = '{partition_column}';
+                        WHERE table_name = '{parent_table}' AND column_name = '{column}';
 
                         EXECUTE 'CREATE TABLE ' || tablename || ' (
                             CHECK (
-                                {partition_column} >= ''' || startdate || '''::' || columntype || ' AND
-                                {partition_column} < ''' || (startdate + '1 {partition_range}'::interval) || '''::' || columntype || '
+                                {column} >= ''' || startdate || '''::' || columntype || ' AND
+                                {column} < ''' || (startdate + '1 {range}'::interval) || '''::' || columntype || '
                             ),
                             LIKE "{parent_table}" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES
                         ) INHERITS ("{parent_table}");';
@@ -148,9 +157,4 @@ class RangePartition(Partition):
                 EXECUTE 'INSERT INTO ' || tablename || ' VALUES (($1).*);' USING NEW;
                 RETURN NEW;
             END;
-        """.format(
-            parent_table=self.table,
-            partition_range=self.partition_range,
-            partition_column=self.column_name,
-            partition_pattern=partition_pattern,
-        )
+        """.format(parent_table=self.table, range=self.range, column=self.column_name, pattern=pattern)

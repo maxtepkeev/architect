@@ -1,13 +1,21 @@
 import os
 import sys
-import datetime
 
-from tests import unittest, capture
+from . import unittest, capture
 
 if not os.environ.get('PONY'):
     raise unittest.SkipTest('Not a Pony build')
 
-from tests.models.pony import *
+from pony import __version__
+from distutils.version import LooseVersion
+
+# All PonyORM versions between 0.5.3 and 0.6.2 have a bug with PyMySQL
+# see https://github.com/ponyorm/pony/issues/87#issuecomment-88564346
+if LooseVersion('0.5.3') < LooseVersion(__version__) < LooseVersion('0.6.2'):
+    del sys.modules['MySQLdb']
+    del sys.modules['_mysql']
+
+from .models.pony import *
 
 
 class BasePonyPartitionTestCase(object):
@@ -18,14 +26,17 @@ class BasePonyPartitionTestCase(object):
             search = 'successfully (re)configured the database for the following models'
             assert search in out, '{0} not in {1}'.format(search, out)
 
-    def test_raises_partition_column_error(self):
-        RangeDateDay.PartitionableMeta.partition_column = 'foo'
 
-        with self.assertRaises(CommitException):
-            with db_session:
-                RangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+@unittest.skipUnless(os.environ.get('DB') == 'sqlite', 'Not a SQLite build')
+class SQLitePonyPartitionTestCase(BasePonyPartitionTestCase, unittest.TestCase):
+    def test_dummy(self):
+        with db_session:
+            object1 = RangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+            commit()
+            object2 = RangeDateDay.get_by_sql(
+                'SELECT * FROM test_rangedateday WHERE id = $object1.id')
 
-        RangeDateDay.PartitionableMeta.partition_column = 'created'
+        self.assertTrue(object1.name, object2.name)
 
 
 @unittest.skipUnless(os.environ.get('DB') == 'postgresql', 'Not a PostgreSQL build')

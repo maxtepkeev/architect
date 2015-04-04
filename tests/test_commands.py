@@ -1,6 +1,6 @@
 import sys
 
-from tests import unittest, capture
+from . import unittest, capture
 
 from architect.commands import commands
 from architect.exceptions import (
