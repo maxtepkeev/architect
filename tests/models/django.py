@@ -18,7 +18,7 @@ settings.configure(
 )
 
 # We don't have a real app with models, so we have to fake it
-sys.modules['test.models'] = type('test.models', (object,), {'__dict__': '', '__file__': ''})
+sys.modules['test.models'] = type('test.models', (object,), {'__dict__': '', '__file__': '', '__loader__': ''})
 
 from django.db import models
 from django.core import management
