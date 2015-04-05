@@ -1,7 +1,7 @@
 Changelog
 ---------
 
-0.3.0 (2015-04-XX)
+0.3.0 (2015-04-05)
 ++++++++++++++++++
 
 - Added: Documentation rewritten from scratch
