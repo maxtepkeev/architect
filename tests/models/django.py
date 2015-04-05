@@ -49,7 +49,8 @@ for item in ('day', 'week', 'month', 'year'):
 try:
     from django import setup
     setup()
+    command = 'migrate'
 except ImportError:
-    pass
+    command = 'syncdb'
 
-management.call_command('syncdb', interactive=False)
+management.call_command(command, verbosity=0, interactive=False)
