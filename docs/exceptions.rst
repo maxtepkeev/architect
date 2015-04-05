@@ -2,4 +2,4 @@ Exceptions
 ==========
 
 .. automodule:: architect.exceptions
-    :members:
+   :members:

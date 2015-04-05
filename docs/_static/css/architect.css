@@ -1,10 +1,22 @@
-.feature-matrix {width:100%;margin-bottom:24px}
-.feature-matrix td{background-color:#f3f6f6;padding:10px 5px;border:1px solid #e1e4e5}
-.feature-matrix th{font-weight:normal;padding:10px 5px;border:1px solid #e1e4e5}
-.feature-matrix .database{font-weight:bold;text-align:center;vertical-align:middle}
-.feature-matrix .orm{background-color:#f3f6f6;font-weight:bold;text-align:center}
-.feature-matrix .invisible-cell{border:0}
-.feature-matrix .feature{padding-left:10px;font-weight:bold}
-.feature-matrix .subfeature{padding-left:10px;font-weight:bold}
-.feature-matrix .implemented{background-color:#e3f6e7;color:#3d8940;text-align:center}
-.feature-matrix .not-implemented{background-color:#fff0f2;color:#b02d37;text-align:center}
+a.reference.external.image-reference {
+    text-decoration: none;
+    border-bottom: 0;
+}
+
+pre {
+    padding-left: 15px;
+}
+
+dl pre, blockquote pre {
+    margin-left: -30px;
+    padding-left: 15px;
+}
+
+dl dl pre, li pre {
+    margin-left: 0;
+    padding-left: 15px;
+}
+
+.highlight .go {
+    color: #888888;
+}

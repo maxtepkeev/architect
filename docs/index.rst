@@ -2,18 +2,16 @@ Architect
 =========
 
 .. image:: https://badge.fury.io/py/architect.svg
-    :target: https://badge.fury.io/py/architect
+   :target: https://badge.fury.io/py/architect
 
-.. image:: https://pypip.in/d/architect/badge.svg
-    :target: https://crate.io/packages/architect
+.. image:: https://img.shields.io/pypi/dm/architect.svg
+   :target: https://pypi.python.org/pypi/architect
 
-.. image:: https://travis-ci.org/maxtepkeev/architect.svg?branch=master
-    :target: https://travis-ci.org/maxtepkeev/architect
+.. image:: https://img.shields.io/travis/maxtepkeev/architect/master.svg
+   :target: https://travis-ci.org/maxtepkeev/architect
 
 .. image:: https://img.shields.io/coveralls/maxtepkeev/architect/master.svg
-    :target: https://coveralls.io/r/maxtepkeev/architect?branch=master
-
-|
+   :target: https://coveralls.io/r/maxtepkeev/architect?branch=master
 
 Architect is a set of tools which enhances ORMs written in Python with more features and simplifies
 different database related complex tasks.
@@ -44,15 +42,19 @@ Architect has no required external dependencies except for the ORM it will be us
 Contacts and Support
 --------------------
 
-I will be glad to get your feedback, `pull requests <https://github.com/maxtepkeev/architect/pulls>`_,
-`issues <https://github.com/maxtepkeev/architect/issues>`_, whatever. Feel free to contact me for any
-questions.
+I will be glad to get your `feedback <https://github.com/maxtepkeev/architect/issues>`_, `pull requests
+<https://github.com/maxtepkeev/architect/pulls>`_, `issues <https://github.com/maxtepkeev/architect/issues>`_,
+whatever. Feel free to contact me for any questions.
 
-Donations
----------
+Donations and Sponsorship
+-------------------------
 
-If you like this project and want to support it, please `GITTIP <https://www.gittip.com/maxtepkeev/>`_
-it's author.
+If you like this project and want to support it you have 3 options:
+
+#. Just give this project a star at the `GitHub <https://github.com/maxtepkeev/architect>`_ repository.
+#. You can express your gratitude via `Gratipay <https://gratipay.com/maxtepkeev/>`_.
+#. Become a sponsor. Contact me via ``tepkeev at gmail dot com`` if you are interested in becoming a sponsor
+   and we will discuss the terms and conditions.
 
 Copyright and License
 ---------------------
@@ -63,11 +65,11 @@ Table of contents
 -----------------
 
 .. toctree::
-    :maxdepth: 2
+   :includehidden:
+   :maxdepth: 2
 
-    installation
-    features
-    partitioning/index
-    exceptions
-    license
-    changelog
+   installation
+   features/index
+   exceptions
+   license
+   changelog
