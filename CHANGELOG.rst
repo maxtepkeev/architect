@@ -9,9 +9,11 @@ Changelog
   All functionality is now provided by an ``architect.install`` decorator which dynamically injects
   requested feature, e.g. partition, into a model under the ``architect`` namespace, e.g.
   ``model.architect.partition``. No more mixins, inheritance and nested classes with settings that
-  pollute model's namespace. More information is available in the :doc:`docs </features/index>`
+  pollute model's namespace. More information is available in the `docs <http://architect.readthedocs.org
+  /features/index.html>`__
 - Added: New ``operation`` feature which provide an abstraction layer to execute raw SQL statements
-  which will work with any supported ORM, see :doc:`docs </features/operation>`
+  which will work with any supported ORM, see `docs <http://architect.readthedocs.org/features/
+  operation.html>`__
 - Fixed: `Issue #8 <https://github.com/maxtepkeev/architect/issues/8>`__ (``cannot import name
   string_literal`` error with PonyORM and PyMySQL if ``pymysql.install_as_MySQLdb()`` was used)
 - Fixed: `Issue #7 <https://github.com/maxtepkeev/architect/pull/7>`__ (SQLite dummy backend was
