@@ -173,7 +173,11 @@ class uninstall(object):
                 model=model.__name__,
                 allowed=[name for name, obj in model.architect.__dict__.items() if isinstance(obj, BaseFeature)])
 
-        for name, method in inspect.getmembers(model, predicate=inspect.ismethod):
+        # The concept of "unbound methods" has been removed from Python 3. When accessing a method
+        # from a class, we now get a plain function object. This is what the isfunction check for
+        methods = inspect.getmembers(model, predicate=lambda m: inspect.isfunction(m) or inspect.ismethod(m))
+
+        for name, method in methods:
             if getattr(method, 'is_decorated', False):
                 setattr(model, name, method.original)
 

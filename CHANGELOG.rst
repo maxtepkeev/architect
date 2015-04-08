@@ -1,6 +1,12 @@
 Changelog
 ---------
 
+0.3.1 (2015-04-XX)
+++++++++++++++++++
+
+- Fixed: ``architect.uninstall`` decorator wasn't able to restore modified model methods under
+  Python 3
+
 0.3.0 (2015-04-05)
 ++++++++++++++++++
 
