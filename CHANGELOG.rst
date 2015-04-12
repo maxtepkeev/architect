@@ -1,9 +1,10 @@
 Changelog
 ---------
 
-0.3.1 (2015-04-XX)
+0.4.0 (2015-04-XX)
 ++++++++++++++++++
 
+- Added: `wheel <http://wheel.readthedocs.org>`__ support
 - Added: PostgreSQL: New ``integer`` range partition subtype (thanks to `Nikolay Yarovoy
   <https://github.com/nickspring>`__)
 - Added: PostgreSQL: New ``string_firstchars`` range partition subtype (thanks to `Dmitry Brytkov
