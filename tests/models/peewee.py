@@ -30,37 +30,38 @@ for item in ('day', 'week', 'month', 'year'):
 
     locals()[name].create_table(True)
 
-# Generation of entities for integer range partitioning
-for item in ('2', '5'):
-    class Meta(object):
-        database = db
-        db_table = 'test_rangeinteger{0}'.format(item)
-
-    name = 'RangeInteger{0}'.format(item)
-    partition = install('partition', type='range', subtype='integer', range=item, column='num')
-
-    locals()[name] = partition(type(name, (Model,), {
-        'name': CharField(),
-        'num': IntegerField(),
-        'Meta': Meta,
-    }))
-
-    locals()[name].create_table(True)
-
-# Generation of entities for string range partitioning
-for subtype in ('string_firstchars', 'string_lastchars'):
+if not os.environ.get('DB') == 'mysql':
+    # Generation of entities for integer range partitioning
     for item in ('2', '5'):
         class Meta(object):
             database = db
-            db_table = 'test_range{0}{1}'.format(subtype, item)
+            db_table = 'test_rangeinteger{0}'.format(item)
 
-        name = 'Range{0}{1}'.format(''.join(s.capitalize() for s in subtype.split('_')), item)
-        partition = install('partition', type='range', subtype=subtype, range=item, column='title')
+        name = 'RangeInteger{0}'.format(item)
+        partition = install('partition', type='range', subtype='integer', range=item, column='num')
 
         locals()[name] = partition(type(name, (Model,), {
             'name': CharField(),
-            'title': CharField(),
+            'num': IntegerField(),
             'Meta': Meta,
         }))
 
         locals()[name].create_table(True)
+
+    # Generation of entities for string range partitioning
+    for subtype in ('string_firstchars', 'string_lastchars'):
+        for item in ('2', '5'):
+            class Meta(object):
+                database = db
+                db_table = 'test_range{0}{1}'.format(subtype, item)
+
+            name = 'Range{0}{1}'.format(''.join(s.capitalize() for s in subtype.split('_')), item)
+            partition = install('partition', type='range', subtype=subtype, range=item, column='title')
+
+            locals()[name] = partition(type(name, (Model,), {
+                'name': CharField(),
+                'title': CharField(),
+                'Meta': Meta,
+            }))
+
+            locals()[name].create_table(True)
