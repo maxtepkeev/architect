@@ -18,11 +18,44 @@ class Partition(BasePartition):
         """
         Prepares needed triggers and functions for those triggers.
         """
+        spaces = {'declarations': 5, 'variables': 5, 'checks': 9}
+        definitions, formatters = self._get_definitions()
+
+        for definition in definitions:
+            for index, _ in enumerate(definitions[definition]):
+                if index > 0:
+                    definitions[definition][index] = '    ' * spaces[definition] + definitions[definition][index]
+            definitions[definition] = '\n'.join(definitions[definition]).format(**formatters)
+
         return self.database.execute("""
             -- We need to create a before insert function
-            CREATE OR REPLACE FUNCTION {parent_table}_insert_child()
+            CREATE OR REPLACE FUNCTION {{parent_table}}_insert_child()
             RETURNS TRIGGER AS $$
-                {function}
+                DECLARE
+                    tablename VARCHAR;
+                    match {{parent_table}}.{{column}}%TYPE;
+                    {declarations}
+                BEGIN
+                    {variables}
+
+                    IF NOT EXISTS(
+                        SELECT 1 FROM information_schema.tables WHERE table_name=tablename)
+                    THEN
+                        BEGIN
+                            EXECUTE 'CREATE TABLE ' || tablename || ' (
+                                CHECK (
+                                    ' || {checks} || '
+                                ),
+                                LIKE "{{parent_table}}" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES
+                            ) INHERITS ("{{parent_table}}");';
+                        EXCEPTION WHEN duplicate_table THEN
+                            -- pass
+                        END;
+                    END IF;
+
+                    EXECUTE 'INSERT INTO ' || tablename || ' VALUES (($1).*);' USING NEW;
+                    RETURN NEW;
+                END;
             $$ LANGUAGE plpgsql;
 
             -- Then we create a trigger which calls the before insert function
@@ -31,20 +64,20 @@ class Partition(BasePartition):
             IF NOT EXISTS(
                 SELECT 1
                 FROM information_schema.triggers
-                WHERE event_object_table = '{parent_table}'
-                AND trigger_name = 'before_insert_{parent_table}_trigger'
+                WHERE event_object_table = '{{parent_table}}'
+                AND trigger_name = 'before_insert_{{parent_table}}_trigger'
             ) THEN
-                CREATE TRIGGER before_insert_{parent_table}_trigger
-                    BEFORE INSERT ON "{parent_table}"
-                    FOR EACH ROW EXECUTE PROCEDURE {parent_table}_insert_child();
+                CREATE TRIGGER before_insert_{{parent_table}}_trigger
+                    BEFORE INSERT ON "{{parent_table}}"
+                    FOR EACH ROW EXECUTE PROCEDURE {{parent_table}}_insert_child();
             END IF;
             END $$;
 
             -- Then we create a function to delete duplicate row from the master table after insert
-            CREATE OR REPLACE FUNCTION {parent_table}_delete_master()
+            CREATE OR REPLACE FUNCTION {{parent_table}}_delete_master()
             RETURNS TRIGGER AS $$
                 BEGIN
-                    DELETE FROM ONLY "{parent_table}" WHERE {pk};
+                    DELETE FROM ONLY "{{parent_table}}" WHERE {{pk}};
                     RETURN NEW;
                 END;
             $$ LANGUAGE plpgsql;
@@ -55,18 +88,18 @@ class Partition(BasePartition):
             IF NOT EXISTS(
                 SELECT 1
                 FROM information_schema.triggers
-                WHERE event_object_table = '{parent_table}'
-                AND trigger_name = 'after_insert_{parent_table}_trigger'
+                WHERE event_object_table = '{{parent_table}}'
+                AND trigger_name = 'after_insert_{{parent_table}}_trigger'
             ) THEN
-                CREATE TRIGGER after_insert_{parent_table}_trigger
-                    AFTER INSERT ON "{parent_table}"
-                    FOR EACH ROW EXECUTE PROCEDURE {parent_table}_delete_master();
+                CREATE TRIGGER after_insert_{{parent_table}}_trigger
+                    AFTER INSERT ON "{{parent_table}}"
+                    FOR EACH ROW EXECUTE PROCEDURE {{parent_table}}_delete_master();
             END IF;
             END $$;
-        """.format(
+        """.format(**definitions).format(
             pk=' AND '.join('{pk} = NEW.{pk}'.format(pk=pk) for pk in self.pks),
             parent_table=self.table,
-            function=self._get_function()
+            column=self.column_name
         ))
 
     def exists(self):
@@ -81,6 +114,12 @@ class Partition(BasePartition):
         """
         pass
 
+    def _get_definitions(self):
+        """
+        Returns needed definitions for chosen partition type/subtype.
+        """
+        raise NotImplementedError('Method "_get_definitions" not implemented in: {0}'.format(self.__class__.__name__))
+
 
 class RangePartition(Partition):
     """
@@ -91,12 +130,14 @@ class RangePartition(Partition):
         self.range = meta['range']
         self.subtype = meta['subtype']
 
-    def _get_function(self):
+    def _get_definitions(self):
         """
-        Dynamically loads needed before insert function body depending on the partition subtype.
+        Dynamically returns needed definitions depending on the partition subtype.
         """
         try:
-            return getattr(self, '_get_{0}_function'.format(self.subtype))()
+            definitions = getattr(self, '_get_{0}_definitions'.format(self.subtype))()
+            formatters = dict(range=self.range, subtype=self.subtype, **definitions.pop('formatters', {}))
+            return definitions, formatters
         except AttributeError:
             import re
             expression = '_get_(\w+)_function'
@@ -106,9 +147,9 @@ class RangePartition(Partition):
                 current=self.subtype,
                 allowed=[re.match(expression, c).group(1) for c in dir(self) if re.match(expression, c) is not None])
 
-    def _get_date_function(self):
+    def _get_date_definitions(self):
         """
-        Contains a before insert function body for date partition subtype.
+        Returns definitions for date partition subtype.
         """
         patterns = {
             'day': '"y"YYYY"d"DDD',
@@ -126,35 +167,91 @@ class RangePartition(Partition):
                 current=self.range,
                 allowed=patterns.keys())
 
-        return """
-            DECLARE tablename TEXT;
-            DECLARE columntype TEXT;
-            DECLARE startdate TIMESTAMP;
-            BEGIN
-                startdate := date_trunc('{range}', NEW.{column});
-                tablename := '{parent_table}_' || to_char(NEW.{column}, '{pattern}');
+        return {
+            'formatters': {'pattern': pattern},
+            'declarations': [],
+            'variables': [
+                "match := DATE_TRUNC('{range}', NEW.{{column}});",
+                "tablename := '{{parent_table}}_' || TO_CHAR(NEW.{{column}}, '{pattern}');"
+            ],
+            'checks': [
+                "'{{column}} >= ''' || match || ''' AND {{column}} < ''' || (match + '1 {range}' :: INTERVAL) || ''''",
+            ]
+        }
 
-                IF NOT EXISTS(
-                    SELECT 1 FROM information_schema.tables WHERE table_name=tablename)
-                THEN
-                    BEGIN
-                        SELECT data_type INTO columntype
-                        FROM information_schema.columns
-                        WHERE table_name = '{parent_table}' AND column_name = '{column}';
+    def _get_integer_definitions(self):
+        """
+        Returns definitions for integer partition subtype.
+        """
+        if not self.range.isdigit() or int(self.range) < 1:
+            raise PartitionRangeError(
+                model=self.model.__name__,
+                dialect=self.dialect,
+                current=self.range,
+                allowed=['positive integer'])
 
-                        EXECUTE 'CREATE TABLE ' || tablename || ' (
-                            CHECK (
-                                {column} >= ''' || startdate || '''::' || columntype || ' AND
-                                {column} < ''' || (startdate + '1 {range}'::interval) || '''::' || columntype || '
-                            ),
-                            LIKE "{parent_table}" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES
-                        ) INHERITS ("{parent_table}");';
-                    EXCEPTION WHEN duplicate_table THEN
-                        -- pass
-                    END;
-                END IF;
+        return {
+            'declarations': ['checks TEXT;'],
+            'variables': [
+                "IF NEW.{{column}} = 0 THEN",
+                "    tablename := '{{parent_table}}_0';",
+                "    checks := '{{column}} = 0';",
+                "ELSE",
+                "    IF NEW.{{column}} > 0 THEN",
+                "        match := ((NEW.{{column}} - 1) / {range}) * {range} + 1;",
+                "        tablename := '{{parent_table}}_' || match || '_' || (match + {range}) - 1;",
+                "    ELSE",
+                "        match := FLOOR(NEW.{{column}} :: FLOAT / {range} :: FLOAT) * {range};",
+                "        tablename := '{{parent_table}}_m' || ABS(match) || '_m' || ABS((match + {range}) - 1);",
+                "    END IF;",
+                "    checks := '{{column}} >= ' || match || ' AND {{column}} <= ' || (match + {range}) - 1;",
+                "END IF;"
+            ],
+            'checks': [
+                "checks"
+            ]
+        }
 
-                EXECUTE 'INSERT INTO ' || tablename || ' VALUES (($1).*);' USING NEW;
-                RETURN NEW;
-            END;
-        """.format(parent_table=self.table, range=self.range, column=self.column_name, pattern=pattern)
+    def _get_string_firstchars_definitions(self):
+        """
+        Returns definitions for string firstchars partition subtype.
+        """
+        if not self.range.isdigit() or int(self.range) < 1:
+            raise PartitionRangeError(
+                model=self.model.__name__,
+                dialect=self.dialect,
+                current=self.range,
+                allowed=['positive integer'])
+
+        return {
+            'declarations': [],
+            'variables': [
+                "match := LOWER(SUBSTR(NEW.{{column}}, 1, {range}));",
+                "tablename := '{{parent_table}}_' || match;"
+            ],
+            'checks': [
+                "'LOWER(SUBSTR({{column}}, 1, {range})) = ''' || match || ''''"
+            ]
+        }
+
+    def _get_string_lastchars_definitions(self):
+        """
+        Returns definitions for string lastchars partition subtype.
+        """
+        if not self.range.isdigit() or int(self.range) < 1:
+            raise PartitionRangeError(
+                model=self.model.__name__,
+                dialect=self.dialect,
+                current=self.range,
+                allowed=['positive integer'])
+
+        return {
+            'declarations': [],
+            'variables': [
+                "match := LOWER(SUBSTRING(NEW.{{column}} FROM '.{{{{{range}}}}}$'));",
+                "tablename := '{{parent_table}}_' || match;"
+            ],
+            'checks': [
+                "'LOWER(SUBSTRING({{column}} FROM ''.{{{{{range}}}}}$'')) = ''' || match || ''''"
+            ]
+        }

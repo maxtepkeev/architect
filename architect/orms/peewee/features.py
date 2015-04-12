@@ -9,7 +9,7 @@ from ...orms.bases import BasePartitionFeature, BaseOperationFeature
 
 class OperationFeature(BaseOperationFeature):
     def execute(self, sql, autocommit=True):
-        return self.model_cls._meta.database.execute_sql(sql, require_commit=autocommit)
+        return self.model_cls._meta.database.execute_sql(sql.replace('%', '%%'), require_commit=autocommit)
 
 
 class PartitionFeature(BasePartitionFeature):

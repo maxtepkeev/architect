@@ -29,7 +29,7 @@ class ConnectionMixin(object):
 
 class OperationFeature(ConnectionMixin, BaseOperationFeature):
     def execute(self, sql, autocommit=True):
-        return self.connection.execution_options(autocommit=autocommit).execute(sql)
+        return self.connection.execution_options(autocommit=autocommit).execute(sql.replace('%', '%%'))
 
 
 class PartitionFeature(ConnectionMixin, BasePartitionFeature):

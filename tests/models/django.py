@@ -45,6 +45,39 @@ for item in ('day', 'week', 'month', 'year'):
         'Meta': Meta,
     }))
 
+# Generation of entities for integer range partitioning
+for item in ('2', '5'):
+    class Meta(object):
+        app_label = 'test'
+        db_table = 'test_rangeinteger{0}'.format(item)
+
+    name = 'RangeInteger{0}'.format(item)
+    partition = install('partition', type='range', subtype='integer', range=item, column='num')
+
+    locals()[name] = partition(type(name, (models.Model,), {
+        '__module__': 'test.models',
+        'name': models.CharField(max_length=255),
+        'num': models.IntegerField(),
+        'Meta': Meta,
+    }))
+
+# Generation of entities for string range partitioning
+for subtype in ('string_firstchars', 'string_lastchars'):
+    for item in ('2', '5'):
+        class Meta(object):
+            app_label = 'test'
+            db_table = 'test_range{0}{1}'.format(subtype, item)
+
+        name = 'Range{0}{1}'.format(''.join(s.capitalize() for s in subtype.split('_')), item)
+        partition = install('partition', type='range', subtype=subtype, range=item, column='title')
+
+        locals()[name] = partition(type(name, (models.Model,), {
+            '__module__': 'test.models',
+            'name': models.CharField(max_length=255),
+            'title': models.CharField(max_length=255),
+            'Meta': Meta,
+        }))
+
 # Django >= 1.7 needs this
 try:
     from django import setup
