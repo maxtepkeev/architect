@@ -1,3 +1,7 @@
+"""
+Tests Pony specific behaviour.
+"""
+
 import os
 import sys
 

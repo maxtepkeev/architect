@@ -1,3 +1,7 @@
+"""
+Tests Django specific behaviour.
+"""
+
 import os
 import datetime
 

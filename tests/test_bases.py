@@ -1,3 +1,7 @@
+"""
+Tests base classes only.
+"""
+
 from . import unittest, mock
 
 from architect.databases.bases import BasePartition

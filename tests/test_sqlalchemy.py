@@ -1,3 +1,7 @@
+"""
+Tests SQLAlchemy specific behaviour.
+"""
+
 import os
 import sys
 import datetime

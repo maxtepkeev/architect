@@ -1,3 +1,7 @@
+"""
+Tests Peewee specific behaviour.
+"""
+
 import os
 import sys
 import datetime

@@ -1,3 +1,7 @@
+"""
+Tests commands from commands subpackage.
+"""
+
 import sys
 
 from . import unittest, capture

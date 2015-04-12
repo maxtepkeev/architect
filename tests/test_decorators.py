@@ -1,3 +1,7 @@
+"""
+Tests decorators only.
+"""
+
 from . import unittest, mock
 
 from architect import install, uninstall
