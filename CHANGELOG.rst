@@ -5,12 +5,10 @@ Changelog
 ++++++++++++++++++
 
 - Added: `wheel <http://wheel.readthedocs.org>`__ support
-- Added: PostgreSQL: New ``integer`` range partition subtype (thanks to `Nikolay Yarovoy
-  <https://github.com/nickspring>`__)
-- Added: PostgreSQL: New ``string_firstchars`` range partition subtype (thanks to `Dmitry Brytkov
-  <https://github.com/dimoha>`__)
-- Added: PostgreSQL: New ``string_lastchars`` range partition subtype
-- Changed: PostgreSQL: Triggers refactoring
+- Added: PostgreSQL: New ``integer`` (thanks to `Nikolay Yarovoy <https://github.com/nickspring>`__),
+  ``string_firstchars`` (thanks to `Dmitry Brytkov <https://github.com/dimoha>`__) and ``string_lastchars``
+  range partition subtypes
+- Changed: PostgreSQL: Triggers refactoring and speedups
 - Fixed: ``architect.uninstall`` decorator wasn't able to restore modified model methods under
   Python 3
 
