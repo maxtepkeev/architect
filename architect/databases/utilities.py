@@ -15,6 +15,13 @@ def get_database_module(dialect):
 
     :param string dialect: (required). Database dialect name.
     """
+    aliases = {
+        ('mysql',): 'mysql',
+        ('sqlite',): 'sqlite',
+        ('pgsql', 'postgres', 'postgresql'): 'postgresql',
+    }
+
+    dialect = next((aliases[alias] for alias in aliases if dialect in alias), dialect)
     names = [str(mod[1]) for mod in pkgutil.iter_modules([os.path.join(os.path.dirname(__file__), dialect)])]
 
     try:
