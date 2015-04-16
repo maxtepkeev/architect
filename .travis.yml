@@ -6,6 +6,21 @@ python:
   - 3.3
   - 3.4
 env:
+  - SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=postgresql
+  - SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=mysql
+  - SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=sqlite
+  - SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB=postgresql
+  - SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB=mysql
+  - SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB=sqlite
+  - SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB=postgresql
+  - SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB=mysql
+  - SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB=sqlite
+  - SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB=postgresql
+  - SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB=mysql
+  - SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB=sqlite
+  - SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=postgresql
+  - SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=mysql
+  - SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=sqlite
   - PEEWEE='peewee>=2.2.0,<2.3.0' DB=postgresql
   - PEEWEE='peewee>=2.2.0,<2.3.0' DB=mysql
   - PEEWEE='peewee>=2.2.0,<2.3.0' DB=sqlite
@@ -48,6 +63,96 @@ env:
 matrix:
   fast_finish: true
   exclude:
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=postgresql
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=mysql
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=sqlite
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB=postgresql
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB=mysql
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB=sqlite
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB=postgresql
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB=mysql
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB=sqlite
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB=postgresql
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB=mysql
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB=sqlite
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=postgresql
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=mysql
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=sqlite
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=postgresql
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=mysql
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=sqlite
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB=postgresql
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB=mysql
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB=sqlite
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB=postgresql
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB=mysql
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB=sqlite
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB=postgresql
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB=mysql
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB=sqlite
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=postgresql
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=mysql
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=sqlite
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=postgresql
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=mysql
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=sqlite
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB=postgresql
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB=mysql
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB=sqlite
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB=postgresql
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB=mysql
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB=sqlite
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB=postgresql
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB=mysql
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB=sqlite
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=postgresql
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=mysql
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=sqlite
     - python: 2.6
       env: DJANGO='django>=1.7.0,<1.8.0' DB=postgresql
     - python: 2.6
@@ -115,6 +220,7 @@ install:
   - if [[ $PEEWEE ]]; then travis_retry pip install $PEEWEE; fi
   - if [[ $PONY ]]; then travis_retry pip install $PONY; fi
   - if [[ $SQLALCHEMY ]]; then travis_retry pip install $SQLALCHEMY; fi
+  - if [[ $SQLOBJECT ]]; then travis_retry pip install $SQLOBJECT; fi
 script:
   - nosetests --with-coverage --cover-erase --cover-package=architect
 after_success:

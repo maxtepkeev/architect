@@ -5,6 +5,7 @@ Changelog
 ++++++++++++++++++
 
 - Added: `wheel <http://wheel.readthedocs.org>`__ support
+- Added: `SQLObject <http://www.sqlobject.org>`__ ORM support
 - Added: PostgreSQL: New ``integer`` (thanks to `Nikolay Yarovoy <https://github.com/nickspring>`__),
   ``string_firstchars`` (thanks to `Dmitry Brytkov <https://github.com/dimoha>`__) and ``string_lastchars``
   range partition subtypes

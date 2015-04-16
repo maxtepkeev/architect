@@ -10,6 +10,7 @@ Table partitioning feature is supported by Architect for the following ORMs:
 * `Peewee <https://peewee.readthedocs.org>`_ >= 2.2.0
 * `Pony <http://ponyorm.com>`_ >= 0.5.0
 * `SQLAlchemy <http://www.sqlalchemy.org>`_ >= 0.8.0
+* `SQLObject <http://www.sqlobject.org>`_ >= 1.5.0
 
 To use this feature, define the model as usual and create a table for it in the database using the
 usual tools that your ORM provides. After the table was created, this feature can be installed into

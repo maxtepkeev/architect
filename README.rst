@@ -25,6 +25,7 @@ Features
   - Peewee
   - Pony
   - SQLAlchemy
+  - SQLObject
 
 * Supported DBs
 

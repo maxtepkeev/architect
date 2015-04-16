@@ -10,6 +10,7 @@ for the following ORMs:
 * `Peewee <https://peewee.readthedocs.org>`_ >= 2.2.0
 * `Pony <http://ponyorm.com>`_ >= 0.5.0
 * `SQLAlchemy <http://www.sqlalchemy.org>`_ >= 0.8.0
+* `SQLObject <http://www.sqlobject.org>`_ >= 1.5.0
 
 This feature is used by all other Architect features internally and usually doesn't need to be
 installed separately. If this is the only feature that will be used in the model it should be
