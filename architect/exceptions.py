@@ -137,14 +137,14 @@ class PartitionTypeError(BaseDatabaseError):
             'supported types for "{dialect}" database are: {{allowed}}', **kw)
 
 
-class PartitionRangeError(BaseDatabaseError):
+class PartitionConstraintError(BaseDatabaseError):
     """
-    Unsupported partition range.
+    Unsupported partition constraint.
     """
     def __init__(self, **kw):
-        super(PartitionRangeError, self).__init__(
-            'Unsupported partition range "{{current}}" in "{model}" model, '
-            'supported partition ranges for "{dialect}" database are: {{allowed}}', **kw)
+        super(PartitionConstraintError, self).__init__(
+            'Unsupported partition constraint "{{current}}" in "{model}" model, '
+            'supported partition constraints for "{dialect}" database are: {{allowed}}', **kw)
 
 
 class PartitionRangeSubtypeError(BaseDatabaseError):

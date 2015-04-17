@@ -10,7 +10,7 @@ from ..bases import BasePartition
 from ..utilities import DateTime
 from ...exceptions import (
     PartitionRangeSubtypeError,
-    PartitionRangeError,
+    PartitionConstraintError,
     PartitionFunctionError
 )
 
@@ -42,7 +42,7 @@ class RangePartition(Partition):
     """
     def __init__(self, model, **meta):
         super(RangePartition, self).__init__(model, **meta)
-        self.range = meta['range']
+        self.constraint = meta['constraint']
         self.subtype = meta['subtype']
         self.datetime = DateTime(self.column_value)
 
@@ -75,7 +75,7 @@ class RangePartition(Partition):
             child_table=self._get_name(),
             parent_table=self.table,
             function=self._get_function(),
-            period_end=self.datetime.get_period(self.range)[1],
+            period_end=self.datetime.get_period(self.constraint)[1],
             addition='86400' if self._get_column_type() == 'timestamp' else '1'
         ))
 
@@ -107,14 +107,14 @@ class RangePartition(Partition):
 
         try:
             if self.column_value is None:
-                pattern = patterns[self.range]['none']
+                pattern = patterns[self.constraint]['none']
             else:
-                pattern = self.column_value.strftime(patterns[self.range]['real'])
+                pattern = self.column_value.strftime(patterns[self.constraint]['real'])
         except KeyError:
-            raise PartitionRangeError(
+            raise PartitionConstraintError(
                 model=self.model.__name__,
                 dialect=self.dialect,
-                current=self.range,
+                current=self.constraint,
                 allowed=patterns.keys())
 
         return '{0}_{1}'.format(self.table, pattern)

@@ -9,7 +9,7 @@ using any kind of the ORM or anything else.
 from ..bases import BasePartition
 from ...exceptions import (
     PartitionRangeSubtypeError,
-    PartitionRangeError
+    PartitionConstraintError
 )
 
 
@@ -127,7 +127,7 @@ class RangePartition(Partition):
     """
     def __init__(self, model, **meta):
         super(RangePartition, self).__init__(model, **meta)
-        self.range = meta['range']
+        self.constraint = meta['constraint']
         self.subtype = meta['subtype']
 
     def _get_definitions(self):
@@ -136,7 +136,7 @@ class RangePartition(Partition):
         """
         try:
             definitions = getattr(self, '_get_{0}_definitions'.format(self.subtype))()
-            formatters = dict(range=self.range, subtype=self.subtype, **definitions.pop('formatters', {}))
+            formatters = dict(constraint=self.constraint, subtype=self.subtype, **definitions.pop('formatters', {}))
             return definitions, formatters
         except AttributeError:
             import re
@@ -159,23 +159,23 @@ class RangePartition(Partition):
         }
 
         try:
-            pattern = patterns[self.range]
+            pattern = patterns[self.constraint]
         except KeyError:
-            raise PartitionRangeError(
+            raise PartitionConstraintError(
                 model=self.model.__name__,
                 dialect=self.dialect,
-                current=self.range,
+                current=self.constraint,
                 allowed=patterns.keys())
 
         return {
             'formatters': {'pattern': pattern},
             'declarations': [],
             'variables': [
-                "match := DATE_TRUNC('{range}', NEW.{{column}});",
+                "match := DATE_TRUNC('{constraint}', NEW.{{column}});",
                 "tablename := '{{parent_table}}_' || TO_CHAR(NEW.{{column}}, '{pattern}');"
             ],
             'checks': [
-                "'{{column}} >= ''' || match || ''' AND {{column}} < ''' || (match + '1 {range}' :: INTERVAL) || ''''",
+                "'{{column}} >= ''' || match || ''' AND {{column}} < ''' || (match + INTERVAL '1 {constraint}') || ''''"
             ]
         }
 
@@ -183,11 +183,11 @@ class RangePartition(Partition):
         """
         Returns definitions for integer partition subtype.
         """
-        if not self.range.isdigit() or int(self.range) < 1:
-            raise PartitionRangeError(
+        if not self.constraint.isdigit() or int(self.constraint) < 1:
+            raise PartitionConstraintError(
                 model=self.model.__name__,
                 dialect=self.dialect,
-                current=self.range,
+                current=self.constraint,
                 allowed=['positive integer'])
 
         return {
@@ -198,13 +198,13 @@ class RangePartition(Partition):
                 "    checks := '{{column}} = 0';",
                 "ELSE",
                 "    IF NEW.{{column}} > 0 THEN",
-                "        match := ((NEW.{{column}} - 1) / {range}) * {range} + 1;",
-                "        tablename := '{{parent_table}}_' || match || '_' || (match + {range}) - 1;",
+                "        match := ((NEW.{{column}} - 1) / {constraint}) * {constraint} + 1;",
+                "        tablename := '{{parent_table}}_' || match || '_' || (match + {constraint}) - 1;",
                 "    ELSE",
-                "        match := FLOOR(NEW.{{column}} :: FLOAT / {range} :: FLOAT) * {range};",
-                "        tablename := '{{parent_table}}_m' || ABS(match) || '_m' || ABS((match + {range}) - 1);",
+                "        match := FLOOR(NEW.{{column}} :: FLOAT / {constraint} :: FLOAT) * {constraint};",
+                "        tablename := '{{parent_table}}_m' || ABS(match) || '_m' || ABS((match + {constraint}) - 1);",
                 "    END IF;",
-                "    checks := '{{column}} >= ' || match || ' AND {{column}} <= ' || (match + {range}) - 1;",
+                "    checks := '{{column}} >= ' || match || ' AND {{column}} <= ' || (match + {constraint}) - 1;",
                 "END IF;"
             ],
             'checks': [
@@ -216,21 +216,21 @@ class RangePartition(Partition):
         """
         Returns definitions for string firstchars partition subtype.
         """
-        if not self.range.isdigit() or int(self.range) < 1:
-            raise PartitionRangeError(
+        if not self.constraint.isdigit() or int(self.constraint) < 1:
+            raise PartitionConstraintError(
                 model=self.model.__name__,
                 dialect=self.dialect,
-                current=self.range,
+                current=self.constraint,
                 allowed=['positive integer'])
 
         return {
             'declarations': [],
             'variables': [
-                "match := LOWER(SUBSTR(NEW.{{column}}, 1, {range}));",
+                "match := LOWER(SUBSTR(NEW.{{column}}, 1, {constraint}));",
                 "tablename := '{{parent_table}}_' || match;"
             ],
             'checks': [
-                "'LOWER(SUBSTR({{column}}, 1, {range})) = ''' || match || ''''"
+                "'LOWER(SUBSTR({{column}}, 1, {constraint})) = ''' || match || ''''"
             ]
         }
 
@@ -238,20 +238,20 @@ class RangePartition(Partition):
         """
         Returns definitions for string lastchars partition subtype.
         """
-        if not self.range.isdigit() or int(self.range) < 1:
-            raise PartitionRangeError(
+        if not self.constraint.isdigit() or int(self.constraint) < 1:
+            raise PartitionConstraintError(
                 model=self.model.__name__,
                 dialect=self.dialect,
-                current=self.range,
+                current=self.constraint,
                 allowed=['positive integer'])
 
         return {
             'declarations': [],
             'variables': [
-                "match := LOWER(SUBSTRING(NEW.{{column}} FROM '.{{{{{range}}}}}$'));",
+                "match := LOWER(SUBSTRING(NEW.{{column}} FROM '.{{{{{constraint}}}}}$'));",
                 "tablename := '{{parent_table}}_' || match;"
             ],
             'checks': [
-                "'LOWER(SUBSTRING({{column}} FROM ''.{{{{{range}}}}}$'')) = ''' || match || ''''"
+                "'LOWER(SUBSTRING({{column}} FROM ''.{{{{{constraint}}}}}$'')) = ''' || match || ''''"
             ]
         }

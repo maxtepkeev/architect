@@ -8,7 +8,7 @@ from . import unittest, mock
 
 from architect.databases.postgresql.partition import Partition, RangePartition
 from architect.exceptions import (
-    PartitionRangeError,
+    PartitionConstraintError,
     PartitionRangeSubtypeError
 )
 
@@ -18,7 +18,7 @@ class BasePartitionTestCase(object):
         model = mock.Mock(__name__='Foo')
         defaults = {'table': None, 'column_value': None, 'column': None, 'pk': None}
         self.partition = Partition(model, **defaults)
-        self.range_partition = RangePartition(model, **dict(range='foo', subtype='bar', **defaults))
+        self.range_partition = RangePartition(model, **dict(constraint='foo', subtype='bar', **defaults))
 
 
 @unittest.skipUnless(os.environ.get('DB') == 'sqlite', 'Not a SQLite build')
@@ -34,21 +34,21 @@ class PostgresqlPartitionTestCase(BasePartitionTestCase, unittest.TestCase):
     def test__get_definitions_raises_partition_range_subtype_error(self):
         self.assertRaises(PartitionRangeSubtypeError, lambda: self.range_partition._get_definitions())
 
-    def test__get_date_definitions_raises_partition_range_error(self):
+    def test__get_date_definitions_raises_partition_constraint_error(self):
         self.range_partition.subtype = 'date'
-        self.assertRaises(PartitionRangeError, lambda: self.range_partition._get_definitions())
+        self.assertRaises(PartitionConstraintError, lambda: self.range_partition._get_definitions())
 
-    def test__get_integer_definitions_raises_partition_range_error(self):
+    def test__get_integer_definitions_raises_partition_constraint_error(self):
         self.range_partition.subtype = 'integer'
-        self.assertRaises(PartitionRangeError, lambda: self.range_partition._get_definitions())
+        self.assertRaises(PartitionConstraintError, lambda: self.range_partition._get_definitions())
 
-    def test__get_string_firstchars_definitions_raises_partition_range_error(self):
+    def test__get_string_firstchars_definitions_raises_partition_constraint_error(self):
         self.range_partition.subtype = 'string_firstchars'
-        self.assertRaises(PartitionRangeError, lambda: self.range_partition._get_definitions())
+        self.assertRaises(PartitionConstraintError, lambda: self.range_partition._get_definitions())
 
-    def test__get_string_lastchars_definitions_raises_partition_range_error(self):
+    def test__get_string_lastchars_definitions_raises_partition_constraint_error(self):
         self.range_partition.subtype = 'string_lastchars'
-        self.assertRaises(PartitionRangeError, lambda: self.range_partition._get_definitions())
+        self.assertRaises(PartitionConstraintError, lambda: self.range_partition._get_definitions())
 
 
 @unittest.skipUnless(os.environ.get('DB') == 'mysql', 'Not a MySQL build')

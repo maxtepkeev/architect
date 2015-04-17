@@ -20,7 +20,7 @@ for item in ('day', 'week', 'month', 'year'):
         table = 'test_rangedate{0}'.format(item)
 
     name = 'RangeDate{0}'.format(item.capitalize())
-    partition = install('partition', type='range', subtype='date', range=item, column='created')
+    partition = install('partition', type='range', subtype='date', constraint=item, column='created')
 
     locals()[name] = partition(type(name, (SQLObject,), {
         'name': StringCol(),
@@ -37,7 +37,7 @@ if not os.environ.get('DB') == 'mysql':
             table = 'test_rangeinteger{0}'.format(item)
 
         name = 'RangeInteger{0}'.format(item)
-        partition = install('partition', type='range', subtype='integer', range=item, column='num')
+        partition = install('partition', type='range', subtype='integer', constraint=item, column='num')
 
         locals()[name] = partition(type(name, (SQLObject,), {
             'name': StringCol(),
@@ -54,7 +54,7 @@ if not os.environ.get('DB') == 'mysql':
                 table = 'test_range{0}{1}'.format(subtype, item)
 
             name = 'Range{0}{1}'.format(''.join(s.capitalize() for s in subtype.split('_')), item)
-            partition = install('partition', type='range', subtype=subtype, range=item, column='title')
+            partition = install('partition', type='range', subtype=subtype, constraint=item, column='title')
 
             locals()[name] = partition(type(name, (SQLObject,), {
                 'name': StringCol(),

@@ -9,6 +9,7 @@ Changelog
 - Added: PostgreSQL: New ``integer`` (thanks to `Nikolay Yarovoy <https://github.com/nickspring>`__),
   ``string_firstchars`` (thanks to `Dmitry Brytkov <https://github.com/dimoha>`__) and ``string_lastchars``
   range partition subtypes
+- Changed: ``range`` partition option renamed to ``constraint`` to better suit new partition subtypes
 - Changed: PostgreSQL: Triggers refactoring and speedups
 - Fixed: ``architect.uninstall`` decorator wasn't able to restore modified model methods under
   Python 3
