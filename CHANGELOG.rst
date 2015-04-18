@@ -1,7 +1,7 @@
 Changelog
 ---------
 
-0.4.0 (2015-04-XX)
+0.4.0 (2015-04-18)
 ++++++++++++++++++
 
 - Added: `wheel <http://wheel.readthedocs.org>`__ support
