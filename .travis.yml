@@ -45,6 +45,9 @@ env:
   - SQLALCHEMY='sqlalchemy>=0.9.0,<0.10.0' DB=postgresql
   - SQLALCHEMY='sqlalchemy>=0.9.0,<0.10.0' DB=mysql
   - SQLALCHEMY='sqlalchemy>=0.9.0,<0.10.0' DB=sqlite
+  - SQLALCHEMY='sqlalchemy>=1.0.0,<1.1.0' DB=postgresql
+  - SQLALCHEMY='sqlalchemy>=1.0.0,<1.1.0' DB=mysql
+  - SQLALCHEMY='sqlalchemy>=1.0.0,<1.1.0' DB=sqlite
   - DJANGO='django>=1.4.0,<1.5.0' DB=postgresql
   - DJANGO='django>=1.4.0,<1.5.0' DB=mysql
   - DJANGO='django>=1.4.0,<1.5.0' DB=sqlite
