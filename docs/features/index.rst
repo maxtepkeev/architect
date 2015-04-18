@@ -11,10 +11,10 @@ all of its features despite of the ORM being used.
 
 .. raw:: html
 
-    <h2 id="install">
-        install
-        <a class="headerlink" href="#install" title="Permalink to this headline">¶</a>
-    </h2>
+   <h2 id="install">
+       install
+       <a class="headerlink" href="#install" title="Permalink to this headline">¶</a>
+   </h2>
 
 All features in Architect are installed into models using ``install`` decorator. An ``install``
 decorator in it's general form can be written as the following:
@@ -59,10 +59,10 @@ This provides 100% non-conflicting behaviour with all ORMs and other 3rd party p
 
 .. raw:: html
 
-    <h2 id="uninstall">
-        uninstall
-        <a class="headerlink" href="#uninstall" title="Permalink to this headline">¶</a>
-    </h2>
+   <h2 id="uninstall">
+       uninstall
+       <a class="headerlink" href="#uninstall" title="Permalink to this headline">¶</a>
+   </h2>
 
 Under some circumstances a model might not need one or all of the installed features anymore, one
 example can be a model inheritance, where the parent model has a feature installed and a child model
@@ -79,8 +79,8 @@ doesn't want to use it. A feature can be easily uninstalled from a model using `
 where a ``feature`` is a feature name as a string which was installed before.
 
 .. toctree::
-    :hidden:
-    :maxdepth: 1
+   :hidden:
+   :maxdepth: 1
 
-    operation
-    partition
+   operation
+   partition/index

@@ -21,16 +21,16 @@ Features
 
 * Supported ORMs
 
-  - Django
-  - Peewee
-  - Pony
-  - SQLAlchemy
-  - SQLObject
+  - `Django <https://www.djangoproject.com>`_ >= 1.4
+  - `Peewee <https://peewee.readthedocs.org>`_ >= 2.2.0
+  - `Pony <http://ponyorm.com>`_ >= 0.5.0
+  - `SQLAlchemy <http://www.sqlalchemy.org>`_ >= 0.8.0
+  - `SQLObject <http://www.sqlobject.org>`_ >= 1.5.0
 
 * Supported DBs
 
-  - PostgreSQL
-  - MySQL
+  - `PostgreSQL <http://www.postgresql.org>`_ >= 8.0
+  - `MySQL <https://www.mysql.com>`_ >= 5.5
 
 * Supports Python 2.6 - 3.4
 * Extensively documented

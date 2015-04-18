@@ -80,17 +80,25 @@ html_show_sourcelink = True
 htmlhelp_basename = 'Architectdoc'
 
 
-# Returns method name without class name or module name prepended
-class MethodNameDocumenter(sphinx.ext.autodoc.MethodDocumenter):
-    objtype = 'methodname'
-
+# Returns object name without class name or module name prepended
+class NameOnlyMixin(object):
     def format_name(self):
         name = self.objpath[1]
         self.objpath = None
         return name
 
 
+class AttributeNameOnlyDocumenter(NameOnlyMixin, sphinx.ext.autodoc.AttributeDocumenter):
+    objtype = 'attribute-name-only'
+    directivetype = 'attribute'
+
+
+class MethodNameOnlyDocumenter(NameOnlyMixin, sphinx.ext.autodoc.MethodDocumenter):
+    objtype = 'method-name-only'
+
+
 # Documentation setup
 def setup(app):
     app.add_stylesheet('css/architect.css')
-    app.add_autodocumenter(MethodNameDocumenter)
+    app.add_autodocumenter(AttributeNameOnlyDocumenter)
+    app.add_autodocumenter(MethodNameOnlyDocumenter)

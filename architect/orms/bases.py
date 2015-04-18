@@ -79,7 +79,7 @@ class BasePartitionFeature(BaseFeature):
 
     def get_partition(self):
         """
-        Returns requested partition type object to work with.
+        Returns partition type object to work with depending on the given partition options.
         """
         database = get_database_module(self.model_meta['dialect'])
 
@@ -100,7 +100,7 @@ class BasePartitionFeature(BaseFeature):
     @property
     def model_meta(self):
         """
-        Returns dictionary of model meta attributes under common names.
+        Returns dictionary of model meta attributes needed for partitioning under common names.
         """
         raise NotImplementedError('Property "model_meta" not implemented in: {0}'.format(self.__class__.__name__))
 
