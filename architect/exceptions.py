@@ -89,7 +89,7 @@ class MethodAutoDecorateError(BaseDatabaseError):
     """
     def __init__(self, **kw):
         super(MethodAutoDecorateError, self).__init__(
-            'Unable to autodecorate method "{{current}}" in model "{model}", method not found', **kw)
+            'Unable to autodecorate method "{{current}}" in model "{model}" because it doesn\'t exist', **kw)
 
 
 class DatabaseError(BaseDatabaseError):
