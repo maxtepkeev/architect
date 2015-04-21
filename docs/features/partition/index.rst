@@ -23,8 +23,11 @@ where ``options`` are:
 - ``subtype`` (required). Partition subtype, e.g. ``date``, ``integer`` etc
 - ``constraint`` (required). What data fits into partition, e.g. ``day``, ``5`` (every 5 items) etc
 - ``column`` (required). Column, which value determines which partition record belongs to
-- ``dsn`` (optional). Data Source Name in the form of dialect://user:pass@host/database. Currently needed
-  only for SQLAlchemy ORM.
+- ``db`` (optional). Currently used with:
+
+  * Django - only for specifying other database name instead of ``default``.
+  * SQLAlchemy - required if model's ``metadata`` is not bound to any engine, should be set in the form of
+    Data Source Name, e.g. dialect://user:pass@host/database.
 
 Above options can take different values depending on the database type because different databases support
 different partition types, subtypes etc. To find out which values can be set for the above options choose

@@ -2,21 +2,32 @@
 Defines features for the Django ORM.
 """
 
-from django.db import connection, transaction
+from django.db import connections, transaction
 from django.db.models.fields import FieldDoesNotExist
+from django.db.utils import cached_property, ConnectionDoesNotExist
 
 from ...orms.bases import BasePartitionFeature, BaseOperationFeature
-from ...exceptions import PartitionColumnError, OptionNotSetError
+from ...exceptions import PartitionColumnError, OptionNotSetError, OptionValueError
 
 
-class OperationFeature(BaseOperationFeature):
-    def __init__(self, *args, **kwargs):
-        super(OperationFeature, self).__init__(*args, **kwargs)
-        self.cursor = connection.cursor()
+class ConnectionMixin(object):
+    """
+    Provides support for multiple database connections.
+    """
+    @cached_property
+    def connection(self):
+        db = self.options.get('db', 'default')
 
+        try:
+            return connections[db].cursor()
+        except ConnectionDoesNotExist as e:
+            raise OptionValueError(model=self.model_cls.__name__, current=db, option='db', cause=e)
+
+
+class OperationFeature(ConnectionMixin, BaseOperationFeature):
     def execute(self, sql, autocommit=True):
         if not autocommit:
-            return self.cursor.execute(sql)
+            return self.connection.execute(sql)
 
         try:
             autocommit = transaction.atomic  # Django >= 1.6
@@ -24,25 +35,25 @@ class OperationFeature(BaseOperationFeature):
             autocommit = transaction.commit_on_success  # Django <= 1.5
 
         with autocommit():
-            return self.cursor.execute(sql)
+            return self.connection.execute(sql)
 
     def select_one(self, sql):
         self.execute(sql)
-        result = self.cursor.fetchone()
+        result = self.connection.fetchone()
         return result[0] if result is not None else result
 
     def select_all(self, sql, as_dict=False):
         self.execute(sql)
 
         if as_dict:
-            result = [dict(zip([col[0] for col in self.cursor.description], row)) for row in self.cursor.fetchall()]
+            result = [dict(zip([c[0] for c in self.connection.description], row)) for row in self.connection.fetchall()]
         else:
-            result = self.cursor.fetchall()
+            result = self.connection.fetchall()
 
         return result
 
 
-class PartitionFeature(BasePartitionFeature):
+class PartitionFeature(ConnectionMixin, BasePartitionFeature):
     decorate = ('save',)
 
     @property
@@ -66,7 +77,7 @@ class PartitionFeature(BasePartitionFeature):
         return {
             'table': meta.db_table,
             'pk': meta.pk.column,
-            'dialect': connection.vendor,
+            'dialect': self.connection.db.vendor,
             'column_value': column_value,
         }
 
@@ -76,7 +87,12 @@ class PartitionFeature(BasePartitionFeature):
         Checks if partition exists and creates it if needed before saving model instance.
         """
         def wrapper(instance, *args, **kwargs):
-            partition = instance.architect.partition.get_partition()
+            feature = instance.architect.partition
+
+            if feature.options.get('db') is not None and 'using' not in kwargs:
+                kwargs['using'] = feature.options['db']
+
+            partition = feature.get_partition()
 
             if not partition.exists():
                 partition.create()
