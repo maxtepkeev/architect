@@ -6,7 +6,7 @@ from sqlalchemy import create_engine, event
 from sqlalchemy.exc import ArgumentError
 
 from ...orms.bases import BasePartitionFeature, BaseOperationFeature
-from ...exceptions import OptionNotSetError, DsnParseError
+from ...exceptions import OptionNotSetError, OptionValueError
 
 
 class ConnectionMixin(object):
@@ -23,8 +23,8 @@ class ConnectionMixin(object):
             return create_engine(self.options['dsn'])
         except KeyError as key:
             raise OptionNotSetError(model=self.model_cls.__name__, current=key)
-        except ArgumentError:
-            raise DsnParseError(model=self.model_cls.__name__, current=self.options['dsn'])
+        except ArgumentError as e:
+            raise OptionValueError(model=self.model_cls.__name__, current=self.options['dsn'], option='dsn', cause=e)
 
 
 class OperationFeature(ConnectionMixin, BaseOperationFeature):

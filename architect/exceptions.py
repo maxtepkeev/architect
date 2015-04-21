@@ -52,7 +52,7 @@ class BaseDatabaseError(BaseArchitectError):
     """
     def __init__(self, message, **kw):
         super(BaseDatabaseError, self).__init__(
-            message.format(model=kw.get('model', ''), dialect=kw.get('dialect', '')), **kw)
+            message.format(model=kw.pop('model', ''), dialect=kw.pop('dialect', ''), **kw), **kw)
 
 
 class ORMError(BaseDatabaseError):
@@ -110,12 +110,13 @@ class OptionNotSetError(BaseDatabaseError):
         super(OptionNotSetError, self).__init__('Option "{{current}}" isn\'t set for model "{model}"', **kw)
 
 
-class DsnParseError(BaseDatabaseError):
+class OptionValueError(BaseDatabaseError):
     """
-    Unable to parse given Data Source Name.
+    Invalid value provided for option.
     """
     def __init__(self, **kw):
-        super(DsnParseError, self).__init__('Invalid DSN "{{current}}" provided for model "{model}"', **kw)
+        super(OptionValueError, self).__init__(
+            'Invalid value "{{current}}" provided for option "{option}" in model "{model}", cause is: {cause}', **kw)
 
 
 class PartitionColumnError(BaseDatabaseError):
