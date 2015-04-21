@@ -4,6 +4,7 @@ Changelog
 0.5.0 (2015-05-XX)
 ++++++++++++++++++
 
+- Changed: ``dsn`` partition option renamed to ``db`` to cover more use cases
 - Changed: ``DsnParseError`` renamed to ``OptionValueError`` to cover more use cases
 
 0.4.0 (2015-04-18)

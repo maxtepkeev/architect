@@ -26,7 +26,7 @@ class install(object):
         """
         self.features = {}
         self.feature = feature
-        self.options = {'feature': options, 'global': dict((k, v) for k, v in options.items() if k in ('dsn',))}
+        self.options = {'feature': options, 'global': dict((k, v) for k, v in options.items() if k in ('db',))}
 
     def __call__(self, model):
         """

@@ -20,11 +20,11 @@ class ConnectionMixin(object):
             return self.model_cls.metadata.bind
 
         try:
-            return create_engine(self.options['dsn'])
+            return create_engine(self.options['db'])
         except KeyError as key:
             raise OptionNotSetError(model=self.model_cls.__name__, current=key)
         except ArgumentError as e:
-            raise OptionValueError(model=self.model_cls.__name__, current=self.options['dsn'], option='dsn', cause=e)
+            raise OptionValueError(model=self.model_cls.__name__, current=self.options['db'], option='db', cause=e)
 
 
 class OperationFeature(ConnectionMixin, BaseOperationFeature):

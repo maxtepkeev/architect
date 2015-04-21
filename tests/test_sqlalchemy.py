@@ -25,36 +25,37 @@ class BaseSqlAlchemyPartitionTestCase(object):
         cls.session = sessionmaker(bind=engine)()
 
     def test_bound_metadata(self):
-        url = RangeDateDay.architect.partition.options.pop('dsn')
+        url = RangeDateDay.architect.partition.options.pop('db')
         RangeDateDay.metadata.bind = engine
         self.session.add(RangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23)))
         self.session.commit()
         self.session.rollback()
         RangeDateDay.metadata.bind = None
-        RangeDateDay.architect.partition.options['dsn'] = url
+        RangeDateDay.architect.partition.options['db'] = url
 
-    def test_raises_bad_dsn_provided_error(self):
-        from architect.exceptions import DsnParseError
-        url = RangeDateDay.architect.partition.options['dsn']
-        RangeDateDay.architect.partition.options['dsn'] = 'foo'
-
-        with self.assertRaises(DsnParseError):
-            self.session.add(RangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23)))
-            self.session.commit()
-
-        self.session.rollback()
-        RangeDateDay.architect.partition.options['dsn'] = url
-
-    def test_raises_dsn_not_provided_error(self):
+    def test_raises_db_not_provided_error(self):
         from architect.exceptions import OptionNotSetError
-        url = RangeDateDay.architect.partition.options.pop('dsn')
+        url = RangeDateDay.architect.partition.options.pop('db')
 
         with self.assertRaises(OptionNotSetError):
             self.session.add(RangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23)))
             self.session.commit()
 
         self.session.rollback()
-        RangeDateDay.architect.partition.options['dsn'] = url
+        RangeDateDay.architect.partition.options['db'] = url
+
+    def test_raises_option_value_error(self):
+        from architect.exceptions import OptionValueError
+
+        url = RangeDateDay.architect.partition.options['db']
+        RangeDateDay.architect.partition.options['db'] = 'foo'
+
+        with self.assertRaises(OptionValueError):
+            self.session.add(RangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23)))
+            self.session.commit()
+
+        self.session.rollback()
+        RangeDateDay.architect.partition.options['db'] = url
 
 
 @unittest.skipUnless(os.environ.get('DB') == 'sqlite', 'Not a SQLite build')
