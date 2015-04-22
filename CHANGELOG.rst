@@ -8,6 +8,8 @@ Changelog
   /issues/9>`__)
 - Changed: ``dsn`` partition option renamed to ``db`` to cover more use cases
 - Changed: ``DsnParseError`` exception renamed to ``OptionValueError`` to cover more use cases
+- Fixed: "No module named modulename.py" error when trying to specify model's module with .py extension
+  at the end in partition command
 
 0.4.0 (2015-04-18)
 ++++++++++++++++++
