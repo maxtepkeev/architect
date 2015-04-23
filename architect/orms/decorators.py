@@ -66,7 +66,7 @@ class install(object):
         # inheritance. While the same can be achieved using metaclasses, the problem is that
         # every ORM also uses metaclasses which produces the metaclass conflict because a
         # class can't have two metaclasses. This situation can also be solved but it requires
-        # much more magical stuff to be written that is why this approach was chosen.
+        # much more magical stuff to be written that is why this approach was chosen
         class Architect(object):
             def __init__(self, features):
                 self.map = {}
