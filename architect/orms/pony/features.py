@@ -4,7 +4,7 @@ Defines features for the Pony ORM.
 
 from pony.orm.core import db_session
 
-from ...orms.bases import BasePartitionFeature, BaseOperationFeature
+from ..bases import BasePartitionFeature, BaseOperationFeature
 
 
 class OperationFeature(BaseOperationFeature):

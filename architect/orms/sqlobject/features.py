@@ -2,7 +2,7 @@
 Defines features for the SQLObject ORM.
 """
 
-from ...orms.bases import BasePartitionFeature, BaseOperationFeature
+from ..bases import BasePartitionFeature, BaseOperationFeature
 
 
 class OperationFeature(BaseOperationFeature):

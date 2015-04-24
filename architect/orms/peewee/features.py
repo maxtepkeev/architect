@@ -4,7 +4,7 @@ Defines features for the Peewee ORM.
 
 from peewee import CompositeKey
 
-from ...orms.bases import BasePartitionFeature, BaseOperationFeature
+from ..bases import BasePartitionFeature, BaseOperationFeature
 
 
 class OperationFeature(BaseOperationFeature):

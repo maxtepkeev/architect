@@ -5,7 +5,7 @@ Defines features for the SQLAlchemy ORM.
 from sqlalchemy import create_engine, event
 from sqlalchemy.exc import ArgumentError
 
-from ...orms.bases import BasePartitionFeature, BaseOperationFeature
+from ..bases import BasePartitionFeature, BaseOperationFeature
 from ...exceptions import OptionNotSetError, OptionValueError
 
 
