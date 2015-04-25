@@ -3,5 +3,6 @@ source = architect
 
 [report]
 omit =
+    */compat.py
     */python?.?/*
     */site-packages/*
