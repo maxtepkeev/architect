@@ -61,7 +61,7 @@ class ORMError(BaseDatabaseError):
     """
     def __init__(self, **kw):
         super(ORMError, self).__init__(
-            'Unsupported ORM "{{current}}" requested for model "{model}", available ORMs are: {{allowed}}', **kw)
+            'Unsupported ORM "{{current}}" requested for class "{model}", available ORMs are: {{allowed}}', **kw)
 
 
 class FeatureInstallError(BaseDatabaseError):
