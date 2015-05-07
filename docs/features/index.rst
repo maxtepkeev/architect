@@ -84,3 +84,4 @@ where a ``feature`` is a feature name as a string which was installed before.
 
    operation
    partition/index
+   custom

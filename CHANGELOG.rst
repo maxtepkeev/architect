@@ -6,6 +6,8 @@ Changelog
 
 - Added: Django: Support for multiple databases (`Issue #9 <https://github.com/maxtepkeev/architect
   /issues/9>`__)
+- Added: Support for custom features, see `docs <http://architect.readthedocs.org/features/custom.html>`__
+  for details
 - Changed: ``dsn`` partition option renamed to ``db`` to cover more use cases
 - Changed: ``DsnParseError`` exception renamed to ``OptionValueError`` to cover more use cases
 - Fixed: "No module named modulename.py" error when trying to specify model's module with .py extension

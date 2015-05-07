@@ -2,6 +2,8 @@
 Defines base classes used in orms module.
 """
 
+from .registry import Registrar
+from ..compat import with_metaclass
 from ..databases.utilities import get_database_module
 from ..exceptions import (
     PartitionTypeError,
@@ -10,11 +12,13 @@ from ..exceptions import (
 )
 
 
-class BaseFeature(object):
+class BaseFeature(with_metaclass(Registrar)):
     """
     Each feature is installed into the model using an "install" decorator. This class defines a
     common set of attributes and methods which is needed for a feature to be properly installed.
     """
+    orm = None         #: which orm this feature belongs to
+    name = None        #: name that will be used to access this feature
     decorate = ()      #: model methods that should be decorated by feature decorators
     dependencies = ()  #: features that this feature depends on
 
@@ -35,6 +39,8 @@ class BaseOperationFeature(BaseFeature):
     different APIs to work with raw SQL. This feature creates an abstraction layer to execute raw
     SQL statements which will work with any supported ORM.
     """
+    name = 'operation'
+
     def execute(self, sql, autocommit=True):
         """
         Executes raw SQL for write operations.
@@ -75,6 +81,7 @@ class BasePartitionFeature(BaseFeature):
     """
     Implements table partitioning functionality for the model.
     """
+    name = 'partition'
     dependencies = ('operation',)
 
     def get_partition(self):
@@ -108,7 +115,7 @@ class BasePartitionFeature(BaseFeature):
         """
         Returns current value for the specified partition column.
 
-        :param list allowed_columns: Names of valid columns for current model.
+        :param list allowed_columns: (required). Names of valid columns for current model.
         """
         try:
             return None if self.model_obj is None else getattr(self.model_obj, self.options['column'])

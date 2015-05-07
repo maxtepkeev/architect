@@ -6,6 +6,7 @@ import inspect
 import functools
 
 from .bases import BaseFeature
+from .registry import registry, Registrar
 from ..exceptions import (
     ORMError,
     FeatureInstallError,
@@ -34,17 +35,18 @@ class install(object):
         """
         orm = self.options['feature'].pop('orm', None) or model.__class__.__module__.split('.')[0]
 
-        try:
-            features_module = __import__('{0}.features'.format(orm), globals(), level=1, fromlist='*')
-        except ImportError:
-            import os
-            import pkgutil
-            raise ORMError(
-                current=orm,
-                model=model.__name__,
-                allowed=[name for _, name, is_pkg in pkgutil.iter_modules([os.path.dirname(__file__)]) if is_pkg])
+        if orm not in Registrar.orms:
+            try:
+                __import__('{0}.features'.format(orm), globals(), level=1, fromlist='*')
+            except ImportError:
+                import os
+                import pkgutil
+                raise ORMError(
+                    current=orm,
+                    model=model.__name__,
+                    allowed=[name for _, name, is_pkg in pkgutil.iter_modules([os.path.dirname(__file__)]) if is_pkg])
 
-        self.init_feature(self.feature, model, features_module)
+        self.init_feature(self.feature, model, registry[orm])
 
         # If a model already has some architect features installed, we need to
         # gather them and merge with the new feature that needs to be installed
@@ -96,23 +98,18 @@ class install(object):
         model.architect = Architect(self.features)
         return model
 
-    def init_feature(self, feature, model, features_module):
+    def init_feature(self, feature, model, features_registry):
         """
         Initializes the requested feature.
 
         :param string feature: (required). A feature to initialize.
         :param class model: (required). A model where feature will be initialized.
-        :param module features_module: (required). A module with available features for the current ORM.
+        :param dict features_registry: (required). A registry with available features for the current ORM.
         """
         try:
-            feature_cls = getattr(features_module, '{0}Feature'.format(feature.capitalize()))
-        except AttributeError:
-            import re
-            raise FeatureInstallError(
-                current=feature,
-                model=model.__name__,
-                allowed=[cls.replace('Feature', '').lower() for cls in dir(
-                    features_module) if re.match('\w+Feature', cls) is not None and 'Base' not in cls])
+            feature_cls = features_registry[feature]
+        except KeyError:
+            raise FeatureInstallError(current=feature, model=model.__name__, allowed=features_registry.keys())
 
         for name in feature_cls.decorate:
             try:
@@ -138,7 +135,7 @@ class install(object):
             feature_cls.register_hooks(model)
 
         for dependency in feature_cls.dependencies:
-            self.init_feature(dependency, model, features_module)
+            self.init_feature(dependency, model, features_registry)
 
 
 class uninstall(object):

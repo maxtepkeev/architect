@@ -10,9 +10,12 @@ from architect.orms.bases import BaseFeature
 
 class BaseDecoratorTestCase(object):
     def setUp(self):
+        with mock.patch('pkgutil.iter_modules') as modules:
+            modules.return_value = [(None, 'foo', True)]
+            self.foo_feature = type('FooFeature', (BaseFeature,), dict(orm='foo', name='foo'))
+            self.bar_feature = type('BarFeature', (BaseFeature,), dict(orm='foo', name='bar', dependencies=('foo',)))
+
         spec = ['FooFeature', 'BarFeature']
-        self.foo_feature = type('FooFeature', (BaseFeature,), {})
-        self.bar_feature = type('BarFeature', (BaseFeature,), {'dependencies': ('foo',)})
         foo = mock.Mock(features=mock.Mock(spec=spec, FooFeature=self.foo_feature, BarFeature=self.bar_feature))
         patcher = mock.patch.dict('sys.modules', {
             'architect.orms.foo': foo,
