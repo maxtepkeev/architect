@@ -12,6 +12,7 @@ if not os.environ.get('SQLALCHEMY'):
     raise unittest.SkipTest('Not a SQLAlchemy build')
 
 from .models.sqlalchemy import *
+from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker
 
 
@@ -66,7 +67,7 @@ class SQLiteSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, unittes
         self.session.commit()
 
         object2 = self.session.query(RangeDateDay).from_statement(
-            'SELECT * FROM test_rangedateday WHERE id = :id'
+            text('SELECT * FROM test_rangedateday WHERE id = :id')
         ).params(id=object1.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -80,7 +81,7 @@ class PostgresqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, uni
         self.session.commit()
 
         object2 = self.session.query(RangeDateDay).from_statement(
-            'SELECT * FROM test_rangedateday_y2014d105 WHERE id = :id'
+            text('SELECT * FROM test_rangedateday_y2014d105 WHERE id = :id')
         ).params(id=object1.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -91,7 +92,7 @@ class PostgresqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, uni
         self.session.commit()
 
         object2 = self.session.query(RangeDateWeek).from_statement(
-            'SELECT * FROM test_rangedateweek_y2014w16 WHERE id = :id'
+            text('SELECT * FROM test_rangedateweek_y2014w16 WHERE id = :id')
         ).params(id=object1.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -102,7 +103,7 @@ class PostgresqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, uni
         self.session.commit()
 
         object2 = self.session.query(RangeDateMonth).from_statement(
-            'SELECT * FROM test_rangedatemonth_y2014m04 WHERE id = :id'
+            text('SELECT * FROM test_rangedatemonth_y2014m04 WHERE id = :id')
         ).params(id=object1.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -113,7 +114,7 @@ class PostgresqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, uni
         self.session.commit()
 
         object2 = self.session.query(RangeDateYear).from_statement(
-            'SELECT * FROM test_rangedateyear_y2014 WHERE id = :id'
+            text('SELECT * FROM test_rangedateyear_y2014 WHERE id = :id')
         ).params(id=object1.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -125,10 +126,10 @@ class PostgresqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, uni
         self.session.commit()
 
         object2 = self.session.query(RangeInteger2).from_statement(
-            'SELECT * FROM test_rangeinteger2_3_4 WHERE id = :id'
+            text('SELECT * FROM test_rangeinteger2_3_4 WHERE id = :id')
         ).params(id=object1.id).first()
         object4 = self.session.query(RangeInteger5).from_statement(
-            'SELECT * FROM test_rangeinteger5_1_5 WHERE id = :id'
+            text('SELECT * FROM test_rangeinteger5_1_5 WHERE id = :id')
         ).params(id=object3.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -141,10 +142,10 @@ class PostgresqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, uni
         self.session.commit()
 
         object2 = self.session.query(RangeInteger2).from_statement(
-            'SELECT * FROM test_rangeinteger2_0 WHERE id = :id'
+            text('SELECT * FROM test_rangeinteger2_0 WHERE id = :id')
         ).params(id=object1.id).first()
         object4 = self.session.query(RangeInteger5).from_statement(
-            'SELECT * FROM test_rangeinteger5_0 WHERE id = :id'
+            text('SELECT * FROM test_rangeinteger5_0 WHERE id = :id')
         ).params(id=object3.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -157,10 +158,10 @@ class PostgresqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, uni
         self.session.commit()
 
         object2 = self.session.query(RangeInteger2).from_statement(
-            'SELECT * FROM test_rangeinteger2_m4_m3 WHERE id = :id'
+            text('SELECT * FROM test_rangeinteger2_m4_m3 WHERE id = :id')
         ).params(id=object1.id).first()
         object4 = self.session.query(RangeInteger5).from_statement(
-            'SELECT * FROM test_rangeinteger5_m5_m1 WHERE id = :id'
+            text('SELECT * FROM test_rangeinteger5_m5_m1 WHERE id = :id')
         ).params(id=object3.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -173,10 +174,10 @@ class PostgresqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, uni
         self.session.commit()
 
         object2 = self.session.query(RangeStringFirstchars2).from_statement(
-            'SELECT * FROM test_rangestring_firstchars2_ab WHERE id = :id'
+            text('SELECT * FROM test_rangestring_firstchars2_ab WHERE id = :id')
         ).params(id=object1.id).first()
         object4 = self.session.query(RangeStringFirstchars5).from_statement(
-            'SELECT * FROM test_rangestring_firstchars5_abcde WHERE id = :id'
+            text('SELECT * FROM test_rangestring_firstchars5_abcde WHERE id = :id')
         ).params(id=object3.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -189,10 +190,10 @@ class PostgresqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, uni
         self.session.commit()
 
         object2 = self.session.query(RangeStringLastchars2).from_statement(
-            'SELECT * FROM test_rangestring_lastchars2_ef WHERE id = :id'
+            text('SELECT * FROM test_rangestring_lastchars2_ef WHERE id = :id')
         ).params(id=object1.id).first()
         object4 = self.session.query(RangeStringLastchars5).from_statement(
-            'SELECT * FROM test_rangestring_lastchars5_bcdef WHERE id = :id'
+            text('SELECT * FROM test_rangestring_lastchars5_bcdef WHERE id = :id')
         ).params(id=object3.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -207,7 +208,7 @@ class MysqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, unittest
         self.session.commit()
 
         object2 = self.session.query(RangeDateDay).from_statement(
-            'SELECT * FROM test_rangedateday WHERE id = :id'
+            text('SELECT * FROM test_rangedateday WHERE id = :id')
         ).params(id=object1.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -218,7 +219,7 @@ class MysqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, unittest
         self.session.commit()
 
         object2 = self.session.query(RangeDateWeek).from_statement(
-            'SELECT * FROM test_rangedateweek WHERE id = :id'
+            text('SELECT * FROM test_rangedateweek WHERE id = :id')
         ).params(id=object1.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -229,7 +230,7 @@ class MysqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, unittest
         self.session.commit()
 
         object2 = self.session.query(RangeDateMonth).from_statement(
-            'SELECT * FROM test_rangedatemonth WHERE id = :id'
+            text('SELECT * FROM test_rangedatemonth WHERE id = :id')
         ).params(id=object1.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -240,7 +241,7 @@ class MysqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, unittest
         self.session.commit()
 
         object2 = self.session.query(RangeDateYear).from_statement(
-            'SELECT * FROM test_rangedateyear WHERE id = :id'
+            text('SELECT * FROM test_rangedateyear WHERE id = :id')
         ).params(id=object1.id).first()
 
         self.assertTrue(object1.name, object2.name)
