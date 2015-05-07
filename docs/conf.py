@@ -83,9 +83,13 @@ htmlhelp_basename = 'Architectdoc'
 # Returns object name without class name or module name prepended
 class NameOnlyMixin(object):
     def format_name(self):
-        name = self.objpath[1]
-        self.objpath = None
-        return name
+        return self.objpath[1]
+
+    def add_directive_header(self, sig):
+        super(NameOnlyMixin, self).add_directive_header(sig)
+        for index, line in enumerate(self.directive.result):
+            if ':module:' in line:
+                del self.directive.result[index]
 
 
 class AttributeNameOnlyDocumenter(NameOnlyMixin, sphinx.ext.autodoc.AttributeDocumenter):
