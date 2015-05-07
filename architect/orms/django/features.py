@@ -4,7 +4,8 @@ Defines features for the Django ORM.
 
 from django.db import connections, transaction
 from django.db.models.fields import FieldDoesNotExist
-from django.db.utils import cached_property, ConnectionDoesNotExist
+from django.db.utils import ConnectionDoesNotExist
+from django.utils.functional import cached_property
 
 from ..bases import BasePartitionFeature, BaseOperationFeature
 from ...exceptions import PartitionColumnError, OptionNotSetError, OptionValueError
