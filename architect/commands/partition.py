@@ -20,7 +20,7 @@ def run(args):
     :param dictionary args: (required). Dictionary of command arguments.
     """
     names = []
-    module = args['module'].rstrip('.py')
+    module = args['module'][:-3] if args['module'].endswith('.py') else args['module']
 
     try:
         module_clss = filter(lambda obj: isinstance(obj, type), __import__(module, fromlist=module).__dict__.values())
