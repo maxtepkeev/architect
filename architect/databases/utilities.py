@@ -9,9 +9,9 @@ import datetime
 from ..exceptions import DatabaseError
 
 
-def get_database_module(dialect):
+def get_database(dialect):
     """
-    Returns requested database module.
+    Returns requested database package with modules that provide additional functionality.
 
     :param string dialect: (required). Database dialect name.
     """

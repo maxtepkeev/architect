@@ -4,7 +4,7 @@ Defines base classes used in orms module.
 
 from .registry import Registrar
 from ..compat import with_metaclass
-from ..databases.utilities import get_database_module
+from ..databases.utilities import get_database
 from ..exceptions import (
     PartitionTypeError,
     OptionNotSetError,
@@ -88,7 +88,7 @@ class BasePartitionFeature(BaseFeature):
         """
         Returns partition type object to work with depending on the given partition options.
         """
-        database = get_database_module(self.model_meta['dialect'])
+        database = get_database(self.model_meta['dialect'])
 
         try:
             cls_name = '{0}Partition'.format(self.options['type'].capitalize())
