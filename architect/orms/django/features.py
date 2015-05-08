@@ -2,6 +2,7 @@
 Defines features for the Django ORM.
 """
 
+from django.conf import settings
 from django.db import connections, transaction
 from django.db.models.fields import FieldDoesNotExist
 from django.db.utils import ConnectionDoesNotExist, DEFAULT_DB_ALIAS
@@ -33,6 +34,10 @@ class OperationFeature(ConnectionMixin, BaseOperationFeature):
         try:
             autocommit = transaction.atomic  # Django >= 1.6
         except AttributeError:
+            # Fix for Django bug #9055
+            if settings.DEBUG:
+                sql = sql.replace('%', '%%')
+
             autocommit = transaction.commit_on_success  # Django <= 1.5
 
         with autocommit():

@@ -10,6 +10,7 @@ Changelog
   for details
 - Changed: ``dsn`` partition option renamed to ``db`` to cover more use cases
 - Changed: ``DsnParseError`` exception renamed to ``OptionValueError`` to cover more use cases
+- Fixed: Django: Error when trying to partition a model with Django <= 1.5 in debug mode
 - Fixed: "No module named modulename.py" error when trying to specify model's module with .py extension
   at the end in partition command
 
