@@ -4,7 +4,7 @@ Defines features for the Django ORM.
 
 from django.db import connections, transaction
 from django.db.models.fields import FieldDoesNotExist
-from django.db.utils import ConnectionDoesNotExist
+from django.db.utils import ConnectionDoesNotExist, DEFAULT_DB_ALIAS
 from django.utils.functional import cached_property
 
 from ..bases import BasePartitionFeature, BaseOperationFeature
@@ -17,7 +17,7 @@ class ConnectionMixin(object):
     """
     @cached_property
     def connection(self):
-        db = self.options.get('db', 'default')
+        db = self.options.get('db', DEFAULT_DB_ALIAS)
 
         try:
             return connections[db].cursor()
