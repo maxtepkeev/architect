@@ -1,7 +1,7 @@
 Changelog
 ---------
 
-0.5.0 (2015-05-XX)
+0.5.0 (2015-05-08)
 ++++++++++++++++++
 
 - Added: Django: Support for multiple databases (`Issue #9 <https://github.com/maxtepkeev/architect
