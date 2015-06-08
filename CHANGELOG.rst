@@ -1,6 +1,12 @@
 Changelog
 ---------
 
+0.5.1 (2015-06-08)
+++++++++++++++++++
+
+- Fixed: `Issue #13 <https://github.com/maxtepkeev/architect/issues/13>`__ (MySQL support was broken
+  in v0.5.0 released to PyPI)
+
 0.5.0 (2015-05-08)
 ++++++++++++++++++
 
