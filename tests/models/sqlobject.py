@@ -24,7 +24,7 @@ for item in ('day', 'week', 'month', 'year'):
 
     locals()[name] = partition(type(name, (SQLObject,), {
         'name': StringCol(),
-        'created': DateTimeCol(),
+        'created': DateTimeCol(default=None),
         'sqlmeta': sqlmeta
     }))
 
@@ -41,7 +41,7 @@ if not os.environ.get('DB') == 'mysql':
 
         locals()[name] = partition(type(name, (SQLObject,), {
             'name': StringCol(),
-            'num': IntCol(),
+            'num': IntCol(default=None),
             'sqlmeta': sqlmeta
         }))
 
@@ -58,7 +58,7 @@ if not os.environ.get('DB') == 'mysql':
 
             locals()[name] = partition(type(name, (SQLObject,), {
                 'name': StringCol(),
-                'title': StringCol(),
+                'title': StringCol(default=None),
                 'sqlmeta': sqlmeta
             }))
 

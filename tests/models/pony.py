@@ -23,7 +23,7 @@ for item in ('day', 'week', 'month', 'year'):
     locals()[name] = partition(type(name, (db.Entity,), {
         '_table_': 'test_rangedate{0}'.format(item),
         'name': Required(unicode),
-        'created': Required(datetime.datetime),
+        'created': Optional(datetime.datetime, nullable=True),
     }))
 
 if not os.environ.get('DB') == 'mysql':
@@ -35,7 +35,7 @@ if not os.environ.get('DB') == 'mysql':
         locals()[name] = partition(type(name, (db.Entity,), {
             '_table_': 'test_rangeinteger{0}'.format(item),
             'name': Required(unicode),
-            'num': Required(int)
+            'num': Optional(int, nullable=True)
         }))
 
     # Generation of entities for string range partitioning
@@ -47,7 +47,7 @@ if not os.environ.get('DB') == 'mysql':
             locals()[name] = partition(type(name, (db.Entity,), {
                 '_table_': 'test_range{0}{1}'.format(subtype, item),
                 'name': Required(unicode),
-                'title': Required(unicode),
+                'title': Optional(unicode, nullable=True),
             }))
 
 db.generate_mapping(create_tables=True)

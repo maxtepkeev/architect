@@ -41,9 +41,21 @@ class PostgresqlPeeweePartitionTestCase(BasePeeweePartitionTestCase, unittest.Te
 
         self.assertTrue(object1.name, object2.name)
 
+    def test_range_date_day_null(self):
+        object1 = RangeDateDay.create(name='foo')
+        object2 = list(RangeDateDay.raw('SELECT * FROM test_rangedateday_null WHERE id = %s', object1.id))[0]
+
+        self.assertTrue(object1.name, object2.name)
+
     def test_range_date_week(self):
         object1 = RangeDateWeek.create(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
         object2 = list(RangeDateWeek.raw('SELECT * FROM test_rangedateweek_y2014w16 WHERE id = %s', object1.id))[0]
+
+        self.assertTrue(object1.name, object2.name)
+
+    def test_range_date_week_null(self):
+        object1 = RangeDateWeek.create(name='foo')
+        object2 = list(RangeDateWeek.raw('SELECT * FROM test_rangedateweek_null WHERE id = %s', object1.id))[0]
 
         self.assertTrue(object1.name, object2.name)
 
@@ -53,9 +65,21 @@ class PostgresqlPeeweePartitionTestCase(BasePeeweePartitionTestCase, unittest.Te
 
         self.assertTrue(object1.name, object2.name)
 
+    def test_range_date_month_null(self):
+        object1 = RangeDateMonth.create(name='foo')
+        object2 = list(RangeDateMonth.raw('SELECT * FROM test_rangedatemonth_null WHERE id = %s', object1.id))[0]
+
+        self.assertTrue(object1.name, object2.name)
+
     def test_range_date_year(self):
         object1 = RangeDateYear.create(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
         object2 = list(RangeDateYear.raw('SELECT * FROM test_rangedateyear_y2014 WHERE id = %s', object1.id))[0]
+
+        self.assertTrue(object1.name, object2.name)
+
+    def test_range_date_year_null(self):
+        object1 = RangeDateYear.create(name='foo')
+        object2 = list(RangeDateYear.raw('SELECT * FROM test_rangedateyear_null WHERE id = %s', object1.id))[0]
 
         self.assertTrue(object1.name, object2.name)
 
@@ -86,6 +110,15 @@ class PostgresqlPeeweePartitionTestCase(BasePeeweePartitionTestCase, unittest.Te
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
 
+    def test_range_integer_null(self):
+        object1 = RangeInteger2.create(name='foo')
+        object2 = list(RangeInteger2.raw('SELECT * FROM test_rangeinteger2_null WHERE id = %s', object1.id))[0]
+        object3 = RangeInteger5.create(name='foo')
+        object4 = list(RangeInteger5.raw('SELECT * FROM test_rangeinteger5_null WHERE id = %s', object3.id))[0]
+
+        self.assertTrue(object1.name, object2.name)
+        self.assertTrue(object3.name, object4.name)
+
     def test_range_string_firstchars(self):
         object1 = RangeStringFirstchars2.create(name='foo', title='abcdef')
         object2 = list(RangeStringFirstchars2.raw(
@@ -97,6 +130,17 @@ class PostgresqlPeeweePartitionTestCase(BasePeeweePartitionTestCase, unittest.Te
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
 
+    def test_range_string_firstchars_null(self):
+        object1 = RangeStringFirstchars2.create(name='foo')
+        object2 = list(RangeStringFirstchars2.raw(
+            'SELECT * FROM test_rangestring_firstchars2_null WHERE id = %s', object1.id))[0]
+        object3 = RangeStringFirstchars5.create(name='foo')
+        object4 = list(RangeStringFirstchars5.raw(
+            'SELECT * FROM test_rangestring_firstchars5_null WHERE id = %s', object3.id))[0]
+
+        self.assertTrue(object1.name, object2.name)
+        self.assertTrue(object3.name, object4.name)
+
     def test_range_string_lastchars(self):
         object1 = RangeStringLastchars2.create(name='foo', title='abcdef')
         object2 = list(RangeStringLastchars2.raw(
@@ -104,6 +148,17 @@ class PostgresqlPeeweePartitionTestCase(BasePeeweePartitionTestCase, unittest.Te
         object3 = RangeStringLastchars5.create(name='foo', title='abcdef')
         object4 = list(RangeStringLastchars5.raw(
             'SELECT * FROM test_rangestring_lastchars5_bcdef WHERE id = %s', object3.id))[0]
+
+        self.assertTrue(object1.name, object2.name)
+        self.assertTrue(object3.name, object4.name)
+
+    def test_range_string_lastchars_null(self):
+        object1 = RangeStringLastchars2.create(name='foo')
+        object2 = list(RangeStringLastchars2.raw(
+            'SELECT * FROM test_rangestring_lastchars2_null WHERE id = %s', object1.id))[0]
+        object3 = RangeStringLastchars5.create(name='foo')
+        object4 = list(RangeStringLastchars5.raw(
+            'SELECT * FROM test_rangestring_lastchars5_null WHERE id = %s', object3.id))[0]
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)

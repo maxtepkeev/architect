@@ -18,13 +18,14 @@ class Partition(BasePartition):
         """
         Prepares needed triggers and functions for those triggers.
         """
-        spaces = {'declarations': 5, 'variables': 5, 'checks': 9}
+        indentation = {'declarations': 5, 'variables': 6}
         definitions, formatters = self._get_definitions()
 
-        for definition in definitions:
-            for index, _ in enumerate(definitions[definition]):
+        for definition in indentation:
+            for index, _ in enumerate(definitions.setdefault(definition, [])):
                 if index > 0:
-                    definitions[definition][index] = '    ' * spaces[definition] + definitions[definition][index]
+                    definitions[definition][index] = '    ' * indentation[definition] + definitions[definition][index]
+
             definitions[definition] = '\n'.join(definitions[definition]).format(**formatters)
 
         return self.database.execute("""
@@ -32,20 +33,24 @@ class Partition(BasePartition):
             CREATE OR REPLACE FUNCTION {{parent_table}}_insert_child()
             RETURNS TRIGGER AS $$
                 DECLARE
-                    tablename VARCHAR;
                     match {{parent_table}}.{{column}}%TYPE;
+                    tablename VARCHAR;
+                    checks TEXT;
                     {declarations}
                 BEGIN
-                    {variables}
+                    IF NEW.{{column}} IS NULL THEN
+                        tablename := '{{parent_table}}_null';
+                        checks := '{{column}} IS NULL';
+                    ELSE
+                        {variables}
+                    END IF;
 
                     IF NOT EXISTS(
                         SELECT 1 FROM information_schema.tables WHERE table_name=tablename)
                     THEN
                         BEGIN
                             EXECUTE 'CREATE TABLE ' || tablename || ' (
-                                CHECK (
-                                    ' || {checks} || '
-                                ),
+                                CHECK (' || checks || '),
                                 LIKE "{{parent_table}}" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES
                             ) INHERITS ("{{parent_table}}");';
                         EXCEPTION WHEN duplicate_table THEN
@@ -169,13 +174,10 @@ class RangePartition(Partition):
 
         return {
             'formatters': {'pattern': pattern},
-            'declarations': [],
             'variables': [
                 "match := DATE_TRUNC('{constraint}', NEW.{{column}});",
-                "tablename := '{{parent_table}}_' || TO_CHAR(NEW.{{column}}, '{pattern}');"
-            ],
-            'checks': [
-                "'{{column}} >= ''' || match || ''' AND {{column}} < ''' || (match + INTERVAL '1 {constraint}') || ''''"
+                "tablename := '{{parent_table}}_' || TO_CHAR(NEW.{{column}}, '{pattern}');",
+                "checks := '{{column}} >= ''' || match || ''' AND {{column}} < ''' || (match + INTERVAL '1 {constraint}') || '''';"
             ]
         }
 
@@ -191,7 +193,6 @@ class RangePartition(Partition):
                 allowed=['positive integer'])
 
         return {
-            'declarations': ['checks TEXT;'],
             'variables': [
                 "IF NEW.{{column}} = 0 THEN",
                 "    tablename := '{{parent_table}}_0';",
@@ -206,9 +207,6 @@ class RangePartition(Partition):
                 "    END IF;",
                 "    checks := '{{column}} >= ' || match || ' AND {{column}} <= ' || (match + {constraint}) - 1;",
                 "END IF;"
-            ],
-            'checks': [
-                "checks"
             ]
         }
 
@@ -224,13 +222,10 @@ class RangePartition(Partition):
                 allowed=['positive integer'])
 
         return {
-            'declarations': [],
             'variables': [
                 "match := LOWER(SUBSTR(NEW.{{column}}, 1, {constraint}));",
-                "tablename := '{{parent_table}}_' || match;"
-            ],
-            'checks': [
-                "'LOWER(SUBSTR({{column}}, 1, {constraint})) = ''' || match || ''''"
+                "tablename := '{{parent_table}}_' || match;",
+                "checks := 'LOWER(SUBSTR({{column}}, 1, {constraint})) = ''' || match || '''';"
             ]
         }
 
@@ -246,12 +241,9 @@ class RangePartition(Partition):
                 allowed=['positive integer'])
 
         return {
-            'declarations': [],
             'variables': [
                 "match := LOWER(SUBSTRING(NEW.{{column}} FROM '.{{{{{constraint}}}}}$'));",
-                "tablename := '{{parent_table}}_' || match;"
-            ],
-            'checks': [
-                "'LOWER(SUBSTRING({{column}} FROM ''.{{{{{constraint}}}}}$'')) = ''' || match || ''''"
+                "tablename := '{{parent_table}}_' || match;",
+                "checks := 'LOWER(SUBSTRING({{column}} FROM ''.{{{{{constraint}}}}}$'')) = ''' || match || '''';"
             ]
         }

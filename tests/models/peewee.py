@@ -24,7 +24,7 @@ for item in ('day', 'week', 'month', 'year'):
 
     locals()[name] = partition(type(name, (Model,), {
         'name': CharField(),
-        'created': DateTimeField(),
+        'created': DateTimeField(null=True),
         'Meta': Meta,
     }))
 
@@ -42,7 +42,7 @@ if not os.environ.get('DB') == 'mysql':
 
         locals()[name] = partition(type(name, (Model,), {
             'name': CharField(),
-            'num': IntegerField(),
+            'num': IntegerField(null=True),
             'Meta': Meta,
         }))
 
@@ -60,7 +60,7 @@ if not os.environ.get('DB') == 'mysql':
 
             locals()[name] = partition(type(name, (Model,), {
                 'name': CharField(),
-                'title': CharField(),
+                'title': CharField(null=True),
                 'Meta': Meta,
             }))
 

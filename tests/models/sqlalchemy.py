@@ -26,7 +26,7 @@ for item in ('day', 'week', 'month', 'year'):
         '__tablename__': 'test_rangedate{0}'.format(item),
         'id': Column(Integer, primary_key=True),
         'name': Column(String(length=255)),
-        'created': Column(DateTime)
+        'created': Column(DateTime, nullable=True)
     }))
 
 if not os.environ.get('DB') == 'mysql':
@@ -39,7 +39,7 @@ if not os.environ.get('DB') == 'mysql':
             '__tablename__': 'test_rangeinteger{0}'.format(item),
             'id': Column(Integer, primary_key=True),
             'name': Column(String(length=255)),
-            'num': Column(Integer)
+            'num': Column(Integer, nullable=True)
         }))
 
     # Generation of entities for string range partitioning
@@ -52,7 +52,7 @@ if not os.environ.get('DB') == 'mysql':
                 '__tablename__': 'test_range{0}{1}'.format(subtype, item),
                 'id': Column(Integer, primary_key=True),
                 'name': Column(String(length=255)),
-                'title': Column(String(length=255))
+                'title': Column(String(length=255), nullable=True)
             }))
 
 Base.metadata.create_all(engine)
