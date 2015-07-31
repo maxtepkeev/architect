@@ -1,7 +1,7 @@
 Changelog
 ---------
 
-0.5.2 (2015-07-XX)
+0.5.2 (2015-07-31)
 ++++++++++++++++++
 
 - Fixed: PostgreSQL: `Issue #14 <https://github.com/maxtepkeev/architect/issues/14>`__ (Error when trying
