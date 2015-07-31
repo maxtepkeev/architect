@@ -26,7 +26,7 @@ for item in ('day', 'week', 'month', 'year'):
         'created': Optional(datetime.datetime, nullable=True),
     }))
 
-if not os.environ.get('DB') == 'mysql':
+if os.environ.get('DB') == 'postgresql':
     # Generation of entities for integer range partitioning
     for item in ('2', '5'):
         name = 'RangeInteger{0}'.format(item)

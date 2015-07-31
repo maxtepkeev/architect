@@ -45,7 +45,7 @@ for item in ('day', 'week', 'month', 'year'):
         'Meta': Meta,
     }))
 
-if not os.environ.get('DB') == 'mysql':
+if os.environ.get('DB') == 'postgresql':
     # Generation of entities for integer range partitioning
     for item in ('2', '5'):
         class Meta(object):
