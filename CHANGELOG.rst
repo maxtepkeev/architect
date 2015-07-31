@@ -4,9 +4,9 @@ Changelog
 0.5.2 (2015-07-XX)
 ++++++++++++++++++
 
-- Fixed: `Issue #11 <https://github.com/maxtepkeev/architect/issues/11>`__ (Error when trying to save a
-  record into a table that was partitioned by a column that can be ``NULL``, now if a column, that was
-  used for partitioning, has ``NULL`` value it will be inserted into a special partition with ``_null``
+- Fixed: PostgreSQL: `Issue #11 <https://github.com/maxtepkeev/architect/issues/11>`__ (Error when trying
+  to save a record into a table that was partitioned by a column that can be ``NULL``, now if a column, that
+  was used for partitioning, has ``NULL`` value it will be inserted into a special partition with ``_null``
   postfix)
 - Fixed: SQLObject: Error when trying to partition a model with a field that has a ``default`` attribute
   set to some value
