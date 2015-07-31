@@ -130,6 +130,17 @@ class PostgresqlPeeweePartitionTestCase(BasePeeweePartitionTestCase, unittest.Te
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
 
+    def test_range_string_firstchars_special_characters(self):
+        object1 = RangeStringFirstchars2.create(name='foo', title=';<abcdef')
+        object2 = list(RangeStringFirstchars2.raw(
+            'SELECT * FROM "test_rangestring_firstchars2_;<" WHERE id = %s', object1.id))[0]
+        object3 = RangeStringFirstchars5.create(name='foo', title='ab;<cdef')
+        object4 = list(RangeStringFirstchars5.raw(
+            'SELECT * FROM "test_rangestring_firstchars5_ab;<c" WHERE id = %s', object3.id))[0]
+
+        self.assertTrue(object1.name, object2.name)
+        self.assertTrue(object3.name, object4.name)
+
     def test_range_string_firstchars_null(self):
         object1 = RangeStringFirstchars2.create(name='foo')
         object2 = list(RangeStringFirstchars2.raw(
@@ -148,6 +159,17 @@ class PostgresqlPeeweePartitionTestCase(BasePeeweePartitionTestCase, unittest.Te
         object3 = RangeStringLastchars5.create(name='foo', title='abcdef')
         object4 = list(RangeStringLastchars5.raw(
             'SELECT * FROM test_rangestring_lastchars5_bcdef WHERE id = %s', object3.id))[0]
+
+        self.assertTrue(object1.name, object2.name)
+        self.assertTrue(object3.name, object4.name)
+
+    def test_range_string_lastchars_special_characters(self):
+        object1 = RangeStringLastchars2.create(name='foo', title='abcd;<')
+        object2 = list(RangeStringLastchars2.raw(
+            'SELECT * FROM "test_rangestring_lastchars2_;<" WHERE id = %s', object1.id))[0]
+        object3 = RangeStringLastchars5.create(name='foo', title='abcd;<')
+        object4 = list(RangeStringLastchars5.raw(
+            'SELECT * FROM "test_rangestring_lastchars5_bcd;<" WHERE id = %s', object3.id))[0]
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)

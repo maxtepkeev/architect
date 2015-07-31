@@ -166,6 +166,19 @@ class PostgresqlPonyPartitionTestCase(BasePonyPartitionTestCase, unittest.TestCa
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
 
+    def test_range_string_firstchars_special_characters(self):
+        with db_session:
+            object1 = RangeStringFirstchars2(name='foo', title=';<abcdef')
+            object3 = RangeStringFirstchars5(name='foo', title='ab;<cdef')
+            commit()
+            object2 = RangeStringFirstchars2.get_by_sql(
+                'SELECT * FROM "test_rangestring_firstchars2_;<" WHERE id = $object1.id')
+            object4 = RangeStringFirstchars5.get_by_sql(
+                'SELECT * FROM "test_rangestring_firstchars5_ab;<c" WHERE id = $object3.id')
+
+        self.assertTrue(object1.name, object2.name)
+        self.assertTrue(object3.name, object4.name)
+
     def test_range_string_firstchars_null(self):
         with db_session:
             object1 = RangeStringFirstchars2(name='foo')
@@ -188,6 +201,19 @@ class PostgresqlPonyPartitionTestCase(BasePonyPartitionTestCase, unittest.TestCa
                 'SELECT * FROM test_rangestring_lastchars2_ef WHERE id = $object1.id')
             object4 = RangeStringLastchars5.get_by_sql(
                 'SELECT * FROM test_rangestring_lastchars5_bcdef WHERE id = $object3.id')
+
+        self.assertTrue(object1.name, object2.name)
+        self.assertTrue(object3.name, object4.name)
+
+    def test_range_string_lastchars_special_characters(self):
+        with db_session:
+            object1 = RangeStringLastchars2(name='foo', title='abcd;<')
+            object3 = RangeStringLastchars5(name='foo', title='abcd;<')
+            commit()
+            object2 = RangeStringLastchars2.get_by_sql(
+                'SELECT * FROM "test_rangestring_lastchars2_;<" WHERE id = $object1.id')
+            object4 = RangeStringLastchars5.get_by_sql(
+                'SELECT * FROM "test_rangestring_lastchars5_bcd;<" WHERE id = $object3.id')
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)

@@ -224,7 +224,7 @@ class RangePartition(Partition):
         return {
             'variables': [
                 "match := LOWER(SUBSTR(NEW.{{column}}, 1, {constraint}));",
-                "tablename := '{{parent_table}}_' || match;",
+                "tablename := QUOTE_IDENT('{{parent_table}}_' || match);",
                 "checks := 'LOWER(SUBSTR({{column}}, 1, {constraint})) = ''' || match || '''';"
             ]
         }
@@ -243,7 +243,7 @@ class RangePartition(Partition):
         return {
             'variables': [
                 "match := LOWER(SUBSTRING(NEW.{{column}} FROM '.{{{{{constraint}}}}}$'));",
-                "tablename := '{{parent_table}}_' || match;",
+                "tablename := QUOTE_IDENT('{{parent_table}}_' || match);",
                 "checks := 'LOWER(SUBSTRING({{column}} FROM ''.{{{{{constraint}}}}}$'')) = ''' || match || '''';"
             ]
         }

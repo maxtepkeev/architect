@@ -243,6 +243,22 @@ class PostgresqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, uni
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
 
+    def test_range_string_firstchars_special_characters(self):
+        object1 = RangeStringFirstchars2(name='foo', title=';<abcdef')
+        object3 = RangeStringFirstchars5(name='foo', title='ab;<cdef')
+        self.session.add_all([object1, object3])
+        self.session.commit()
+
+        object2 = self.session.query(RangeStringFirstchars2).from_statement(
+            text('SELECT * FROM "test_rangestring_firstchars2_;<" WHERE id = :id')
+        ).params(id=object1.id).first()
+        object4 = self.session.query(RangeStringFirstchars5).from_statement(
+            text('SELECT * FROM "test_rangestring_firstchars5_ab;<c" WHERE id = :id')
+        ).params(id=object3.id).first()
+
+        self.assertTrue(object1.name, object2.name)
+        self.assertTrue(object3.name, object4.name)
+
     def test_range_string_firstchars_null(self):
         object1 = RangeStringFirstchars2(name='foo')
         object3 = RangeStringFirstchars5(name='foo')
@@ -270,6 +286,22 @@ class PostgresqlSqlAlchemyPartitionTestCase(BaseSqlAlchemyPartitionTestCase, uni
         ).params(id=object1.id).first()
         object4 = self.session.query(RangeStringLastchars5).from_statement(
             text('SELECT * FROM test_rangestring_lastchars5_bcdef WHERE id = :id')
+        ).params(id=object3.id).first()
+
+        self.assertTrue(object1.name, object2.name)
+        self.assertTrue(object3.name, object4.name)
+
+    def test_range_string_lastchars_special_characters(self):
+        object1 = RangeStringLastchars2(name='foo', title='abcd;<')
+        object3 = RangeStringLastchars5(name='foo', title='abcd;<')
+        self.session.add_all([object1, object3])
+        self.session.commit()
+
+        object2 = self.session.query(RangeStringLastchars2).from_statement(
+            text('SELECT * FROM "test_rangestring_lastchars2_;<" WHERE id = :id')
+        ).params(id=object1.id).first()
+        object4 = self.session.query(RangeStringLastchars5).from_statement(
+            text('SELECT * FROM "test_rangestring_lastchars5_bcd;<" WHERE id = :id')
         ).params(id=object3.id).first()
 
         self.assertTrue(object1.name, object2.name)

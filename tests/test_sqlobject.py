@@ -150,6 +150,17 @@ class PostgresqlSqlObjectPartitionTestCase(BaseSqlObjectPartitionTestCase, unitt
         self.assertTrue(object1.name, object2[1])
         self.assertTrue(object3.name, object4[1])
 
+    def test_range_string_firstchars_special_characters(self):
+        object1 = RangeStringFirstchars2(name='foo', title=';<abcdef')
+        object3 = RangeStringFirstchars5(name='foo', title=';<abcdef')
+        object2 = RangeStringFirstchars2._connection.queryOne(
+            'SELECT * FROM "test_rangestring_firstchars2_;<" WHERE id = %s' % object1.id)
+        object4 = RangeStringFirstchars5._connection.queryOne(
+            'SELECT * FROM "test_rangestring_firstchars5_;<abc" WHERE id = %s' % object3.id)
+
+        self.assertTrue(object1.name, object2[1])
+        self.assertTrue(object3.name, object4[1])
+
     def test_range_string_firstchars_null(self):
         object1 = RangeStringFirstchars2(name='foo')
         object3 = RangeStringFirstchars5(name='foo')
@@ -168,6 +179,17 @@ class PostgresqlSqlObjectPartitionTestCase(BaseSqlObjectPartitionTestCase, unitt
             'SELECT * FROM test_rangestring_lastchars2_ef WHERE id = %s' % object1.id)
         object4 = RangeStringLastchars5._connection.queryOne(
             'SELECT * FROM test_rangestring_lastchars5_bcdef WHERE id = %s' % object3.id)
+
+        self.assertTrue(object1.name, object2[1])
+        self.assertTrue(object3.name, object4[1])
+
+    def test_range_string_lastchars_special_characters(self):
+        object1 = RangeStringLastchars2(name='foo', title='abcd;<')
+        object3 = RangeStringLastchars5(name='foo', title='abcd;<')
+        object2 = RangeStringLastchars2._connection.queryOne(
+            'SELECT * FROM "test_rangestring_lastchars2_;<" WHERE id = %s' % object1.id)
+        object4 = RangeStringLastchars5._connection.queryOne(
+            'SELECT * FROM "test_rangestring_lastchars5_bcd;<" WHERE id = %s' % object3.id)
 
         self.assertTrue(object1.name, object2[1])
         self.assertTrue(object3.name, object4[1])
