@@ -2,6 +2,8 @@
 Defines features for the SQLObject ORM.
 """
 
+from sqlobject.main import instanceName
+
 from ..bases import BasePartitionFeature, BaseOperationFeature
 
 
@@ -45,16 +47,16 @@ class PartitionFeature(BasePartitionFeature):
         Checks if partition exists and creates it if needed before saving model instance.
         """
         def wrapper(instance, *args, **kwargs):
-            for attr in kwargs:
-                setattr(instance, '_SO_val_{0}'.format(attr), kwargs[attr])
+            for col, val in instance.sqlmeta.columns.items():
+                setattr(instance, instanceName(col), kwargs.get(col, val.default))
 
             partition = instance.architect.partition.get_partition()
 
             if not partition.exists():
                 partition.create()
 
-            for attr in kwargs:
-                delattr(instance, '_SO_val_{0}'.format(attr))
+            for col in instance.sqlmeta.columns:
+                delattr(instance, instanceName(col))
 
             method(instance, *args, **kwargs)
         return wrapper

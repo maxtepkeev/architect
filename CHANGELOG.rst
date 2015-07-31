@@ -1,6 +1,12 @@
 Changelog
 ---------
 
+0.5.2 (2015-07-XX)
+++++++++++++++++++
+
+- Fixed: SQLObject: Error when trying to partition a model with a field that has a ``default`` attribute
+  set to some value
+
 0.5.1 (2015-06-08)
 ++++++++++++++++++
 
