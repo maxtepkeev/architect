@@ -5,6 +5,7 @@ python:
   - 3.2
   - 3.3
   - 3.4
+  - 3.5
 env:
   - SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=postgresql
   - SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=mysql
