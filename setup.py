@@ -9,10 +9,9 @@ try:
 except ImportError:
     requirements.append('argparse >= 1.2.1')
 
-
 setup(
     name='architect',
-    version=__version__,
+    version=globals()['__version__'],
     packages=find_packages(exclude=('tests', 'tests.*')),
     url='https://github.com/maxtepkeev/architect',
     license=open('LICENSE').read(),
