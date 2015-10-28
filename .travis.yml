@@ -282,7 +282,7 @@ install:
   - travis_retry pip install -r tests/requirements.txt
   - travis_retry pip install coveralls
   - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then travis_retry pip install unittest2 argparse; fi
-  - if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then travis_retry pip install coverage<4.0; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then travis_retry pip install 'coverage<4.0'; fi
   - if [[ $DB == postgresql ]]; then travis_retry pip install psycopg2; fi
   - if [[ $DB == mysql ]]; then travis_retry pip install pymysql; fi
   - if [[ $DJANGO ]]; then travis_retry pip install $DJANGO; fi
