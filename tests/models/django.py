@@ -81,10 +81,10 @@ if os.environ.get('DB') == 'postgresql':
 
 # Django >= 1.7 needs this
 try:
-    from django import setup
-    setup()
+    import django
+    django.setup()
     command = 'migrate'
-except ImportError:
+except AttributeError:
     command = 'syncdb'
 
 management.call_command(command, verbosity=0, interactive=False)
