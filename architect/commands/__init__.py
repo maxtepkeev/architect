@@ -19,7 +19,7 @@ from ..exceptions import (
 
 commands = {}
 
-for _, name, _ in pkgutil.iter_modules([os.path.dirname(__file__)]):
+for _, name, __ in pkgutil.iter_modules([os.path.dirname(__file__)]):
     commands[name] = {'module': __import__(name, globals(), level=1)}
 
 sys.path.append(os.getcwd())
@@ -87,8 +87,8 @@ def main():
         command = args.func.__module__.split('.')[-1]
     except AttributeError:
         parser.error('too few arguments')
-
-    try:
-        commands[command]['parser'].result(args.func(vars(args)))
-    except BaseArchitectError as e:
-        commands[command]['parser'].error(str(e))
+    else:
+        try:
+            commands[command]['parser'].result(args.func(vars(args)))
+        except BaseArchitectError as e:
+            commands[command]['parser'].error(str(e))
