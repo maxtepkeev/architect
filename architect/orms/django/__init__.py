@@ -1,6 +1,4 @@
-import os
-
-if 'DJANGO_SETTINGS_MODULE' in os.environ:
+def init():
     try:
         import django
         django.setup()

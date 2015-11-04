@@ -9,7 +9,7 @@ import sys
 import pkgutil
 import argparse
 
-from .. import __version__
+from .. import __version__, orms
 from ..exceptions import (
     BaseArchitectError,
     CommandNotProvidedError,
@@ -88,6 +88,7 @@ def main():
     except AttributeError:
         parser.error('too few arguments')
     else:
+        orms.init()
         try:
             commands[command]['parser'].result(args.func(vars(args)))
         except BaseArchitectError as e:
