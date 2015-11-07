@@ -4,6 +4,7 @@ Changelog
 0.5.3 (2015-11-XX)
 ++++++++++++++++++
 
+- Added: Tests are now built-in into source package distributed via PyPI
 - Fixed: Django: `Issue #21 <https://github.com/maxtepkeev/architect/issues/21>`__ (Unable to partition a
   model with non-lazy translations)
 

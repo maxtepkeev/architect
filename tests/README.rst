@@ -15,3 +15,13 @@ unittest package so you don't need to install it. For Python 2.6 you also need t
 .. code-block:: bash
 
     $ nosetests --with-coverage --cover-erase --cover-package=architect
+
+Alternatively, starting from v0.5.3 you can use
+
+.. code-block:: bash
+
+    $ python setup.py test --orm=ORM --db=DB
+
+where ORM is one of the supported ORMs (django, peewee, pony, sqlalchemy, sqlobject) and DB is one
+of the supported databases (mysql, postgresql, sqlite). Using the above command will automatically
+install all the needed dependencies needed for running tests, so you don't have to do it by hand.
