@@ -7,6 +7,7 @@ from django.conf import settings
 
 databases = {
     'sqlite': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': ':memory:'},
+    'pgsql': {'ENGINE': 'django.db.backends.postgresql_psycopg2', 'NAME': 'architect', 'USER': 'postgres'},
     'postgresql': {'ENGINE': 'django.db.backends.postgresql_psycopg2', 'NAME': 'architect', 'USER': 'postgres'},
     'mysql': {'ENGINE': 'django.db.backends.mysql', 'NAME': 'architect', 'USER': 'root'}
 }
@@ -45,7 +46,7 @@ for item in ('day', 'week', 'month', 'year'):
         'Meta': Meta,
     }))
 
-if os.environ.get('DB') == 'postgresql':
+if os.environ.get('DB') in ('pgsql', 'postgresql'):
     # Generation of entities for integer range partitioning
     for item in ('2', '5'):
         class Meta(object):

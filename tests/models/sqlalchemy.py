@@ -9,6 +9,7 @@ from architect import install
 
 databases = {
     'sqlite': 'sqlite://',
+    'pgsql': 'postgresql+psycopg2://postgres@localhost/architect',
     'postgresql': 'postgresql+psycopg2://postgres@localhost/architect',
     'mysql': 'mysql+pymysql://root@localhost/architect'
 }
@@ -29,7 +30,7 @@ for item in ('day', 'week', 'month', 'year'):
         'created': Column(DateTime, nullable=True)
     }))
 
-if os.environ.get('DB') == 'postgresql':
+if os.environ.get('DB') in ('pgsql', 'postgresql'):
     # Generation of entities for integer range partitioning
     for item in ('2', '5'):
         name = 'RangeInteger{0}'.format(item)

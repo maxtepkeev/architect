@@ -37,7 +37,7 @@ class SQLiteSqlObjectPartitionTestCase(BaseSqlObjectPartitionTestCase, unittest.
         self.assertTrue(object1.name, object2[1])
 
 
-@unittest.skipUnless(os.environ.get('DB') == 'postgresql', 'Not a PostgreSQL build')
+@unittest.skipUnless(os.environ.get('DB') in ('pgsql', 'postgresql'), 'Not a PostgreSQL build')
 class PostgresqlSqlObjectPartitionTestCase(BaseSqlObjectPartitionTestCase, unittest.TestCase):
     def test_range_date_day(self):
         object1 = RangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))

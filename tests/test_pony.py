@@ -43,7 +43,7 @@ class SQLitePonyPartitionTestCase(BasePonyPartitionTestCase, unittest.TestCase):
         self.assertTrue(object1.name, object2.name)
 
 
-@unittest.skipUnless(os.environ.get('DB') == 'postgresql', 'Not a PostgreSQL build')
+@unittest.skipUnless(os.environ.get('DB') in ('pgsql', 'postgresql'), 'Not a PostgreSQL build')
 class PostgresqlPonyPartitionTestCase(BasePonyPartitionTestCase, unittest.TestCase):
     def test_range_date_day(self):
         with db_session:
