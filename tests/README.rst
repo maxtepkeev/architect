@@ -24,4 +24,4 @@ Alternatively, starting from v0.5.3 you can use
 
 where ORM is one of the supported ORMs (django, peewee, pony, sqlalchemy, sqlobject) and DB is one
 of the supported databases (mysql, postgresql, sqlite). Using the above command will automatically
-install all the needed dependencies needed for running tests, so you don't have to do it by hand.
+install all the dependencies needed for running tests, so you don't have to do it by hand.
