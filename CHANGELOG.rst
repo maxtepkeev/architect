@@ -1,6 +1,12 @@
 Changelog
 ---------
 
+0.5.3 (2015-11-XX)
+++++++++++++++++++
+
+- Fixed: Django: `Issue #21 <https://github.com/maxtepkeev/architect/issues/21>`__ (Unable to partition a
+  model with non-lazy translations)
+
 0.5.2 (2015-07-31)
 ++++++++++++++++++
 
