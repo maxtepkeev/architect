@@ -58,7 +58,7 @@ except ImportError:
 setup(
     name='architect',
     version=globals()['__version__'],
-    packages=find_packages(exclude=('tests',)),
+    packages=find_packages(exclude=('tests', 'tests.*')),
     url='https://github.com/maxtepkeev/architect',
     license=open('LICENSE').read(),
     author='Max Tepkeev',
