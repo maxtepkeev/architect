@@ -1,7 +1,7 @@
 Changelog
 ---------
 
-0.5.3 (2015-11-XX)
+0.5.3 (2015-11-08)
 ++++++++++++++++++
 
 - Added: Tests are now built-in into source package distributed via PyPI
