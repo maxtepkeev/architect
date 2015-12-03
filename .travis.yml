@@ -71,6 +71,9 @@ env:
   - DJANGO='django>=1.8.0,<1.9.0' DB=postgresql
   - DJANGO='django>=1.8.0,<1.9.0' DB=mysql
   - DJANGO='django>=1.8.0,<1.9.0' DB=sqlite
+  - DJANGO='django>=1.9.0,<1.10.0' DB=postgresql
+  - DJANGO='django>=1.9.0,<1.10.0' DB=mysql
+  - DJANGO='django>=1.9.0,<1.10.0' DB=sqlite
 matrix:
   fast_finish: true
   exclude:
@@ -206,18 +209,36 @@ matrix:
       env: DJANGO='django>=1.8.0,<1.9.0' DB=mysql
     - python: 2.6
       env: DJANGO='django>=1.8.0,<1.9.0' DB=sqlite
+    - python: 2.6
+      env: DJANGO='django>=1.9.0,<1.10.0' DB=postgresql
+    - python: 2.6
+      env: DJANGO='django>=1.9.0,<1.10.0' DB=mysql
+    - python: 2.6
+      env: DJANGO='django>=1.9.0,<1.10.0' DB=sqlite
     - python: 3.2
       env: DJANGO='django>=1.4.0,<1.5.0' DB=postgresql
     - python: 3.2
       env: DJANGO='django>=1.4.0,<1.5.0' DB=mysql
     - python: 3.2
       env: DJANGO='django>=1.4.0,<1.5.0' DB=sqlite
+    - python: 3.2
+      env: DJANGO='django>=1.9.0,<1.10.0' DB=postgresql
+    - python: 3.2
+      env: DJANGO='django>=1.9.0,<1.10.0' DB=mysql
+    - python: 3.2
+      env: DJANGO='django>=1.9.0,<1.10.0' DB=sqlite
     - python: 3.3
       env: DJANGO='django>=1.4.0,<1.5.0' DB=postgresql
     - python: 3.3
       env: DJANGO='django>=1.4.0,<1.5.0' DB=mysql
     - python: 3.3
       env: DJANGO='django>=1.4.0,<1.5.0' DB=sqlite
+    - python: 3.3
+      env: DJANGO='django>=1.9.0,<1.10.0' DB=postgresql
+    - python: 3.3
+      env: DJANGO='django>=1.9.0,<1.10.0' DB=mysql
+    - python: 3.3
+      env: DJANGO='django>=1.9.0,<1.10.0' DB=sqlite
     - python: 3.4
       env: DJANGO='django>=1.4.0,<1.5.0' DB=postgresql
     - python: 3.4
