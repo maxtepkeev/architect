@@ -4,7 +4,7 @@ Changelog
 0.5.4 (2015-12-XX)
 ++++++++++++++++++
 
-- Fixed: Peewee: Table partitioning feature was broken for Peewee >= 2.7.4 due to Peewee API changes
+- Fixed: Peewee: Table partitioning was broken in Peewee >= 2.7.4 due to Peewee API changes
 
 0.5.3 (2015-11-08)
 ++++++++++++++++++
