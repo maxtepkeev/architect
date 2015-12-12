@@ -26,6 +26,14 @@ sys.modules['test.models'] = type('test.models', (object,), {
     '__spec__': ''
 })
 
+# Django >= 1.7 needs this
+try:
+    import django
+    django.setup()
+    command = 'migrate'
+except AttributeError:
+    command = 'syncdb'
+
 from django.db import models
 from django.core import management
 from architect import install
@@ -80,12 +88,4 @@ if os.environ.get('DB') in ('pgsql', 'postgresql'):
                 'Meta': Meta,
             }))
 
-# Django >= 1.7 needs this
-try:
-    import django
-    django.setup()
-    command = 'migrate'
-except AttributeError:
-    command = 'syncdb'
-
-management.call_command(command, verbosity=0, interactive=False)
+management.call_command(command, run_syncdb=True, verbosity=0, interactive=False)
