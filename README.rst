@@ -83,7 +83,7 @@ Thanks
 PremiumSoft for supporting this project by providing `Open Source License
 <http://www.navicat.com/store/open-source>`_ of `Navicat <http://www.navicat.com>`_.
 
-.. image:: _static/img/navicat_logo.png
+.. image:: docs/_static/img/navicat_logo.png
    :width: 300px
    :height: 122px
    :target: http://www.navicat.com
