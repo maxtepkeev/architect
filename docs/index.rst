@@ -57,6 +57,17 @@ If you like this project and want to support it you have 3 options:
 #. Become a sponsor. Contact me via ``tepkeev at gmail dot com`` if you are interested in becoming a sponsor
    and we will discuss the terms and conditions.
 
+Thanks
+------
+
+PremiumSoft for supporting this project by providing `Open Source License
+<http://www.navicat.com/store/open-source>`_ of `Navicat <http://www.navicat.com>`_.
+
+.. image:: _static/img/navicat_logo.png
+   :width: 300px
+   :height: 122px
+   :target: http://www.navicat.com
+
 Copyright and License
 ---------------------
 
