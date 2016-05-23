@@ -4,9 +4,6 @@ Architect
 .. image:: https://badge.fury.io/py/architect.svg
    :target: https://badge.fury.io/py/architect
 
-.. image:: https://img.shields.io/pypi/dm/architect.svg
-   :target: https://pypi.python.org/pypi/architect
-
 .. image:: https://img.shields.io/travis/maxtepkeev/architect/master.svg
    :target: https://travis-ci.org/maxtepkeev/architect
 
