@@ -23,6 +23,9 @@ env:
   - SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=postgresql
   - SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=mysql
   - SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=sqlite
+  - SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB=postgresql
+  - SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB=mysql
+  - SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB=sqlite
   - PEEWEE='peewee>=2.2.0,<2.3.0' DB=postgresql
   - PEEWEE='peewee>=2.2.0,<2.3.0' DB=mysql
   - PEEWEE='peewee>=2.2.0,<2.3.0' DB=sqlite
@@ -110,6 +113,12 @@ matrix:
       env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=mysql
     - python: 3.2
       env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=sqlite
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB=postgresql
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB=mysql
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB=sqlite
     - python: 3.3
       env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=postgresql
     - python: 3.3
@@ -140,6 +149,12 @@ matrix:
       env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=mysql
     - python: 3.3
       env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=sqlite
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB=postgresql
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB=mysql
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB=sqlite
     - python: 3.4
       env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=postgresql
     - python: 3.4
@@ -170,6 +185,12 @@ matrix:
       env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=mysql
     - python: 3.4
       env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=sqlite
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB=postgresql
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB=mysql
+    - python: 3.4
+      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB=sqlite
     - python: 3.5
       env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB=postgresql
     - python: 3.5
@@ -200,6 +221,12 @@ matrix:
       env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=mysql
     - python: 3.5
       env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB=sqlite
+    - python: 3.5
+      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB=postgresql
+    - python: 3.5
+      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB=mysql
+    - python: 3.5
+      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB=sqlite
     - python: 2.6
       env: DJANGO='django>=1.7.0,<1.8.0' DB=postgresql
     - python: 2.6
