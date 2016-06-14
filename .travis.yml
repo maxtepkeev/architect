@@ -318,6 +318,7 @@ install:
   - if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then travis_retry pip install 'coverage<4.0'; fi
   - if [[ $DB == postgresql ]]; then travis_retry pip install psycopg2; fi
   - if [[ $DB == mysql ]]; then travis_retry pip install pymysql; fi
+  - if [[ $DB == mysql ]] && [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then travis_retry pip install 'pymysql<0.7.0'; fi
   - if [[ $DJANGO ]]; then travis_retry pip install $DJANGO; fi
   - if [[ $PEEWEE ]]; then travis_retry pip install $PEEWEE; fi
   - if [[ $PONY ]]; then travis_retry pip install $PONY; fi
