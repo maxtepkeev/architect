@@ -5,6 +5,7 @@ Changelog
 ++++++++++++++++++
 
 - Fixed: Peewee: Table partitioning was broken in Peewee >= 2.7.4 due to Peewee API changes
+- Fixed: PostgreSQL: Failed to partition a table if a reserved keyword was used as a column name
 
 0.5.3 (2015-11-08)
 ++++++++++++++++++
