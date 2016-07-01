@@ -38,8 +38,8 @@ Changelog
 0.5.0 (2015-05-08)
 ++++++++++++++++++
 
-- Added: Django: Support for multiple databases (`Issue #9 <https://github.com/maxtepkeev/architect
-  /issues/9>`__)
+- Added: Django: `Issue #9 <https://github.com/maxtepkeev/architect/issues/9>`__ (Support for multiple
+  databases)
 - Added: Support for custom features, see `docs <http://architect.readthedocs.org/features/custom.html>`__
   for details
 - Changed: ``dsn`` partition option renamed to ``db`` to cover more use cases
