@@ -4,6 +4,8 @@ Changelog
 0.5.4 (2015-12-XX)
 ++++++++++++++++++
 
+- Added: Django: `Issue #30 <https://github.com/maxtepkeev/architect/issues/30>`__ (Support for
+  using database routers to determine correct database for a model in a multi database configuration)
 - Fixed: Peewee: Table partitioning was broken in Peewee >= 2.7.4 due to Peewee API changes
 - Fixed: PostgreSQL: Failed to partition a table if a reserved keyword was used as a column name
 

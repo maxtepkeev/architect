@@ -25,9 +25,10 @@ where ``options`` are:
 - ``column`` (required). Column, which value determines which partition record belongs to
 - ``db`` (optional). Currently used with:
 
-  * Django - only for specifying other database name instead of ``default``.
+  * Django - only for specifying other database name instead of ``default``. Also if custom routers are used,
+    Architect tries it's best to figure out the database name from them automatically.
   * SQLAlchemy - required if model's ``metadata`` is not bound to any engine, should be set in the form of
-    Data Source Name, e.g. dialect://user:pass@host/database.
+    DSN, e.g. dialect://user:pass@host/database.
 
 Above options can take different values depending on the database type because different databases support
 different partition types, subtypes etc. To find out which values can be set for the above options choose
