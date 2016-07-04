@@ -1,7 +1,7 @@
 Changelog
 ---------
 
-0.5.4 (2015-12-XX)
+0.5.4 (2016-07-04)
 ++++++++++++++++++
 
 - Added: Django: `Issue #30 <https://github.com/maxtepkeev/architect/issues/30>`__ (Support for
