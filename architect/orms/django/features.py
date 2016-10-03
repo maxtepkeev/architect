@@ -78,7 +78,7 @@ class PartitionFeature(ConnectionMixin, BasePartitionFeature):
             raise PartitionColumnError(
                 model=self.model_cls.__name__,
                 current=self.options['column'],
-                allowed=meta.get_all_field_names())
+                allowed=[f.name for f in meta.get_fields()])
 
         return {
             'table': meta.db_table,
