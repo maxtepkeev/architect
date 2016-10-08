@@ -19,7 +19,7 @@ Features
 * Supported ORMs
 
   - `Django <https://www.djangoproject.com>`_ >= 1.4
-  - `Peewee <https://peewee.readthedocs.org>`_ >= 2.2.0
+  - `Peewee <https://peewee.readthedocs.io>`_ >= 2.2.0
   - `Pony <http://ponyorm.com>`_ >= 0.5.0
   - `SQLAlchemy <http://www.sqlalchemy.org>`_ >= 0.8.0
   - `SQLObject <http://www.sqlobject.org>`_ >= 1.5.0

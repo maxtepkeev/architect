@@ -40,7 +40,7 @@ Changelog
 
 - Added: Django: `Issue #9 <https://github.com/maxtepkeev/architect/issues/9>`__ (Support for multiple
   databases)
-- Added: Support for custom features, see `docs <http://architect.readthedocs.org/features/custom.html>`__
+- Added: Support for custom features, see `docs <http://architect.readthedocs.io/features/custom.html>`__
   for details
 - Changed: ``dsn`` partition option renamed to ``db`` to cover more use cases
 - Changed: ``DsnParseError`` exception renamed to ``OptionValueError`` to cover more use cases
@@ -51,11 +51,11 @@ Changelog
 0.4.0 (2015-04-18)
 ++++++++++++++++++
 
-- Added: `wheel <http://wheel.readthedocs.org>`__ support
+- Added: `wheel <http://wheel.readthedocs.io>`__ support
 - Added: `SQLObject <http://www.sqlobject.org>`__ ORM support
 - Added: PostgreSQL: New ``integer`` (thanks to `Nikolay Yarovoy <https://github.com/nickspring>`__),
   ``string_firstchars`` (thanks to `Dmitry Brytkov <https://github.com/dimoha>`__) and ``string_lastchars``
-  range partition subtypes, see `docs <http://architect.readthedocs.org/features/partition/postgresql.html
+  range partition subtypes, see `docs <http://architect.readthedocs.io/features/partition/postgresql.html
   #range>`__ for details
 - Changed: ``range`` partition option renamed to ``constraint`` to better suit new partition subtypes
 - Changed: PostgreSQL: Triggers refactoring and speedups, don't forget to rerun ``partition`` command to
@@ -71,10 +71,10 @@ Changelog
   All functionality is now provided by an ``architect.install`` decorator which dynamically injects
   requested feature, e.g. partition, into a model under the ``architect`` namespace, e.g.
   ``model.architect.partition``. No more mixins, inheritance and nested classes with settings that
-  pollute model's namespace. More information is available in the `docs <http://architect.readthedocs.org
+  pollute model's namespace. More information is available in the `docs <http://architect.readthedocs.io
   /features/index.html>`__
 - Added: New ``operation`` feature which provide an abstraction layer to execute raw SQL statements
-  which will work with any supported ORM, see `docs <http://architect.readthedocs.org/features/
+  which will work with any supported ORM, see `docs <http://architect.readthedocs.io/features/
   operation.html>`__
 - Fixed: `Issue #8 <https://github.com/maxtepkeev/architect/issues/8>`__ (``cannot import name
   string_literal`` error with PonyORM and PyMySQL if ``pymysql.install_as_MySQLdb()`` was used)
