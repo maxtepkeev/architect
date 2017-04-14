@@ -33,12 +33,12 @@ class Partition(BasePartition):
             CREATE OR REPLACE FUNCTION {{parent_table}}_insert_child()
             RETURNS TRIGGER AS $$
                 DECLARE
-                    match {{parent_table}}."{{column}}"%TYPE;
+                    match {{parent_table}}.{{column}}%TYPE;
                     tablename VARCHAR;
                     checks TEXT;
                     {declarations}
                 BEGIN
-                    IF NEW."{{column}}" IS NULL THEN
+                    IF NEW.{{column}} IS NULL THEN
                         tablename := '{{parent_table}}_null';
                         checks := '{{column}} IS NULL';
                     ELSE
@@ -104,7 +104,7 @@ class Partition(BasePartition):
         """.format(**definitions).format(
             pk=' AND '.join('{pk} = NEW.{pk}'.format(pk=pk) for pk in self.pks),
             parent_table=self.table,
-            column=self.column_name
+            column='"{0}"'.format(self.column_name)
         ))
 
     def exists(self):
@@ -175,8 +175,8 @@ class RangePartition(Partition):
         return {
             'formatters': {'pattern': pattern},
             'variables': [
-                "match := DATE_TRUNC('{constraint}', NEW.\"{{column}}\");",
-                "tablename := '{{parent_table}}_' || TO_CHAR(NEW.\"{{column}}\", '{pattern}');",
+                "match := DATE_TRUNC('{constraint}', NEW.{{column}});",
+                "tablename := '{{parent_table}}_' || TO_CHAR(NEW.{{column}}, '{pattern}');",
                 "checks := '{{column}} >= ''' || match || ''' AND {{column}} < ''' || (match + INTERVAL '1 {constraint}') || '''';"
             ]
         }
@@ -194,15 +194,15 @@ class RangePartition(Partition):
 
         return {
             'variables': [
-                "IF NEW.\"{{column}}\" = 0 THEN",
+                "IF NEW.{{column}} = 0 THEN",
                 "    tablename := '{{parent_table}}_0';",
                 "    checks := '{{column}} = 0';",
                 "ELSE",
-                "    IF NEW.\"{{column}}\" > 0 THEN",
-                "        match := ((NEW.\"{{column}}\" - 1) / {constraint}) * {constraint} + 1;",
+                "    IF NEW.{{column}} > 0 THEN",
+                "        match := ((NEW.{{column}} - 1) / {constraint}) * {constraint} + 1;",
                 "        tablename := '{{parent_table}}_' || match || '_' || (match + {constraint}) - 1;",
                 "    ELSE",
-                "        match := FLOOR(NEW.\"{{column}}\" :: FLOAT / {constraint} :: FLOAT) * {constraint};",
+                "        match := FLOOR(NEW.{{column}} :: FLOAT / {constraint} :: FLOAT) * {constraint};",
                 "        tablename := '{{parent_table}}_m' || ABS(match) || '_m' || ABS((match + {constraint}) - 1);",
                 "    END IF;",
                 "    checks := '{{column}} >= ' || match || ' AND {{column}} <= ' || (match + {constraint}) - 1;",
@@ -223,7 +223,7 @@ class RangePartition(Partition):
 
         return {
             'variables': [
-                "match := LOWER(SUBSTR(NEW.\"{{column}}\", 1, {constraint}));",
+                "match := LOWER(SUBSTR(NEW.{{column}}, 1, {constraint}));",
                 "tablename := QUOTE_IDENT('{{parent_table}}_' || match);",
                 "checks := 'LOWER(SUBSTR({{column}}, 1, {constraint})) = ''' || match || '''';"
             ]
@@ -242,7 +242,7 @@ class RangePartition(Partition):
 
         return {
             'variables': [
-                "match := LOWER(SUBSTRING(NEW.\"{{column}}\" FROM '.{{{{{constraint}}}}}$'));",
+                "match := LOWER(SUBSTRING(NEW.{{column}} FROM '.{{{{{constraint}}}}}$'));",
                 "tablename := QUOTE_IDENT('{{parent_table}}_' || match);",
                 "checks := 'LOWER(SUBSTRING({{column}} FROM ''.{{{{{constraint}}}}}$'')) = ''' || match || '''';"
             ]
