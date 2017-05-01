@@ -147,11 +147,15 @@ matrix:
     - python: 3.5
       env: DJANGO='django>=1.4.0,<1.5.0' DB='all'
     - python: 3.5
+      env: DJANGO='django>=1.5.0,<1.6.0' DB='all'
+    - python: 3.5
       env: DJANGO='django>=1.6.0,<1.7.0' DB='all'
     - python: 3.5
       env: DJANGO='django>=1.7.0,<1.8.0' DB='all'
     - python: 3.6
       env: DJANGO='django>=1.4.0,<1.5.0' DB='all'
+    - python: 3.6
+      env: DJANGO='django>=1.5.0,<1.6.0' DB='all'
     - python: 3.6
       env: DJANGO='django>=1.6.0,<1.7.0' DB='all'
     - python: 3.6
