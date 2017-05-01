@@ -1,7 +1,7 @@
 Changelog
 ---------
 
-0.5.6 (2017-05-XX)
+0.5.6 (2017-05-01)
 ++++++++++++++++++
 
 - Added: Support for testing all databases in one go using ``DB=all`` environmental variable
