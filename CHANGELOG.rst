@@ -1,6 +1,11 @@
 Changelog
 ---------
 
+0.5.6 (2017-05-XX)
+++++++++++++++++++
+
+- Fixed: Django: Unable to partition tables in multi database configuration without ``default`` database
+
 0.5.5 (2016-10-08)
 ++++++++++++++++++
 

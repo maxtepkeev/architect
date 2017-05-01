@@ -16,9 +16,13 @@ class ConnectionMixin(object):
     """
     Provides support for multiple database connections.
     """
+    @property
+    def database(self):
+        return self.options.get('db', router.db_for_write(self.model_cls))
+
     @cached_property
     def connection(self):
-        db = self.options.get('db', router.db_for_write(self.model_cls))
+        db = self.database
 
         try:
             return connections[db].cursor()
@@ -40,7 +44,7 @@ class OperationFeature(ConnectionMixin, BaseOperationFeature):
 
             autocommit = transaction.commit_on_success  # Django <= 1.5
 
-        with autocommit():
+        with autocommit(using=self.database):
             return self.connection.execute(sql)
 
     def select_one(self, sql):
