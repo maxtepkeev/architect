@@ -60,7 +60,7 @@ setup(
     version=globals()['__version__'],
     packages=find_packages(exclude=('tests', 'tests.*')),
     url='https://github.com/maxtepkeev/architect',
-    license=open('LICENSE').read(),
+    license='Apache 2.0',
     author='Max Tepkeev',
     author_email='tepkeev@gmail.com',
     description='A set of tools which enhances ORMs written in Python with more features',
