@@ -4,6 +4,7 @@ Changelog
 0.5.6 (2017-05-XX)
 ++++++++++++++++++
 
+- Added: Support for testing all databases in one go using ``DB=all`` environmental variable
 - Fixed: Django: Unable to partition tables in multi database configuration without ``default`` database
 - Fixed: PostgreSQL: Failed to partition a table if a reserved keyword was used as a column name (turned
   out this wasn't fixed properly in v0.5.4) (thanks to `ra2er <https://github.com/ra2er>`__)

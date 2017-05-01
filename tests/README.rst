@@ -23,5 +23,6 @@ Alternatively, starting from v0.5.3 you can use
     $ python setup.py test --orm=ORM --db=DB
 
 where ORM is one of the supported ORMs (django, peewee, pony, sqlalchemy, sqlobject) and DB is one
-of the supported databases (mysql, postgresql, sqlite). Using the above command will automatically
-install all the dependencies needed for running tests, so you don't have to do it by hand.
+of the supported databases (mysql, pgsql, sqlite) or "all" if you want to test all databases in
+one go. Using the above command will automatically install all the dependencies needed for running
+tests, so you don't have to do it by hand.

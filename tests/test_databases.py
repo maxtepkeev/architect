@@ -21,12 +21,12 @@ class BasePartitionTestCase(object):
         self.range_partition = RangePartition(model, **dict(constraint='foo', subtype='bar', **defaults))
 
 
-@unittest.skipUnless(os.environ.get('DB') == 'sqlite', 'Not a SQLite build')
+@unittest.skipUnless(os.environ.get('DB') in ('sqlite', 'all'), 'Not a SQLite build')
 class SQLitePartitionTestCase(BasePartitionTestCase, unittest.TestCase):
     pass
 
 
-@unittest.skipUnless(os.environ.get('DB') == 'postgresql', 'Not a PostgreSQL build')
+@unittest.skipUnless(os.environ.get('DB') in ('pgsql', 'all'), 'Not a PostgreSQL build')
 class PostgresqlPartitionTestCase(BasePartitionTestCase, unittest.TestCase):
     def test__get_definitions_not_implemented(self):
         self.assertRaises(NotImplementedError, lambda: self.partition._get_definitions())
@@ -51,6 +51,6 @@ class PostgresqlPartitionTestCase(BasePartitionTestCase, unittest.TestCase):
         self.assertRaises(PartitionConstraintError, lambda: self.range_partition._get_definitions())
 
 
-@unittest.skipUnless(os.environ.get('DB') == 'mysql', 'Not a MySQL build')
+@unittest.skipUnless(os.environ.get('DB') in ('mysql', 'all'), 'Not a MySQL build')
 class MysqlPartitionTestCase(BasePartitionTestCase, unittest.TestCase):
     pass
