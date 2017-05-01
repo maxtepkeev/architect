@@ -5,6 +5,8 @@ Changelog
 ++++++++++++++++++
 
 - Fixed: Django: Unable to partition tables in multi database configuration without ``default`` database
+- Fixed: PostgreSQL: Failed to partition a table if a reserved keyword was used as a column name (turned
+  out this wasn't fixed properly in v0.5.4) (thanks to `ra2er <https://github.com/ra2er>`__)
 
 0.5.5 (2016-10-08)
 ++++++++++++++++++
