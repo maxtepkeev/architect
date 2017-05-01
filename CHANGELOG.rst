@@ -9,7 +9,7 @@ Changelog
 0.5.5 (2016-10-08)
 ++++++++++++++++++
 
-- Fixed: Error handling with Django 1.10.x branch
+- Fixed: Django: Error handling with 1.10.x branch
 
 0.5.4 (2016-07-04)
 ++++++++++++++++++
@@ -102,7 +102,7 @@ Changelog
 0.2.0 (2014-07-19)
 ++++++++++++++++++
 
-- Added: MySQL range partitioning support
+- Added: MySQL: Range partitioning support
 
 0.1.0 (2014-07-13)
 ++++++++++++++++++
