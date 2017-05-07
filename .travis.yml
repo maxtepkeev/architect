@@ -18,6 +18,7 @@ env:
   - SQLOBJECT='sqlobject>=3.0.0,<3.1.0' DB='all'
   - SQLOBJECT='sqlobject>=3.1.0,<3.2.0' DB='all'
   - SQLOBJECT='sqlobject>=3.2.0,<3.3.0' DB='all'
+  - SQLOBJECT='sqlobject>=3.3.0,<3.4.0' DB='all'
   - PEEWEE='peewee>=2.2.0,<2.3.0' DB='all'
   - PEEWEE='peewee>=2.3.0,<2.4.0' DB='all'
   - PEEWEE='peewee>=2.4.0,<2.5.0' DB='all'
@@ -62,6 +63,8 @@ matrix:
       env: SQLOBJECT='sqlobject>=3.1.0,<3.2.0' DB='all'
     - python: 3.2
       env: SQLOBJECT='sqlobject>=3.2.0,<3.3.0' DB='all'
+    - python: 3.2
+      env: SQLOBJECT='sqlobject>=3.3.0,<3.4.0' DB='all'
     - python: 3.3
       env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB='all'
     - python: 3.3
@@ -80,6 +83,8 @@ matrix:
       env: SQLOBJECT='sqlobject>=3.1.0,<3.2.0' DB='all'
     - python: 3.3
       env: SQLOBJECT='sqlobject>=3.2.0,<3.3.0' DB='all'
+    - python: 3.3
+      env: SQLOBJECT='sqlobject>=3.3.0,<3.4.0' DB='all'
     - python: 3.4
       env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB='all'
     - python: 3.4
