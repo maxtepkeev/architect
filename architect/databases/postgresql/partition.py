@@ -45,18 +45,14 @@ class Partition(BasePartition):
                         {variables}
                     END IF;
 
-                    IF NOT EXISTS(
-                        SELECT 1 FROM information_schema.tables WHERE table_name=tablename)
-                    THEN
-                        BEGIN
-                            EXECUTE 'CREATE TABLE ' || tablename || ' (
-                                CHECK (' || checks || '),
-                                LIKE "{{parent_table}}" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES
-                            ) INHERITS ("{{parent_table}}");';
-                        EXCEPTION WHEN duplicate_table THEN
-                            -- pass
-                        END;
-                    END IF;
+                    BEGIN
+                        EXECUTE 'CREATE TABLE IF NOT EXISTS ' || tablename || ' (
+                            CHECK (' || checks || '),
+                            LIKE "{{parent_table}}" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES
+                        ) INHERITS ("{{parent_table}}");';
+                    EXCEPTION WHEN duplicate_table THEN
+                        -- pass
+                    END;
 
                     EXECUTE 'INSERT INTO ' || tablename || ' VALUES (($1).*);' USING NEW;
                     RETURN NEW;
