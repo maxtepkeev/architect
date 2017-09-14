@@ -19,6 +19,7 @@ class BasePartition(object):
         self.column_value = meta['column_value']
         self.column_name = meta['column']
         self.pks = meta['pk'] if isinstance(meta['pk'], list) else [meta['pk']]
+        self.return_null = meta.get('return_null', False)
 
     def prepare(self):
         """
