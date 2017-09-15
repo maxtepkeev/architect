@@ -46,6 +46,13 @@ class PostgresqlSqlObjectPartitionTestCase(unittest.TestCase):
 
         self.assertTrue(object1.name, object2[1])
 
+    def test_range_date_day_return_null(self):
+        object1 = PgsqlRangeDateDayReturnNULL(id=1, name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+        object2 = PgsqlRangeDateDayReturnNULL._connection.queryOne(
+            'SELECT * FROM test_rangedateday_return_null_y2014d105 WHERE id = %s' % object1.id)
+
+        self.assertTrue(object1.name, object2[1])
+
     def test_range_date_week(self):
         object1 = PgsqlRangeDateWeek(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
         object2 = PgsqlRangeDateWeek._connection.queryOne(
@@ -57,6 +64,13 @@ class PostgresqlSqlObjectPartitionTestCase(unittest.TestCase):
         object1 = PgsqlRangeDateWeek(name='foo')
         object2 = PgsqlRangeDateWeek._connection.queryOne(
             'SELECT * FROM test_rangedateweek_null WHERE id = %s' % object1.id)
+
+        self.assertTrue(object1.name, object2[1])
+
+    def test_range_date_week_return_null(self):
+        object1 = PgsqlRangeDateWeekReturnNULL(id=1, name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+        object2 = PgsqlRangeDateWeekReturnNULL._connection.queryOne(
+            'SELECT * FROM test_rangedateweek_return_null_y2014w16 WHERE id = %s' % object1.id)
 
         self.assertTrue(object1.name, object2[1])
 
@@ -74,6 +88,13 @@ class PostgresqlSqlObjectPartitionTestCase(unittest.TestCase):
 
         self.assertTrue(object1.name, object2[1])
 
+    def test_range_date_month_return_null(self):
+        object1 = PgsqlRangeDateMonthReturnNULL(id=1, name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+        object2 = PgsqlRangeDateMonthReturnNULL._connection.queryOne(
+            'SELECT * FROM test_rangedatemonth_return_null_y2014m04 WHERE id = %s' % object1.id)
+
+        self.assertTrue(object1.name, object2[1])
+
     def test_range_date_year(self):
         object1 = PgsqlRangeDateYear(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
         object2 = PgsqlRangeDateYear._connection.queryOne(
@@ -85,6 +106,13 @@ class PostgresqlSqlObjectPartitionTestCase(unittest.TestCase):
         object1 = PgsqlRangeDateYear(name='foo')
         object2 = PgsqlRangeDateYear._connection.queryOne(
             'SELECT * FROM test_rangedateyear_null WHERE id = %s' % object1.id)
+
+        self.assertTrue(object1.name, object2[1])
+
+    def test_range_date_year_return_null(self):
+        object1 = PgsqlRangeDateYearReturnNULL(id=1, name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+        object2 = PgsqlRangeDateYearReturnNULL._connection.queryOne(
+            'SELECT * FROM test_rangedateyear_return_null_y2014 WHERE id = %s' % object1.id)
 
         self.assertTrue(object1.name, object2[1])
 
@@ -132,6 +160,17 @@ class PostgresqlSqlObjectPartitionTestCase(unittest.TestCase):
         self.assertTrue(object1.name, object2[1])
         self.assertTrue(object3.name, object4[1])
 
+    def test_range_integer_positive_return_null(self):
+        object1 = PgsqlRangeInteger2ReturnNULL(id=1, name='foo', num=3)
+        object3 = PgsqlRangeInteger5ReturnNULL(id=1, name='foo', num=3)
+        object2 = PgsqlRangeInteger2ReturnNULL._connection.queryOne(
+            'SELECT * FROM test_rangeinteger2_return_null_3_4 WHERE id = %s' % object1.id)
+        object4 = PgsqlRangeInteger5ReturnNULL._connection.queryOne(
+            'SELECT * FROM test_rangeinteger5_return_null_1_5 WHERE id = %s' % object3.id)
+
+        self.assertTrue(object1.name, object2[1])
+        self.assertTrue(object3.name, object4[1])
+
     def test_range_string_firstchars(self):
         object1 = PgsqlRangeStringFirstchars2(name='foo', title='abcdef')
         object3 = PgsqlRangeStringFirstchars5(name='foo', title='abcdef')
@@ -165,6 +204,17 @@ class PostgresqlSqlObjectPartitionTestCase(unittest.TestCase):
         self.assertTrue(object1.name, object2[1])
         self.assertTrue(object3.name, object4[1])
 
+    def test_range_string_firstchars_return_null(self):
+        object1 = PgsqlRangeStringFirstchars2ReturnNULL(id=1, name='foo', title='abcdef')
+        object3 = PgsqlRangeStringFirstchars5ReturnNULL(id=1, name='foo', title='abcdef')
+        object2 = PgsqlRangeStringFirstchars2ReturnNULL._connection.queryOne(
+            'SELECT * FROM test_rangestring_firstchars2_return_null_ab WHERE id = %s' % object1.id)
+        object4 = PgsqlRangeStringFirstchars5ReturnNULL._connection.queryOne(
+            'SELECT * FROM test_rangestring_firstchars5_return_null_abcde WHERE id = %s' % object3.id)
+
+        self.assertTrue(object1.name, object2[1])
+        self.assertTrue(object3.name, object4[1])
+
     def test_range_string_lastchars(self):
         object1 = PgsqlRangeStringLastchars2(name='foo', title='abcdef')
         object3 = PgsqlRangeStringLastchars5(name='foo', title='abcdef')
@@ -194,6 +244,17 @@ class PostgresqlSqlObjectPartitionTestCase(unittest.TestCase):
             'SELECT * FROM test_rangestring_lastchars2_null WHERE id = %s' % object1.id)
         object4 = PgsqlRangeStringLastchars5._connection.queryOne(
             'SELECT * FROM test_rangestring_lastchars5_null WHERE id = %s' % object3.id)
+
+        self.assertTrue(object1.name, object2[1])
+        self.assertTrue(object3.name, object4[1])
+
+    def test_range_string_lastchars_return_null(self):
+        object1 = PgsqlRangeStringLastchars2ReturnNULL(id=1, name='foo', title='abcdef')
+        object3 = PgsqlRangeStringLastchars5ReturnNULL(id=1, name='foo', title='abcdef')
+        object2 = PgsqlRangeStringLastchars2ReturnNULL._connection.queryOne(
+            'SELECT * FROM test_rangestring_lastchars2_return_null_ef WHERE id = %s' % object1.id)
+        object4 = PgsqlRangeStringLastchars5ReturnNULL._connection.queryOne(
+            'SELECT * FROM test_rangestring_lastchars5_return_null_bcdef WHERE id = %s' % object3.id)
 
         self.assertTrue(object1.name, object2[1])
         self.assertTrue(object3.name, object4[1])
