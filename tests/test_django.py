@@ -80,6 +80,13 @@ class PostgresqlDjangoPartitionTestCase(unittest.TestCase):
 
         self.assertTrue(object1.name, object2.name)
 
+    def test_range_date_day_return_null(self):
+        object1 = PgsqlRangeDateDayReturnNULL.objects.create(id=1, name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+        object2 = PgsqlRangeDateDayReturnNULL.objects.raw(
+            'SELECT * FROM test_rangedateday_return_null_y2014d105 WHERE id = %s', [object1.id])[0]
+
+        self.assertTrue(object1.name, object2.name)
+
     def test_range_date_week(self):
         object1 = PgsqlRangeDateWeek.objects.create(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
         object2 = PgsqlRangeDateWeek.objects.raw(
@@ -91,6 +98,13 @@ class PostgresqlDjangoPartitionTestCase(unittest.TestCase):
         object1 = PgsqlRangeDateWeek.objects.create(name='foo')
         object2 = PgsqlRangeDateWeek.objects.raw(
             'SELECT * FROM test_rangedateweek_null WHERE id = %s', [object1.id])[0]
+
+        self.assertTrue(object1.name, object2.name)
+
+    def test_range_date_week_return_null(self):
+        object1 = PgsqlRangeDateWeekReturnNULL.objects.create(id=1, name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+        object2 = PgsqlRangeDateWeekReturnNULL.objects.raw(
+            'SELECT * FROM test_rangedateweek_return_null_y2014w16 WHERE id = %s', [object1.id])[0]
 
         self.assertTrue(object1.name, object2.name)
 
@@ -108,6 +122,13 @@ class PostgresqlDjangoPartitionTestCase(unittest.TestCase):
 
         self.assertTrue(object1.name, object2.name)
 
+    def test_range_date_month_return_null(self):
+        object1 = PgsqlRangeDateMonthReturnNULL.objects.create(id=1, name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+        object2 = PgsqlRangeDateMonthReturnNULL.objects.raw(
+            'SELECT * FROM test_rangedatemonth_return_null_y2014m04 WHERE id = %s', [object1.id])[0]
+
+        self.assertTrue(object1.name, object2.name)
+
     def test_range_date_year(self):
         object1 = PgsqlRangeDateYear.objects.create(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
         object2 = PgsqlRangeDateYear.objects.raw(
@@ -119,6 +140,13 @@ class PostgresqlDjangoPartitionTestCase(unittest.TestCase):
         object1 = PgsqlRangeDateYear.objects.create(name='foo')
         object2 = PgsqlRangeDateYear.objects.raw(
             'SELECT * FROM test_rangedateyear_null WHERE id = %s', [object1.id])[0]
+
+        self.assertTrue(object1.name, object2.name)
+
+    def test_range_date_year_return_null(self):
+        object1 = PgsqlRangeDateYearReturnNULL.objects.create(id=1, name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+        object2 = PgsqlRangeDateYearReturnNULL.objects.raw(
+            'SELECT * FROM test_rangedateyear_return_null_y2014 WHERE id = %s', [object1.id])[0]
 
         self.assertTrue(object1.name, object2.name)
 
@@ -160,6 +188,15 @@ class PostgresqlDjangoPartitionTestCase(unittest.TestCase):
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
 
+    def test_range_integer_positive_return_null(self):
+        object1 = PgsqlRangeInteger2ReturnNULL.objects.create(id=1, name='foo', num=3)
+        object2 = PgsqlRangeInteger2ReturnNULL.objects.raw('SELECT * FROM test_rangeinteger2_return_null_3_4 WHERE id = %s', [object1.id])[0]
+        object3 = PgsqlRangeInteger5ReturnNULL.objects.create(id=1, name='foo', num=3)
+        object4 = PgsqlRangeInteger5ReturnNULL.objects.raw('SELECT * FROM test_rangeinteger5_return_null_1_5 WHERE id = %s', [object3.id])[0]
+
+        self.assertTrue(object1.name, object2.name)
+        self.assertTrue(object3.name, object4.name)
+
     def test_range_string_firstchars(self):
         object1 = PgsqlRangeStringFirstchars2.objects.create(name='foo', title='abcdef')
         object2 = PgsqlRangeStringFirstchars2.objects.raw(
@@ -193,6 +230,17 @@ class PostgresqlDjangoPartitionTestCase(unittest.TestCase):
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
 
+    def test_range_string_firstchars_return_null(self):
+        object1 = PgsqlRangeStringFirstchars2ReturnNULL.objects.create(id=1, name='foo', title='abcdef')
+        object2 = PgsqlRangeStringFirstchars2ReturnNULL.objects.raw(
+            'SELECT * FROM test_rangestring_firstchars2_return_null_ab WHERE id = %s', [object1.id])[0]
+        object3 = PgsqlRangeStringFirstchars5ReturnNULL.objects.create(id=1, name='foo', title='abcdef')
+        object4 = PgsqlRangeStringFirstchars5ReturnNULL.objects.raw(
+            'SELECT * FROM test_rangestring_firstchars5_return_null_abcde WHERE id = %s', [object3.id])[0]
+
+        self.assertTrue(object1.name, object2.name)
+        self.assertTrue(object3.name, object4.name)
+
     def test_range_string_lastchars(self):
         object1 = PgsqlRangeStringLastchars2.objects.create(name='foo', title='abcdef')
         object2 = PgsqlRangeStringLastchars2.objects.raw(
@@ -222,6 +270,17 @@ class PostgresqlDjangoPartitionTestCase(unittest.TestCase):
         object3 = PgsqlRangeStringLastchars5.objects.create(name='foo')
         object4 = PgsqlRangeStringLastchars5.objects.raw(
             'SELECT * FROM test_rangestring_lastchars5_null WHERE id = %s', [object3.id])[0]
+
+        self.assertTrue(object1.name, object2.name)
+        self.assertTrue(object3.name, object4.name)
+
+    def test_range_string_lastchars_return_null(self):
+        object1 = PgsqlRangeStringLastchars2ReturnNULL.objects.create(id=1, name='foo', title='abcdef')
+        object2 = PgsqlRangeStringLastchars2ReturnNULL.objects.raw(
+            'SELECT * FROM test_rangestring_lastchars2_return_null_ef WHERE id = %s', [object1.id])[0]
+        object3 = PgsqlRangeStringLastchars5ReturnNULL.objects.create(id=1, name='foo', title='abcdef')
+        object4 = PgsqlRangeStringLastchars5ReturnNULL.objects.raw(
+            'SELECT * FROM test_rangestring_lastchars5_return_null_bcdef WHERE id = %s', [object3.id])[0]
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
