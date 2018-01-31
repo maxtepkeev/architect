@@ -57,7 +57,7 @@ class Partition(BasePartition):
                     EXECUTE 'INSERT INTO ' || tablename || ' VALUES (($1).*);' USING NEW;
                     RETURN NEW;
                 END;
-            $$ LANGUAGE plpgsql;
+            $$ LANGUAGE plpgsql SECURITY DEFINER;
 
             -- Then we create a trigger which calls the before insert function
             DO $$
