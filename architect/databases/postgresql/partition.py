@@ -30,10 +30,10 @@ class Partition(BasePartition):
 
         return self.database.execute("""
             -- We need to create a before insert function
-            CREATE OR REPLACE FUNCTION {{parent_table}}_insert_child()
+            CREATE OR REPLACE FUNCTION {{function_name}}_insert_child()
             RETURNS TRIGGER AS $$
                 DECLARE
-                    match {{parent_table}}.{{column}}%TYPE;
+                    match "{{parent_table}}".{{column}}%TYPE;
                     tablename VARCHAR;
                     checks TEXT;
                     {declarations}
@@ -46,7 +46,7 @@ class Partition(BasePartition):
                     END IF;
 
                     BEGIN
-                        EXECUTE 'CREATE TABLE IF NOT EXISTS ' || tablename || ' (
+                        EXECUTE 'CREATE TABLE IF NOT EXISTS ' || quote_ident(tablename) || ' (
                             CHECK (' || checks || '),
                             LIKE "{{parent_table}}" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES
                         ) INHERITS ("{{parent_table}}");';
@@ -54,7 +54,7 @@ class Partition(BasePartition):
                         -- pass
                     END;
 
-                    EXECUTE 'INSERT INTO ' || tablename || ' VALUES (($1).*);' USING NEW;
+                    EXECUTE 'INSERT INTO ' || quote_ident(tablename) || ' VALUES (($1).*);' USING NEW;
                     RETURN NEW;
                 END;
             $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -68,14 +68,14 @@ class Partition(BasePartition):
                 WHERE event_object_table = '{{parent_table}}'
                 AND trigger_name = 'before_insert_{{parent_table}}_trigger'
             ) THEN
-                CREATE TRIGGER before_insert_{{parent_table}}_trigger
+                CREATE TRIGGER before_insert_{{function_name}}_trigger
                     BEFORE INSERT ON "{{parent_table}}"
-                    FOR EACH ROW EXECUTE PROCEDURE {{parent_table}}_insert_child();
+                    FOR EACH ROW EXECUTE PROCEDURE {{function_name}}_insert_child();
             END IF;
             END $$;
 
             -- Then we create a function to delete duplicate row from the master table after insert
-            CREATE OR REPLACE FUNCTION {{parent_table}}_delete_master()
+            CREATE OR REPLACE FUNCTION {{function_name}}_delete_master()
             RETURNS TRIGGER AS $$
                 BEGIN
                     DELETE FROM ONLY "{{parent_table}}" WHERE {{pk}};
@@ -90,17 +90,18 @@ class Partition(BasePartition):
                 SELECT 1
                 FROM information_schema.triggers
                 WHERE event_object_table = '{{parent_table}}'
-                AND trigger_name = 'after_insert_{{parent_table}}_trigger'
+                AND trigger_name = 'after_insert_{{function_name}}_trigger'
             ) THEN
-                CREATE TRIGGER after_insert_{{parent_table}}_trigger
+                CREATE TRIGGER after_insert_{{function_name}}_trigger
                     AFTER INSERT ON "{{parent_table}}"
-                    FOR EACH ROW EXECUTE PROCEDURE {{parent_table}}_delete_master();
+                    FOR EACH ROW EXECUTE PROCEDURE {{function_name}}_delete_master();
             END IF;
             END $$;
         """.format(**definitions).format(
             pk=' AND '.join('{pk} = NEW.{pk}'.format(pk=pk) for pk in self.pks),
             parent_table=self.table,
-            column='"{0}"'.format(self.column_name)
+            column='"{0}"'.format(self.column_name),
+            function_name=self.table.replace('-', '_')
         ))
 
     def exists(self):
