@@ -15,13 +15,19 @@ from ...exceptions import (
 )
 
 
+# Maximum table length must be smaller as the SQL functions and triggers add
+# more characters for their identifiers
+MAX_IDENTIFIER_LENGTH = 63
+MAX_TABLE_LENGTH = MAX_IDENTIFIER_LENGTH - 25
+
+
 class Partition(BasePartition):
     @property
     def safe_tablename(self):
         safe_table = self.table
 
-        if len(safe_table) > 50 or '-' in safe_table:
-            safe_table = 'tbl_{}'.format(hashlib.md5(safe_table).hexdigest())
+        if len(safe_table) > MAX_TABLE_LENGTH or '-' in safe_table:
+            safe_table = 'tbl_{}'.format(hashlib.md5(safe_table.encode('utf-8')).hexdigest())
 
         return safe_table
 
