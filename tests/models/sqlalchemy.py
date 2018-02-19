@@ -34,6 +34,18 @@ for database in test_databases:
         }))
 
     if database == 'pgsql':
+        # Use a very long table name
+
+        name = '{0}RangeVeryLongDateDay'.format(dbname)
+        partition = install(
+            'partition', type='range', subtype='date', constraint='day', column='created', db=engine.url)
+
+        locals()[name] = partition(type(name, (Base,), {
+            '__tablename__': 'test_rangedatedaywithaverylongtablenamethatwillgooverpostgreslimitations'[:63],
+            'id': Column(Integer, primary_key=True),
+            'name': Column(String(length=255)),
+            'created': Column(DateTime, nullable=True)
+        }))
         # Use a table name with a hyphen
         name = '{0}RangeHyphenDateDay'.format(dbname)
         partition = install(

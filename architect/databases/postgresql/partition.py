@@ -6,6 +6,8 @@ partitioning, one can safely work with it via raw SQL statements without
 using any kind of the ORM or anything else.
 """
 
+import hashlib
+
 from ..bases import BasePartition
 from ...exceptions import (
     PartitionRangeSubtypeError,
@@ -14,6 +16,15 @@ from ...exceptions import (
 
 
 class Partition(BasePartition):
+    @property
+    def safe_tablename(self):
+        safe_table = self.table
+
+        if len(safe_table) > 50 or '-' in safe_table:
+            safe_table = 'tbl_{}'.format(hashlib.md5(safe_table).hexdigest())
+
+        return safe_table
+
     def prepare(self):
         """
         Prepares needed triggers and functions for those triggers.
@@ -30,7 +41,7 @@ class Partition(BasePartition):
 
         return self.database.execute("""
             -- We need to create a before insert function
-            CREATE OR REPLACE FUNCTION {{function_name}}_insert_child()
+            CREATE OR REPLACE FUNCTION {{safe_tablename}}_insert_child()
             RETURNS TRIGGER AS $$
                 DECLARE
                     match "{{parent_table}}".{{column}}%TYPE;
@@ -39,7 +50,7 @@ class Partition(BasePartition):
                     {declarations}
                 BEGIN
                     IF NEW.{{column}} IS NULL THEN
-                        tablename := '{{parent_table}}_null';
+                        tablename := '{{safe_tablename}}_null';
                         checks := '{{column}} IS NULL';
                     ELSE
                         {variables}
@@ -66,16 +77,16 @@ class Partition(BasePartition):
                 SELECT 1
                 FROM information_schema.triggers
                 WHERE event_object_table = '{{parent_table}}'
-                AND trigger_name = 'before_insert_{{function_name}}_trigger'
+                AND trigger_name = 'before_insert_{{safe_tablename}}_trigger'
             ) THEN
-                CREATE TRIGGER before_insert_{{function_name}}_trigger
+                CREATE TRIGGER before_insert_{{safe_tablename}}_trigger
                     BEFORE INSERT ON "{{parent_table}}"
-                    FOR EACH ROW EXECUTE PROCEDURE {{function_name}}_insert_child();
+                    FOR EACH ROW EXECUTE PROCEDURE {{safe_tablename}}_insert_child();
             END IF;
             END $$;
 
             -- Then we create a function to delete duplicate row from the master table after insert
-            CREATE OR REPLACE FUNCTION {{function_name}}_delete_master()
+            CREATE OR REPLACE FUNCTION {{safe_tablename}}_delete_master()
             RETURNS TRIGGER AS $$
                 BEGIN
                     DELETE FROM ONLY "{{parent_table}}" WHERE {{pk}};
@@ -90,18 +101,18 @@ class Partition(BasePartition):
                 SELECT 1
                 FROM information_schema.triggers
                 WHERE event_object_table = '{{parent_table}}'
-                AND trigger_name = 'after_insert_{{function_name}}_trigger'
+                AND trigger_name = 'after_insert_{{safe_tablename}}_trigger'
             ) THEN
-                CREATE TRIGGER after_insert_{{function_name}}_trigger
+                CREATE TRIGGER after_insert_{{safe_tablename}}_trigger
                     AFTER INSERT ON "{{parent_table}}"
-                    FOR EACH ROW EXECUTE PROCEDURE {{function_name}}_delete_master();
+                    FOR EACH ROW EXECUTE PROCEDURE {{safe_tablename}}_delete_master();
             END IF;
             END $$;
         """.format(**definitions).format(
             pk=' AND '.join('{pk} = NEW.{pk}'.format(pk=pk) for pk in self.pks),
             parent_table=self.table,
             column='"{0}"'.format(self.column_name),
-            function_name=self.table.replace('-', '_')
+            safe_tablename=self.safe_tablename
         ))
 
     def exists(self):
@@ -173,7 +184,7 @@ class RangePartition(Partition):
             'formatters': {'pattern': pattern},
             'variables': [
                 "match := DATE_TRUNC('{constraint}', NEW.{{column}});",
-                "tablename := QUOTE_IDENT('{{parent_table}}_' || TO_CHAR(NEW.{{column}}, '{pattern}'));",
+                "tablename := QUOTE_IDENT('{{safe_tablename}}_' || TO_CHAR(NEW.{{column}}, '{pattern}'));",
                 "checks := '{{column}} >= ''' || match || ''' AND {{column}} < ''' || (match + INTERVAL '1 {constraint}') || '''';"
             ]
         }
@@ -192,15 +203,15 @@ class RangePartition(Partition):
         return {
             'variables': [
                 "IF NEW.{{column}} = 0 THEN",
-                "    tablename := '{{parent_table}}_0';",
+                "    tablename := '{{safe_tablename}}_0';",
                 "    checks := '{{column}} = 0';",
                 "ELSE",
                 "    IF NEW.{{column}} > 0 THEN",
                 "        match := ((NEW.{{column}} - 1) / {constraint}) * {constraint} + 1;",
-                "        tablename := QUOTE_IDENT('{{parent_table}}_' || match || '_' || (match + {constraint}) - 1);",
+                "        tablename := QUOTE_IDENT('{{safe_tablename}}_' || match || '_' || (match + {constraint}) - 1);",
                 "    ELSE",
                 "        match := FLOOR(NEW.{{column}} :: FLOAT / {constraint} :: FLOAT) * {constraint};",
-                "        tablename := QUOTE_IDENT('{{parent_table}}_m' || ABS(match) || '_m' || ABS((match + {constraint}) - 1));",
+                "        tablename := QUOTE_IDENT('{{safe_tablename}}_m' || ABS(match) || '_m' || ABS((match + {constraint}) - 1));",
                 "    END IF;",
                 "    checks := '{{column}} >= ' || match || ' AND {{column}} <= ' || (match + {constraint}) - 1;",
                 "END IF;"
@@ -221,7 +232,7 @@ class RangePartition(Partition):
         return {
             'variables': [
                 "match := LOWER(SUBSTR(NEW.{{column}}, 1, {constraint}));",
-                "tablename := QUOTE_IDENT('{{parent_table}}_' || match);",
+                "tablename := QUOTE_IDENT('{{safe_tablename}}_' || match);",
                 "checks := 'LOWER(SUBSTR({{column}}, 1, {constraint})) = ''' || match || '''';"
             ]
         }
@@ -240,7 +251,7 @@ class RangePartition(Partition):
         return {
             'variables': [
                 "match := LOWER(SUBSTRING(NEW.{{column}} FROM '.{{{{{constraint}}}}}$'));",
-                "tablename := QUOTE_IDENT('{{parent_table}}_' || match);",
+                "tablename := QUOTE_IDENT('{{safe_tablename}}_' || match);",
                 "checks := 'LOWER(SUBSTRING({{column}} FROM ''.{{{{{constraint}}}}}$'')) = ''' || match || '''';"
             ]
         }

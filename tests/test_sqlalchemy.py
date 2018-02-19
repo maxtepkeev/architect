@@ -369,10 +369,27 @@ class PostgresqlSqlAlchemyPartitionTestCase(unittest.TestCase):
         self.session.commit()
 
         object2 = self.session.query(PgsqlRangeHyphenDateDay).from_statement(
-            text('SELECT * FROM "test_range-dateday_y2014d105" WHERE id = :id')
+            text('SELECT * FROM "tbl_667814817492d1843c9d91d06f3555c5_y2014d105" WHERE id = :id')
         ).params(id=object1.id).first()
 
         self.assertTrue(object1.name, object2.name)
+
+    def test_range_date_day_long_tablename(self):
+        object1 = PgsqlRangeVeryLongDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+        self.session.add(object1)
+        self.session.commit()
+
+        object2 = self.session.query(PgsqlRangeVeryLongDateDay).from_statement(
+            text('SELECT * FROM test_rangedatedaywithaverylongtablenamethatwillgooverpostgresli WHERE id = :id')
+        ).params(id=object1.id).first()
+
+        self.assertTrue(object1.name, object2.name)
+
+        object3 = self.session.query(PgsqlRangeVeryLongDateDay).from_statement(
+            text('SELECT * FROM tbl_3f7c1ccefeb59607865dd3df476eba1f_y2014d105 WHERE id = :id')
+        ).params(id=object1.id).first()
+
+        self.assertTrue(object1.name, object3.name)
 
 
 @unittest.skipUnless(os.environ['DB'] in ('mysql', 'all'), 'Not a MySQL build')
