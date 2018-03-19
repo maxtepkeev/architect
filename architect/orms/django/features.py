@@ -20,7 +20,7 @@ class ConnectionMixin(object):
     def database(self):
         return self.options.get('db', router.db_for_write(self.model_cls))
 
-    @cached_property
+    @property
     def connection(self):
         db = self.database
 
