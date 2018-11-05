@@ -90,6 +90,15 @@ from the beginning, i.e. string "foobar" will go to partition "oobar", string "f
    class Model(object):
        pass
 
+Performance
+-----------
+
+``string_firstchars`` and ``string_lastchars`` both use ``lower`` and ``substr`` functions to determine
+the partition. In order for PostgreSQL's query planner to be able to prune the partition effectively, your
+query must include a filter like ``lower(substr(columnname, 1, 5)) = 'fooba'``. Also note that unless your
+table has an index on this function, PostgreSQL may not be able to provide an accurate estimate for the
+number of rows a query will return.
+
 Limitations
 -----------
 
