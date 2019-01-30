@@ -137,6 +137,17 @@ class PostgresqlSqlAlchemyPartitionTestCase(unittest.TestCase):
 
         self.assertTrue(object1.name, object2.name)
 
+    def test_range_date_day_return_null(self):
+        object1 = PgsqlRangeDateDayReturnNULL(id=1, name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+        self.session.add(object1)
+        self.session.commit()
+
+        object2 = self.session.query(PgsqlRangeDateDayReturnNULL).from_statement(
+            text('SELECT * FROM test_rangedateday_return_null_y2014d105 WHERE id = :id')
+        ).params(id=object1.id).first()
+
+        self.assertTrue(object1.name, object2.name)
+
     def test_range_date_week(self):
         object1 = PgsqlRangeDateWeek(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
         self.session.add(object1)
@@ -155,6 +166,17 @@ class PostgresqlSqlAlchemyPartitionTestCase(unittest.TestCase):
 
         object2 = self.session.query(PgsqlRangeDateWeek).from_statement(
             text('SELECT * FROM test_rangedateweek_null WHERE id = :id')
+        ).params(id=object1.id).first()
+
+        self.assertTrue(object1.name, object2.name)
+
+    def test_range_date_week_return_null(self):
+        object1 = PgsqlRangeDateWeekReturnNULL(id=1, name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+        self.session.add(object1)
+        self.session.commit()
+
+        object2 = self.session.query(PgsqlRangeDateWeekReturnNULL).from_statement(
+            text('SELECT * FROM test_rangedateweek_return_null_y2014w16 WHERE id = :id')
         ).params(id=object1.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -181,6 +203,17 @@ class PostgresqlSqlAlchemyPartitionTestCase(unittest.TestCase):
 
         self.assertTrue(object1.name, object2.name)
 
+    def test_range_date_month_return_null(self):
+        object1 = PgsqlRangeDateMonthReturnNULL(id=1, name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+        self.session.add(object1)
+        self.session.commit()
+
+        object2 = self.session.query(PgsqlRangeDateMonthReturnNULL).from_statement(
+            text('SELECT * FROM test_rangedatemonth_return_null_y2014m04 WHERE id = :id')
+        ).params(id=object1.id).first()
+
+        self.assertTrue(object1.name, object2.name)
+
     def test_range_date_year(self):
         object1 = PgsqlRangeDateYear(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
         self.session.add(object1)
@@ -199,6 +232,17 @@ class PostgresqlSqlAlchemyPartitionTestCase(unittest.TestCase):
 
         object2 = self.session.query(PgsqlRangeDateYear).from_statement(
             text('SELECT * FROM test_rangedateyear_null WHERE id = :id')
+        ).params(id=object1.id).first()
+
+        self.assertTrue(object1.name, object2.name)
+
+    def test_range_date_year_return_null(self):
+        object1 = PgsqlRangeDateYearReturnNULL(id=1, name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
+        self.session.add(object1)
+        self.session.commit()
+
+        object2 = self.session.query(PgsqlRangeDateYearReturnNULL).from_statement(
+            text('SELECT * FROM test_rangedateyear_return_null_y2014 WHERE id = :id')
         ).params(id=object1.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -267,6 +311,22 @@ class PostgresqlSqlAlchemyPartitionTestCase(unittest.TestCase):
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
 
+    def test_range_integer_positive_return_null(self):
+        object1 = PgsqlRangeInteger2ReturnNULL(id=1, name='foo', num=3)
+        object3 = PgsqlRangeInteger5ReturnNULL(id=1, name='foo', num=3)
+        self.session.add_all([object1, object3])
+        self.session.commit()
+
+        object2 = self.session.query(PgsqlRangeInteger2ReturnNULL).from_statement(
+            text('SELECT * FROM test_rangeinteger2_return_null_3_4 WHERE id = :id')
+        ).params(id=object1.id).first()
+        object4 = self.session.query(PgsqlRangeInteger5ReturnNULL).from_statement(
+            text('SELECT * FROM test_rangeinteger5_return_null_1_5 WHERE id = :id')
+        ).params(id=object3.id).first()
+
+        self.assertTrue(object1.name, object2.name)
+        self.assertTrue(object3.name, object4.name)
+
     def test_range_string_firstchars(self):
         object1 = PgsqlRangeStringFirstchars2(name='foo', title='abcdef')
         object3 = PgsqlRangeStringFirstchars5(name='foo', title='abcdef')
@@ -315,6 +375,22 @@ class PostgresqlSqlAlchemyPartitionTestCase(unittest.TestCase):
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
 
+    def test_range_string_firstchars_return_null(self):
+        object1 = PgsqlRangeStringFirstchars2ReturnNULL(id=1, name='foo', title='abcdef')
+        object3 = PgsqlRangeStringFirstchars5ReturnNULL(id=1, name='foo', title='abcdef')
+        self.session.add_all([object1, object3])
+        self.session.commit()
+
+        object2 = self.session.query(PgsqlRangeStringFirstchars2ReturnNULL).from_statement(
+            text('SELECT * FROM test_rangestring_firstchars2_return_null_ab WHERE id = :id')
+        ).params(id=object1.id).first()
+        object4 = self.session.query(PgsqlRangeStringFirstchars5ReturnNULL).from_statement(
+            text('SELECT * FROM test_rangestring_firstchars5_return_null_abcde WHERE id = :id')
+        ).params(id=object3.id).first()
+
+        self.assertTrue(object1.name, object2.name)
+        self.assertTrue(object3.name, object4.name)
+
     def test_range_string_lastchars(self):
         object1 = PgsqlRangeStringLastchars2(name='foo', title='abcdef')
         object3 = PgsqlRangeStringLastchars5(name='foo', title='abcdef')
@@ -358,6 +434,22 @@ class PostgresqlSqlAlchemyPartitionTestCase(unittest.TestCase):
         ).params(id=object1.id).first()
         object4 = self.session.query(PgsqlRangeStringLastchars5).from_statement(
             text('SELECT * FROM test_rangestring_lastchars5_null WHERE id = :id')
+        ).params(id=object3.id).first()
+
+        self.assertTrue(object1.name, object2.name)
+        self.assertTrue(object3.name, object4.name)
+
+    def test_range_string_lastchars_return_null(self):
+        object1 = PgsqlRangeStringLastchars2ReturnNULL(id=1, name='foo', title='abcdef')
+        object3 = PgsqlRangeStringLastchars5ReturnNULL(id=1, name='foo', title='abcdef')
+        self.session.add_all([object1, object3])
+        self.session.commit()
+
+        object2 = self.session.query(PgsqlRangeStringLastchars2ReturnNULL).from_statement(
+            text('SELECT * FROM test_rangestring_lastchars2_return_null_ef WHERE id = :id')
+        ).params(id=object1.id).first()
+        object4 = self.session.query(PgsqlRangeStringLastchars5ReturnNULL).from_statement(
+            text('SELECT * FROM test_rangestring_lastchars5_return_null_bcdef WHERE id = :id')
         ).params(id=object3.id).first()
 
         self.assertTrue(object1.name, object2.name)
