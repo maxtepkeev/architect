@@ -66,7 +66,7 @@ class Partition(BasePartition):
                 SELECT 1
                 FROM information_schema.triggers
                 WHERE event_object_table = '{{parent_table}}'
-                AND trigger_name = 'before_insert_{{parent_table}}_trigger'
+                AND trigger_name = LOWER('before_insert_{{parent_table}}_trigger')
             ) THEN
                 CREATE TRIGGER before_insert_{{parent_table}}_trigger
                     BEFORE INSERT ON "{{parent_table}}"
@@ -90,7 +90,7 @@ class Partition(BasePartition):
                 SELECT 1
                 FROM information_schema.triggers
                 WHERE event_object_table = '{{parent_table}}'
-                AND trigger_name = 'after_insert_{{parent_table}}_trigger'
+                AND trigger_name = LOWER('after_insert_{{parent_table}}_trigger')
             ) THEN
                 CREATE TRIGGER after_insert_{{parent_table}}_trigger
                     AFTER INSERT ON "{{parent_table}}"
