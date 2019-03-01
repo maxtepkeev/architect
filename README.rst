@@ -22,14 +22,15 @@ Features
   - `Peewee <https://peewee.readthedocs.io>`_ >= 2.2.0
   - `Pony <http://ponyorm.com>`_ >= 0.5.0
   - `SQLAlchemy <http://www.sqlalchemy.org>`_ >= 0.8.0
-  - `SQLObject <http://www.sqlobject.org>`_ >= 1.5.0
+  - `SQLObject <http://www.sqlobject.org>`_ >= 1.5.0 for Python <= 3.6
+  - `SQLObject <http://www.sqlobject.org>`_ >= 3.7.1 for Python >= 3.7
 
 * Supported DBs
 
   - `PostgreSQL <http://www.postgresql.org>`_ >= 8.0
   - `MySQL <https://www.mysql.com>`_ >= 5.5
 
-* Supports Python 2.6 - 3.6
+* Supports Python 2.6 - 3.7
 * Extensively documented
 
 Dependencies

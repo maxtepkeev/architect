@@ -4,6 +4,7 @@ Changelog
 Unreleased
 ++++++++++++++++++
 
+- Added: Support for python 3.7. Possible **breaking change** if using with `sqlobject` < 3.7.1.` `sqlobject` has to be upgraded to match version >= 3.7.1.
 - Changed: Remove support python 2.6
 - Fixed: PostgreSQL: `Issue #58 <https://github.com/maxtepkeev/architect/issues/58>`__  Unquoted function
   name are case insensitive and always lowercase
