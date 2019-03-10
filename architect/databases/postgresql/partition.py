@@ -33,7 +33,7 @@ class Partition(BasePartition):
             CREATE OR REPLACE FUNCTION {{parent_table}}_insert_child()
             RETURNS TRIGGER AS $$
                 DECLARE
-                    match {{parent_table}}.{{column}}%TYPE;
+                    match "{{parent_table}}".{{column}}%TYPE;
                     tablename VARCHAR;
                     checks TEXT;
                     {declarations}

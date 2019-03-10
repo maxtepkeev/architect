@@ -27,7 +27,7 @@ for database in test_databases:
             'partition', type='range', subtype='date', constraint=item, column='created', db=engine.url)
 
         locals()[name] = partition(type(name, (Base,), {
-            '__tablename__': 'test_rangedate{0}'.format(item),
+            '__tablename__': 'TEST_rangedate{0}'.format(item),
             'id': Column(Integer, primary_key=True),
             'name': Column(String(length=255)),
             'created': Column(DateTime, nullable=True)
@@ -41,7 +41,7 @@ for database in test_databases:
                 'partition', type='range', subtype='integer', constraint=item, column='num', db=engine.url)
 
             locals()[name] = partition(type(name, (Base,), {
-                '__tablename__': 'test_rangeinteger{0}'.format(item),
+                '__tablename__': 'TEST_rangeinteger{0}'.format(item),
                 'id': Column(Integer, primary_key=True),
                 'name': Column(String(length=255)),
                 'num': Column(Integer, nullable=True)
@@ -55,7 +55,7 @@ for database in test_databases:
                     'partition', type='range', subtype=subtype, constraint=item, column='title', db=engine.url)
 
                 locals()[name] = partition(type(name, (Base,), {
-                    '__tablename__': 'test_range{0}{1}'.format(subtype, item),
+                    '__tablename__': 'TEST_range{0}{1}'.format(subtype, item),
                     'id': Column(Integer, primary_key=True),
                     'name': Column(String(length=255)),
                     'title': Column(String(length=255), nullable=True)

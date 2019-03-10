@@ -24,7 +24,7 @@ for database in test_databases:
         partition = install('partition', type='range', subtype='date', constraint=item, column='created')
 
         locals()[name] = partition(type(name, (db.Entity,), {
-            '_table_': 'test_rangedate{0}'.format(item),
+            '_table_': 'TEST_rangedate{0}'.format(item),
             'name': Required(unicode),
             'created': Optional(datetime.datetime, nullable=True),
         }))
@@ -36,7 +36,7 @@ for database in test_databases:
             partition = install('partition', type='range', subtype='integer', constraint=item, column='num')
 
             locals()[name] = partition(type(name, (db.Entity,), {
-                '_table_': 'test_rangeinteger{0}'.format(item),
+                '_table_': 'TEST_rangeinteger{0}'.format(item),
                 'name': Required(unicode),
                 'num': Optional(int, nullable=True)
             }))
@@ -48,7 +48,7 @@ for database in test_databases:
                 partition = install('partition', type='range', subtype=subtype, constraint=item, column='title')
 
                 locals()[name] = partition(type(name, (db.Entity,), {
-                    '_table_': 'test_range{0}{1}'.format(subtype, item),
+                    '_table_': 'TEST_range{0}{1}'.format(subtype, item),
                     'name': Required(unicode),
                     'title': Optional(unicode, nullable=True),
                 }))

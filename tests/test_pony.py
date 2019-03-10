@@ -35,7 +35,7 @@ class SQLitePonyPartitionTestCase(unittest.TestCase):
         with db_session:
             object1 = SqliteRangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
             commit()
-            object2 = SqliteRangeDateDay.get_by_sql('SELECT * FROM test_rangedateday WHERE id = $object1.id')
+            object2 = SqliteRangeDateDay.get_by_sql('SELECT * FROM TEST_rangedateday WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)
 
@@ -46,7 +46,7 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
         with db_session:
             object1 = PgsqlRangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
             commit()
-            object2 = PgsqlRangeDateDay.get_by_sql('SELECT * FROM test_rangedateday_y2014d105 WHERE id = $object1.id')
+            object2 = PgsqlRangeDateDay.get_by_sql('SELECT * FROM TEST_rangedateday_y2014d105 WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)
 
@@ -54,7 +54,7 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
         with db_session:
             object1 = PgsqlRangeDateDay(name='foo')
             commit()
-            object2 = PgsqlRangeDateDay.get_by_sql('SELECT * FROM test_rangedateday_null WHERE id = $object1.id')
+            object2 = PgsqlRangeDateDay.get_by_sql('SELECT * FROM TEST_rangedateday_null WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)
 
@@ -62,7 +62,7 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
         with db_session:
             object1 = PgsqlRangeDateWeek(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
             commit()
-            object2 = PgsqlRangeDateWeek.get_by_sql('SELECT * FROM test_rangedateweek_y2014w16 WHERE id = $object1.id')
+            object2 = PgsqlRangeDateWeek.get_by_sql('SELECT * FROM TEST_rangedateweek_y2014w16 WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)
 
@@ -70,7 +70,7 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
         with db_session:
             object1 = PgsqlRangeDateWeek(name='foo')
             commit()
-            object2 = PgsqlRangeDateWeek.get_by_sql('SELECT * FROM test_rangedateweek_null WHERE id = $object1.id')
+            object2 = PgsqlRangeDateWeek.get_by_sql('SELECT * FROM TEST_rangedateweek_null WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)
 
@@ -79,7 +79,7 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
             object1 = PgsqlRangeDateMonth(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
             commit()
             object2 = PgsqlRangeDateMonth.get_by_sql(
-                'SELECT * FROM test_rangedatemonth_y2014m04 WHERE id = $object1.id')
+                'SELECT * FROM TEST_rangedatemonth_y2014m04 WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)
 
@@ -87,7 +87,7 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
         with db_session:
             object1 = PgsqlRangeDateMonth(name='foo')
             commit()
-            object2 = PgsqlRangeDateMonth.get_by_sql('SELECT * FROM test_rangedatemonth_null WHERE id = $object1.id')
+            object2 = PgsqlRangeDateMonth.get_by_sql('SELECT * FROM TEST_rangedatemonth_null WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)
 
@@ -95,7 +95,7 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
         with db_session:
             object1 = PgsqlRangeDateYear(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
             commit()
-            object2 = PgsqlRangeDateYear.get_by_sql('SELECT * FROM test_rangedateyear_y2014 WHERE id = $object1.id')
+            object2 = PgsqlRangeDateYear.get_by_sql('SELECT * FROM TEST_rangedateyear_y2014 WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)
 
@@ -103,7 +103,7 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
         with db_session:
             object1 = PgsqlRangeDateYear(name='foo')
             commit()
-            object2 = PgsqlRangeDateYear.get_by_sql('SELECT * FROM test_rangedateyear_null WHERE id = $object1.id')
+            object2 = PgsqlRangeDateYear.get_by_sql('SELECT * FROM TEST_rangedateyear_null WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)
 
@@ -112,8 +112,8 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
             object1 = PgsqlRangeInteger2(name='foo', num=3)
             object3 = PgsqlRangeInteger5(name='foo', num=3)
             commit()
-            object2 = PgsqlRangeInteger2.get_by_sql('SELECT * FROM test_rangeinteger2_3_4 WHERE id = $object1.id')
-            object4 = PgsqlRangeInteger5.get_by_sql('SELECT * FROM test_rangeinteger5_1_5 WHERE id = $object3.id')
+            object2 = PgsqlRangeInteger2.get_by_sql('SELECT * FROM TEST_rangeinteger2_3_4 WHERE id = $object1.id')
+            object4 = PgsqlRangeInteger5.get_by_sql('SELECT * FROM TEST_rangeinteger5_1_5 WHERE id = $object3.id')
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
@@ -123,8 +123,8 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
             object1 = PgsqlRangeInteger2(name='foo', num=0)
             object3 = PgsqlRangeInteger5(name='foo', num=0)
             commit()
-            object2 = PgsqlRangeInteger2.get_by_sql('SELECT * FROM test_rangeinteger2_0 WHERE id = $object1.id')
-            object4 = PgsqlRangeInteger5.get_by_sql('SELECT * FROM test_rangeinteger5_0 WHERE id = $object3.id')
+            object2 = PgsqlRangeInteger2.get_by_sql('SELECT * FROM TEST_rangeinteger2_0 WHERE id = $object1.id')
+            object4 = PgsqlRangeInteger5.get_by_sql('SELECT * FROM TEST_rangeinteger5_0 WHERE id = $object3.id')
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
@@ -134,8 +134,8 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
             object1 = PgsqlRangeInteger2(name='foo', num=-3)
             object3 = PgsqlRangeInteger5(name='foo', num=-3)
             commit()
-            object2 = PgsqlRangeInteger2.get_by_sql('SELECT * FROM test_rangeinteger2_m4_m3 WHERE id = $object1.id')
-            object4 = PgsqlRangeInteger5.get_by_sql('SELECT * FROM test_rangeinteger5_m5_m1 WHERE id = $object3.id')
+            object2 = PgsqlRangeInteger2.get_by_sql('SELECT * FROM TEST_rangeinteger2_m4_m3 WHERE id = $object1.id')
+            object4 = PgsqlRangeInteger5.get_by_sql('SELECT * FROM TEST_rangeinteger5_m5_m1 WHERE id = $object3.id')
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
@@ -145,8 +145,8 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
             object1 = PgsqlRangeInteger2(name='foo')
             object3 = PgsqlRangeInteger5(name='foo')
             commit()
-            object2 = PgsqlRangeInteger2.get_by_sql('SELECT * FROM test_rangeinteger2_null WHERE id = $object1.id')
-            object4 = PgsqlRangeInteger5.get_by_sql('SELECT * FROM test_rangeinteger5_null WHERE id = $object3.id')
+            object2 = PgsqlRangeInteger2.get_by_sql('SELECT * FROM TEST_rangeinteger2_null WHERE id = $object1.id')
+            object4 = PgsqlRangeInteger5.get_by_sql('SELECT * FROM TEST_rangeinteger5_null WHERE id = $object3.id')
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
@@ -157,9 +157,9 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
             object3 = PgsqlRangeStringFirstchars5(name='foo', title='abcdef')
             commit()
             object2 = PgsqlRangeStringFirstchars2.get_by_sql(
-                'SELECT * FROM test_rangestring_firstchars2_ab WHERE id = $object1.id')
+                'SELECT * FROM TEST_rangestring_firstchars2_ab WHERE id = $object1.id')
             object4 = PgsqlRangeStringFirstchars5.get_by_sql(
-                'SELECT * FROM test_rangestring_firstchars5_abcde WHERE id = $object3.id')
+                'SELECT * FROM TEST_rangestring_firstchars5_abcde WHERE id = $object3.id')
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
@@ -183,9 +183,9 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
             object3 = PgsqlRangeStringFirstchars5(name='foo')
             commit()
             object2 = PgsqlRangeStringFirstchars2.get_by_sql(
-                'SELECT * FROM test_rangestring_firstchars2_null WHERE id = $object1.id')
+                'SELECT * FROM TEST_rangestring_firstchars2_null WHERE id = $object1.id')
             object4 = PgsqlRangeStringFirstchars5.get_by_sql(
-                'SELECT * FROM test_rangestring_firstchars5_null WHERE id = $object3.id')
+                'SELECT * FROM TEST_rangestring_firstchars5_null WHERE id = $object3.id')
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
@@ -196,9 +196,9 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
             object3 = PgsqlRangeStringLastchars5(name='foo', title='abcdef')
             commit()
             object2 = PgsqlRangeStringLastchars2.get_by_sql(
-                'SELECT * FROM test_rangestring_lastchars2_ef WHERE id = $object1.id')
+                'SELECT * FROM TEST_rangestring_lastchars2_ef WHERE id = $object1.id')
             object4 = PgsqlRangeStringLastchars5.get_by_sql(
-                'SELECT * FROM test_rangestring_lastchars5_bcdef WHERE id = $object3.id')
+                'SELECT * FROM TEST_rangestring_lastchars5_bcdef WHERE id = $object3.id')
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
@@ -222,9 +222,9 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
             object3 = PgsqlRangeStringLastchars5(name='foo')
             commit()
             object2 = PgsqlRangeStringLastchars2.get_by_sql(
-                'SELECT * FROM test_rangestring_lastchars2_null WHERE id = $object1.id')
+                'SELECT * FROM TEST_rangestring_lastchars2_null WHERE id = $object1.id')
             object4 = PgsqlRangeStringLastchars5.get_by_sql(
-                'SELECT * FROM test_rangestring_lastchars5_null WHERE id = $object3.id')
+                'SELECT * FROM TEST_rangestring_lastchars5_null WHERE id = $object3.id')
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
@@ -236,7 +236,7 @@ class MysqlPonyPartitionTestCase(unittest.TestCase):
         with db_session:
             object1 = MysqlRangeDateDay(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
             commit()
-            object2 = MysqlRangeDateDay.get_by_sql('SELECT * FROM test_rangedateday WHERE id = $object1.id')
+            object2 = MysqlRangeDateDay.get_by_sql('SELECT * FROM TEST_rangedateday WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)
 
@@ -244,7 +244,7 @@ class MysqlPonyPartitionTestCase(unittest.TestCase):
         with db_session:
             object1 = MysqlRangeDateWeek(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
             commit()
-            object2 = MysqlRangeDateWeek.get_by_sql('SELECT * FROM test_rangedateweek WHERE id = $object1.id')
+            object2 = MysqlRangeDateWeek.get_by_sql('SELECT * FROM TEST_rangedateweek WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)
 
@@ -252,7 +252,7 @@ class MysqlPonyPartitionTestCase(unittest.TestCase):
         with db_session:
             object1 = MysqlRangeDateMonth(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
             commit()
-            object2 = MysqlRangeDateMonth.get_by_sql('SELECT * FROM test_rangedatemonth WHERE id = $object1.id')
+            object2 = MysqlRangeDateMonth.get_by_sql('SELECT * FROM TEST_rangedatemonth WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)
 
@@ -260,6 +260,6 @@ class MysqlPonyPartitionTestCase(unittest.TestCase):
         with db_session:
             object1 = MysqlRangeDateYear(name='foo', created=datetime.datetime(2014, 4, 15, 18, 44, 23))
             commit()
-            object2 = MysqlRangeDateYear.get_by_sql('SELECT * FROM test_rangedateyear WHERE id = $object1.id')
+            object2 = MysqlRangeDateYear.get_by_sql('SELECT * FROM TEST_rangedateyear WHERE id = $object1.id')
 
         self.assertTrue(object1.name, object2.name)

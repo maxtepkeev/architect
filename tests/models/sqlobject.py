@@ -23,7 +23,7 @@ for database in test_databases:
     # Generation of entities for date range partitioning
     for item in ('day', 'week', 'month', 'year'):
         class sqlmeta(object):
-            table = 'test_rangedate{0}'.format(item)
+            table = 'TEST_rangedate{0}'.format(item)
 
         name = '{0}RangeDate{1}'.format(dbname, item.capitalize())
         partition = install('partition', type='range', subtype='date', constraint=item, column='created')
@@ -41,7 +41,7 @@ for database in test_databases:
         # Generation of entities for integer range partitioning
         for item in ('2', '5'):
             class sqlmeta(object):
-                table = 'test_rangeinteger{0}'.format(item)
+                table = 'TEST_rangeinteger{0}'.format(item)
 
             name = '{0}RangeInteger{1}'.format(dbname, item)
             partition = install('partition', type='range', subtype='integer', constraint=item, column='num')
@@ -59,7 +59,7 @@ for database in test_databases:
         for subtype in ('string_firstchars', 'string_lastchars'):
             for item in ('2', '5'):
                 class sqlmeta(object):
-                    table = 'test_range{0}{1}'.format(subtype, item)
+                    table = 'TEST_range{0}{1}'.format(subtype, item)
 
                 name = '{0}Range{1}{2}'.format(dbname, ''.join(s.capitalize() for s in subtype.split('_')), item)
                 partition = install('partition', type='range', subtype=subtype, constraint=item, column='title')
