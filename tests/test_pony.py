@@ -157,9 +157,9 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
             object3 = PgsqlRangeStringFirstchars5(name='foo', title='abcdef')
             commit()
             object2 = PgsqlRangeStringFirstchars2.get_by_sql(
-                'SELECT * FROM TEST_rangestring_firstchars2_ab WHERE id = $object1.id')
+                'SELECT * FROM "TEST_rangestring_firstchars2_ab" WHERE id = $object1.id')
             object4 = PgsqlRangeStringFirstchars5.get_by_sql(
-                'SELECT * FROM TEST_rangestring_firstchars5_abcde WHERE id = $object3.id')
+                'SELECT * FROM "TEST_rangestring_firstchars5_abcde" WHERE id = $object3.id')
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
@@ -170,9 +170,9 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
             object3 = PgsqlRangeStringFirstchars5(name='foo', title='ab;<cdef')
             commit()
             object2 = PgsqlRangeStringFirstchars2.get_by_sql(
-                'SELECT * FROM "test_rangestring_firstchars2_;<" WHERE id = $object1.id')
+                'SELECT * FROM "TEST_rangestring_firstchars2_;<" WHERE id = $object1.id')
             object4 = PgsqlRangeStringFirstchars5.get_by_sql(
-                'SELECT * FROM "test_rangestring_firstchars5_ab;<c" WHERE id = $object3.id')
+                'SELECT * FROM "TEST_rangestring_firstchars5_ab;<c" WHERE id = $object3.id')
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
@@ -196,9 +196,9 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
             object3 = PgsqlRangeStringLastchars5(name='foo', title='abcdef')
             commit()
             object2 = PgsqlRangeStringLastchars2.get_by_sql(
-                'SELECT * FROM TEST_rangestring_lastchars2_ef WHERE id = $object1.id')
+                'SELECT * FROM "TEST_rangestring_lastchars2_ef" WHERE id = $object1.id')
             object4 = PgsqlRangeStringLastchars5.get_by_sql(
-                'SELECT * FROM TEST_rangestring_lastchars5_bcdef WHERE id = $object3.id')
+                'SELECT * FROM "TEST_rangestring_lastchars5_bcdef" WHERE id = $object3.id')
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
@@ -209,9 +209,9 @@ class PostgresqlPonyPartitionTestCase(unittest.TestCase):
             object3 = PgsqlRangeStringLastchars5(name='foo', title='abcd;<')
             commit()
             object2 = PgsqlRangeStringLastchars2.get_by_sql(
-                'SELECT * FROM "test_rangestring_lastchars2_;<" WHERE id = $object1.id')
+                'SELECT * FROM "TEST_rangestring_lastchars2_;<" WHERE id = $object1.id')
             object4 = PgsqlRangeStringLastchars5.get_by_sql(
-                'SELECT * FROM "test_rangestring_lastchars5_bcd;<" WHERE id = $object3.id')
+                'SELECT * FROM "TEST_rangestring_lastchars5_bcd;<" WHERE id = $object3.id')
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)

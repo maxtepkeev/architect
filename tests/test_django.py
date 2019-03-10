@@ -163,10 +163,10 @@ class PostgresqlDjangoPartitionTestCase(unittest.TestCase):
     def test_range_string_firstchars(self):
         object1 = PgsqlRangeStringFirstchars2.objects.create(name='foo', title='abcdef')
         object2 = PgsqlRangeStringFirstchars2.objects.raw(
-            'SELECT * FROM TEST_rangestring_firstchars2_ab WHERE id = %s', [object1.id])[0]
+            'SELECT * FROM "TEST_rangestring_firstchars2_ab" WHERE id = %s', [object1.id])[0]
         object3 = PgsqlRangeStringFirstchars5.objects.create(name='foo', title='abcdef')
         object4 = PgsqlRangeStringFirstchars5.objects.raw(
-            'SELECT * FROM TEST_rangestring_firstchars5_abcde WHERE id = %s', [object3.id])[0]
+            'SELECT * FROM "TEST_rangestring_firstchars5_abcde" WHERE id = %s', [object3.id])[0]
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
@@ -174,10 +174,10 @@ class PostgresqlDjangoPartitionTestCase(unittest.TestCase):
     def test_range_string_firstchars_special_characters(self):
         object1 = PgsqlRangeStringFirstchars2.objects.create(name='foo', title=';<abcdef')
         object2 = PgsqlRangeStringFirstchars2.objects.raw(
-            'SELECT * FROM "test_rangestring_firstchars2_;<" WHERE id = %s', [object1.id])[0]
+            'SELECT * FROM "TEST_rangestring_firstchars2_;<" WHERE id = %s', [object1.id])[0]
         object3 = PgsqlRangeStringFirstchars5.objects.create(name='foo', title='ab;<cdef')
         object4 = PgsqlRangeStringFirstchars5.objects.raw(
-            'SELECT * FROM "test_rangestring_firstchars5_ab;<c" WHERE id = %s', [object3.id])[0]
+            'SELECT * FROM "TEST_rangestring_firstchars5_ab;<c" WHERE id = %s', [object3.id])[0]
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
@@ -196,10 +196,10 @@ class PostgresqlDjangoPartitionTestCase(unittest.TestCase):
     def test_range_string_lastchars(self):
         object1 = PgsqlRangeStringLastchars2.objects.create(name='foo', title='abcdef')
         object2 = PgsqlRangeStringLastchars2.objects.raw(
-            'SELECT * FROM TEST_rangestring_lastchars2_ef WHERE id = %s', [object1.id])[0]
+            'SELECT * FROM "TEST_rangestring_lastchars2_ef" WHERE id = %s', [object1.id])[0]
         object3 = PgsqlRangeStringLastchars5.objects.create(name='foo', title='abcdef')
         object4 = PgsqlRangeStringLastchars5.objects.raw(
-            'SELECT * FROM TEST_rangestring_lastchars5_bcdef WHERE id = %s', [object3.id])[0]
+            'SELECT * FROM "TEST_rangestring_lastchars5_bcdef" WHERE id = %s', [object3.id])[0]
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)
@@ -207,10 +207,10 @@ class PostgresqlDjangoPartitionTestCase(unittest.TestCase):
     def test_range_string_lastchars_special_characters(self):
         object1 = PgsqlRangeStringLastchars2.objects.create(name='foo', title='abcd;<')
         object2 = PgsqlRangeStringLastchars2.objects.raw(
-            'SELECT * FROM "test_rangestring_lastchars2_;<" WHERE id = %s', [object1.id])[0]
+            'SELECT * FROM "TEST_rangestring_lastchars2_;<" WHERE id = %s', [object1.id])[0]
         object3 = PgsqlRangeStringLastchars5.objects.create(name='foo', title='abcd;<')
         object4 = PgsqlRangeStringLastchars5.objects.raw(
-            'SELECT * FROM "test_rangestring_lastchars5_bcd;<" WHERE id = %s', [object3.id])[0]
+            'SELECT * FROM "TEST_rangestring_lastchars5_bcd;<" WHERE id = %s', [object3.id])[0]
 
         self.assertTrue(object1.name, object2.name)
         self.assertTrue(object3.name, object4.name)

@@ -274,10 +274,10 @@ class PostgresqlSqlAlchemyPartitionTestCase(unittest.TestCase):
         self.session.commit()
 
         object2 = self.session.query(PgsqlRangeStringFirstchars2).from_statement(
-            text('SELECT * FROM TEST_rangestring_firstchars2_ab WHERE id = :id')
+            text('SELECT * FROM "TEST_rangestring_firstchars2_ab" WHERE id = :id')
         ).params(id=object1.id).first()
         object4 = self.session.query(PgsqlRangeStringFirstchars5).from_statement(
-            text('SELECT * FROM TEST_rangestring_firstchars5_abcde WHERE id = :id')
+            text('SELECT * FROM "TEST_rangestring_firstchars5_abcde" WHERE id = :id')
         ).params(id=object3.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -290,10 +290,10 @@ class PostgresqlSqlAlchemyPartitionTestCase(unittest.TestCase):
         self.session.commit()
 
         object2 = self.session.query(PgsqlRangeStringFirstchars2).from_statement(
-            text('SELECT * FROM "test_rangestring_firstchars2_;<" WHERE id = :id')
+            text('SELECT * FROM "TEST_rangestring_firstchars2_;<" WHERE id = :id')
         ).params(id=object1.id).first()
         object4 = self.session.query(PgsqlRangeStringFirstchars5).from_statement(
-            text('SELECT * FROM "test_rangestring_firstchars5_ab;<c" WHERE id = :id')
+            text('SELECT * FROM "TEST_rangestring_firstchars5_ab;<c" WHERE id = :id')
         ).params(id=object3.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -322,10 +322,10 @@ class PostgresqlSqlAlchemyPartitionTestCase(unittest.TestCase):
         self.session.commit()
 
         object2 = self.session.query(PgsqlRangeStringLastchars2).from_statement(
-            text('SELECT * FROM TEST_rangestring_lastchars2_ef WHERE id = :id')
+            text('SELECT * FROM "TEST_rangestring_lastchars2_ef" WHERE id = :id')
         ).params(id=object1.id).first()
         object4 = self.session.query(PgsqlRangeStringLastchars5).from_statement(
-            text('SELECT * FROM TEST_rangestring_lastchars5_bcdef WHERE id = :id')
+            text('SELECT * FROM "TEST_rangestring_lastchars5_bcdef" WHERE id = :id')
         ).params(id=object3.id).first()
 
         self.assertTrue(object1.name, object2.name)
@@ -338,10 +338,10 @@ class PostgresqlSqlAlchemyPartitionTestCase(unittest.TestCase):
         self.session.commit()
 
         object2 = self.session.query(PgsqlRangeStringLastchars2).from_statement(
-            text('SELECT * FROM "test_rangestring_lastchars2_;<" WHERE id = :id')
+            text('SELECT * FROM "TEST_rangestring_lastchars2_;<" WHERE id = :id')
         ).params(id=object1.id).first()
         object4 = self.session.query(PgsqlRangeStringLastchars5).from_statement(
-            text('SELECT * FROM "test_rangestring_lastchars5_bcd;<" WHERE id = :id')
+            text('SELECT * FROM "TEST_rangestring_lastchars5_bcd;<" WHERE id = :id')
         ).params(id=object3.id).first()
 
         self.assertTrue(object1.name, object2.name)
