@@ -2,7 +2,7 @@ Changelog
 ---------
 
 Unreleased
-++++++++++++++++++
+++++++++++
 
 - Changed: Remove support python 2.6
 - Fixed: PostgreSQL: `Issue #58 <https://github.com/maxtepkeev/architect/issues/58>`__  Unquoted function
