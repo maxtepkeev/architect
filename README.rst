@@ -20,13 +20,13 @@ Features
 
   - `Django <https://www.djangoproject.com>`_ >= 1.4
   - `Peewee <https://peewee.readthedocs.io>`_ >= 2.2.0
-  - `Pony <http://ponyorm.com>`_ >= 0.5.0
-  - `SQLAlchemy <http://www.sqlalchemy.org>`_ >= 0.8.0
-  - `SQLObject <http://www.sqlobject.org>`_ >= 1.5.0
+  - `Pony <https://ponyorm.com>`_ >= 0.5.0
+  - `SQLAlchemy <https://www.sqlalchemy.org>`_ >= 0.8.0
+  - `SQLObject <https://www.sqlobject.org>`_ >= 1.5.0
 
 * Supported DBs
 
-  - `PostgreSQL <http://www.postgresql.org>`_ >= 8.0
+  - `PostgreSQL <https://www.postgresql.org>`_ >= 8.0
   - `MySQL <https://www.mysql.com>`_ >= 5.5
 
 * Supports Python 2.6 - 3.6
@@ -55,7 +55,7 @@ or:
 Documentation
 -------------
 
-Documentation is available at http://architect.readthedocs.io.
+Documentation is available at https://architect.readthedocs.io.
 
 Contacts and Support
 --------------------
@@ -77,12 +77,12 @@ Thanks
 ------
 
 PremiumSoft for supporting this project by providing `Open Source License
-<http://www.navicat.com/store/open-source>`_ of `Navicat <http://www.navicat.com>`_.
+<https://www.navicat.com/store/open-source>`_ of `Navicat <https://www.navicat.com>`_.
 
-.. image:: http://architect.readthedocs.io/_images/navicat_logo.png
+.. image:: https://architect.readthedocs.io/_images/navicat_logo.png
    :width: 300px
    :height: 122px
-   :target: http://www.navicat.com
+   :target: https://www.navicat.com
 
 Copyright and License
 ---------------------

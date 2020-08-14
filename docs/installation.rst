@@ -4,7 +4,7 @@ Installation
 PyPI
 ----
 
-The recommended way to install is from Python Package Index (PyPI) with `pip <http://www.pip-installer.org>`_:
+The recommended way to install is from Python Package Index (PyPI) with `pip <https://www.pip-installer.org>`_:
 
 .. code-block:: bash
 
@@ -32,7 +32,7 @@ Once you have the sources, you can install it into your site-packages:
 
    $ python setup.py install
 
-You can also install latest stable development version via `pip <http://www.pip-installer.org>`_:
+You can also install latest stable development version via `pip <https://www.pip-installer.org>`_:
 
 .. code-block:: bash
 
