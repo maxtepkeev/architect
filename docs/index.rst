@@ -61,7 +61,7 @@ PremiumSoft for supporting this project by providing `Open Source License
 
 .. image:: _static/img/navicat_logo.png
    :width: 300px
-   :height: 122px
+   :height: 121px
    :target: https://www.navicat.com
 
 Copyright and License

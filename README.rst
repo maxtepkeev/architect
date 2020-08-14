@@ -81,7 +81,7 @@ PremiumSoft for supporting this project by providing `Open Source License
 
 .. image:: https://architect.readthedocs.io/_images/navicat_logo.png
    :width: 300px
-   :height: 122px
+   :height: 121px
    :target: https://www.navicat.com
 
 Copyright and License
