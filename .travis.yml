@@ -5,6 +5,7 @@ python:
   - 3.4
   - 3.5
   - 3.6
+  - 3.7
 env:
   - SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB='all'
   - SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB='all'
@@ -76,6 +77,18 @@ matrix:
       env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB='all'
     - python: 3.6
       env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB='all'
+    - python: 3.7
+      env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB='all'
+    - python: 3.7
+      env: SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB='all'
+    - python: 3.7
+      env: SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB='all'
+    - python: 3.7
+      env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB='all'
+    - python: 3.7
+      env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB='all'
+    - python: 3.7
+      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB='all'
     - python: 3.4
       env: DJANGO='django>=1.4.0,<1.5.0' DB='all'
     - python: 3.5
@@ -94,6 +107,14 @@ matrix:
       env: DJANGO='django>=1.6.0,<1.7.0' DB='all'
     - python: 3.6
       env: DJANGO='django>=1.7.0,<1.8.0' DB='all'
+    - python: 3.7
+      env: DJANGO='django>=1.4.0,<1.5.0' DB='all'
+    - python: 3.7
+      env: DJANGO='django>=1.5.0,<1.6.0' DB='all'
+    - python: 3.7
+      env: DJANGO='django>=1.6.0,<1.7.0' DB='all'
+    - python: 3.7
+      env: DJANGO='django>=1.7.0,<1.8.0' DB='all'
     - python: 3.4
       env: PONY='pony>=0.5.0,<0.6.0' DB='all'
     - python: 3.5
@@ -101,6 +122,10 @@ matrix:
     - python: 3.6
       env: PONY='pony>=0.5.0,<0.6.0' DB='all'
     - python: 3.6
+      env: PONY='pony>=0.6.0,<0.7.0' DB='all'
+    - python: 3.7
+      env: PONY='pony>=0.5.0,<0.6.0' DB='all'
+    - python: 3.7
       env: PONY='pony>=0.6.0,<0.7.0' DB='all'
 before_script:
   - psql -c 'create database architect;' -U postgres
