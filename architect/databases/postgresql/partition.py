@@ -14,9 +14,11 @@ from ...exceptions import (
 
 
 class Partition(BasePartition):
-    def prepare(self):
+    def prepare(self, schema_name: str):
         """
         Prepares needed triggers and functions for those triggers.
+
+        :schema_name: for database with multi schemas. e.g. django-tenants library
         """
         indentation = {'declarations': 5, 'variables': 6}
         definitions, formatters = self._get_definitions()
@@ -35,9 +37,11 @@ class Partition(BasePartition):
                 DECLARE
                     match "{{parent_table}}".{{column}}%TYPE;
                     tablename VARCHAR;
+                    tableschema VARCHAR;
                     checks TEXT;
                     {declarations}
                 BEGIN
+                    tableschema := TG_ARGV[0];
                     IF NEW.{{column}} IS NULL THEN
                         tablename := '{{parent_table}}_null';
                         checks := '{{column}} IS NULL';
@@ -46,15 +50,15 @@ class Partition(BasePartition):
                     END IF;
 
                     BEGIN
-                        EXECUTE 'CREATE TABLE IF NOT EXISTS ' || tablename || ' (
+                        EXECUTE 'CREATE TABLE IF NOT EXISTS ' || tableschema || '.' || tablename || ' (
                             CHECK (' || checks || '),
-                            LIKE "{{parent_table}}" INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES
-                        ) INHERITS ("{{parent_table}}");';
+                            LIKE ' || tableschema || '.{{parent_table}} INCLUDING DEFAULTS INCLUDING CONSTRAINTS INCLUDING INDEXES
+                        ) INHERITS (' || tableschema || '.{{parent_table}});';
                     EXCEPTION WHEN duplicate_table THEN
                         -- pass
                     END;
 
-                    EXECUTE 'INSERT INTO ' || tablename || ' VALUES (($1).*);' USING NEW;
+                    EXECUTE 'INSERT INTO ' || tableschema || '.' || tablename || ' VALUES (($1).*);' USING NEW;
                     RETURN NEW;
                 END;
             $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -66,19 +70,23 @@ class Partition(BasePartition):
                 SELECT 1
                 FROM information_schema.triggers
                 WHERE event_object_table = '{{parent_table}}'
+                AND event_object_schema = '{{schema_name}}'
                 AND trigger_name = LOWER('before_insert_{{parent_table}}_trigger')
             ) THEN
                 CREATE TRIGGER before_insert_{{parent_table}}_trigger
-                    BEFORE INSERT ON "{{parent_table}}"
-                    FOR EACH ROW EXECUTE PROCEDURE {{parent_table}}_insert_child();
+                    BEFORE INSERT ON {{schema_name}}.{{parent_table}}
+                    FOR EACH ROW EXECUTE PROCEDURE {{parent_table}}_insert_child('{{schema_name}}');
             END IF;
             END $$;
 
             -- Then we create a function to delete duplicate row from the master table after insert
             CREATE OR REPLACE FUNCTION {{parent_table}}_delete_master()
             RETURNS TRIGGER AS $$
+                DECLARE
+                    schema_name VARCHAR;
                 BEGIN
-                    DELETE FROM ONLY "{{parent_table}}" WHERE {{pk}};
+                    schema_name := TG_ARGV[0];
+                    EXECUTE 'DELETE FROM ONLY ' || schema_name || '.{{parent_table}} WHERE {{pk}};' USING NEW;
                     RETURN NEW;
                 END;
             $$ LANGUAGE plpgsql;
@@ -90,17 +98,19 @@ class Partition(BasePartition):
                 SELECT 1
                 FROM information_schema.triggers
                 WHERE event_object_table = '{{parent_table}}'
+                AND event_object_schema = '{{schema_name}}'
                 AND trigger_name = LOWER('after_insert_{{parent_table}}_trigger')
             ) THEN
                 CREATE TRIGGER after_insert_{{parent_table}}_trigger
-                    AFTER INSERT ON "{{parent_table}}"
-                    FOR EACH ROW EXECUTE PROCEDURE {{parent_table}}_delete_master();
+                    AFTER INSERT ON {{schema_name}}.{{parent_table}}
+                    FOR EACH ROW EXECUTE PROCEDURE {{parent_table}}_delete_master('{{schema_name}}');
             END IF;
             END $$;
         """.format(**definitions).format(
-            pk=' AND '.join('{pk} = NEW.{pk}'.format(pk=pk) for pk in self.pks),
+            pk=' AND '.join('{pk} = ($1).{pk}'.format(pk=pk) for pk in self.pks),
             parent_table=self.table,
-            column='"{0}"'.format(self.column_name)
+            column='"{0}"'.format(self.column_name),
+            schema_name=schema_name
         ))
 
     def exists(self):
