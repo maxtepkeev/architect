@@ -24,7 +24,7 @@ class PartitionFeature(BasePartitionFeature):
             'table': meta.db_table,
             'pk': list(pk.field_names) if isinstance(pk, CompositeKey) else pk.name,
             'dialect': meta.database.__class__.__name__.lower().replace('database', ''),
-            'column_value': self._column_value([field for field in meta.fields.keys()]),
+            'column_values': self._column_values([field for field in meta.fields.keys()]),
         }
 
     @staticmethod

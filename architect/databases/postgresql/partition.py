@@ -18,7 +18,11 @@ class Partition(BasePartition):
         """
         Prepares needed triggers and functions for those triggers.
         """
-        indentation = {'declarations': 5, 'variables': 6}
+        command_str = self._get_command_str()
+        return self.database.execute(command_str)
+
+    def _get_command_str(self):
+        indentation = {'declarations': 5, 'variables': 5}
         definitions, formatters = self._get_definitions()
 
         for definition in indentation:
@@ -28,22 +32,17 @@ class Partition(BasePartition):
 
             definitions[definition] = '\n'.join(definitions[definition]).format(**formatters)
 
-        return self.database.execute("""
+        return """
             -- We need to create a before insert function
             CREATE OR REPLACE FUNCTION {{parent_table}}_insert_child()
             RETURNS TRIGGER AS $$
                 DECLARE
-                    match "{{parent_table}}".{{column}}%TYPE;
+                    {declarations}
                     tablename VARCHAR;
                     checks TEXT;
-                    {declarations}
+
                 BEGIN
-                    IF NEW.{{column}} IS NULL THEN
-                        tablename := '{{parent_table}}_null';
-                        checks := '{{column}} IS NULL';
-                    ELSE
-                        {variables}
-                    END IF;
+                    {variables}
 
                     BEGIN
                         EXECUTE 'CREATE TABLE IF NOT EXISTS ' || tablename || ' (
@@ -100,8 +99,12 @@ class Partition(BasePartition):
         """.format(**definitions).format(
             pk=' AND '.join('{pk} = NEW.{pk}'.format(pk=pk) for pk in self.pks),
             parent_table=self.table,
-            column='"{0}"'.format(self.column_name)
-        ))
+            **{
+                'column_{idx}'.format(idx=idx): '"{0}"'.format(column) for idx, column in enumerate(
+                    self.columns
+                )
+            }
+        )
 
     def exists(self):
         """
@@ -128,27 +131,46 @@ class RangePartition(Partition):
     """
     def __init__(self, model, **meta):
         super(RangePartition, self).__init__(model, **meta)
-        self.constraint = meta['constraint']
-        self.subtype = meta['subtype']
+        self.constraints = meta['constraints']
+        self.subtypes = meta['subtypes']
 
     def _get_definitions(self):
         """
         Dynamically returns needed definitions depending on the partition subtype.
         """
-        try:
-            definitions = getattr(self, '_get_{0}_definitions'.format(self.subtype))()
-            formatters = dict(constraint=self.constraint, subtype=self.subtype, **definitions.pop('formatters', {}))
-            return definitions, formatters
-        except AttributeError:
-            import re
-            expression = '_get_(\w+)_function'
-            raise PartitionRangeSubtypeError(
-                model=self.model.__name__,
-                dialect=self.dialect,
-                current=self.subtype,
-                allowed=[re.match(expression, c).group(1) for c in dir(self) if re.match(expression, c) is not None])
+        definitions = dict()
+        for idx, subtype in enumerate(self.subtypes):
+            try:
+                if definitions:
+                    definitions_temp = getattr(self, '_get_{0}_definitions'.format(subtype))(idx)
+                    definitions['formatters'] = {**definitions['formatters'], **definitions_temp['formatters']}
+                    definitions['declarations'] += definitions_temp['declarations']
+                    definitions['variables'] += definitions_temp['variables']
+                else:
+                    definitions = getattr(self, '_get_{0}_definitions'.format(subtype))(idx)
+            except AttributeError:
+                import re
+                expression = '_get_(\w+)_function'
+                raise PartitionRangeSubtypeError(
+                    model=self.model.__name__,
+                    dialect=self.dialect,
+                    current=subtype,
+                    allowed=[re.match(expression, c).group(1) for c in dir(self) if
+                             re.match(expression, c) is not None])
 
-    def _get_date_definitions(self):
+        formatters = dict(**definitions.pop('formatters', {}))
+        tablename = "tablename := '{{parent_table}}'"
+        checks = "checks := "
+        for idx in range(len(self.constraints)):
+            tablename += ' || tablename_{idx}'.format(idx=idx)
+            formatters["constraint_{}".format(idx)] = self.constraints[idx]
+            formatters["subtype_{}".format(idx)] = self.subtypes[idx]
+        checks += " || ' AND ' || ".join(['checks_{idx}'.format(idx=idx) for idx in range(len(self.constraints))])
+        definitions['variables'].append(tablename+';')
+        definitions['variables'].append(checks+';')
+        return definitions, formatters
+
+    def _get_date_definitions(self, idx):
         """
         Returns definitions for date partition subtype.
         """
@@ -160,86 +182,124 @@ class RangePartition(Partition):
         }
 
         try:
-            pattern = patterns[self.constraint]
+            pattern = patterns[self.constraints[idx]]
         except KeyError:
             raise PartitionConstraintError(
                 model=self.model.__name__,
                 dialect=self.dialect,
-                current=self.constraint,
+                current=self.constraints[idx],
                 allowed=patterns.keys())
 
         return {
             'formatters': {'pattern': pattern},
+            'declarations': [
+                'match_{idx} {{{{parent_table}}}}.{{{{column_{idx}}}}}%TYPE;'.format(idx=idx),
+                'tablename_{idx} VARCHAR;'.format(idx=idx),
+                'checks_{idx} TEXT;'.format(idx=idx),
+            ],
             'variables': [
-                "match := DATE_TRUNC('{constraint}', NEW.{{column}});",
-                "tablename := '{{parent_table}}_' || TO_CHAR(NEW.{{column}}, '{pattern}');",
-                "checks := '{{column}} >= ''' || match || ''' AND {{column}} < ''' || (match + INTERVAL '1 {constraint}') || '''';"
+                "match_{idx} := DATE_TRUNC('{{constraint_{idx}}}', NEW.{{{{column_{idx}}}}});".format(idx=idx),
+                "tablename_{idx} := '__' || TO_CHAR(NEW.{{{{column_{idx}}}}}, '{{pattern}}');".format(idx=idx),
+                "checks_{idx} := '{{{{column_{idx}}}}} >= ''' || match_{idx} || ''' AND {{{{column_{idx}}}}} < ''' "
+                "|| (match_{idx} + INTERVAL '1 {{constraint_{idx}}}') || '''';".format(idx=idx)
             ]
         }
 
-    def _get_integer_definitions(self):
+    def _get_integer_definitions(self, idx):
         """
         Returns definitions for integer partition subtype.
         """
-        if not self.constraint.isdigit() or int(self.constraint) < 1:
+        if not self.constraints[idx].isdigit() or int(self.constraints[idx]) < 1:
             raise PartitionConstraintError(
                 model=self.model.__name__,
                 dialect=self.dialect,
-                current=self.constraint,
+                current=self.constraints[idx],
                 allowed=['positive integer'])
 
         return {
+            'formatters': {'idx': idx},
+            'declarations': [
+                'match_{idx} {{{{parent_table}}}}.{{{{column_{idx}}}}}%TYPE;'.format(idx=idx),
+                'tablename_{idx} VARCHAR;'.format(idx=idx),
+                'checks_{idx} TEXT;'.format(idx=idx),
+            ],
             'variables': [
-                "IF NEW.{{column}} = 0 THEN",
-                "    tablename := '{{parent_table}}_0';",
-                "    checks := '{{column}} = 0';",
+                "IF NEW.{{{{column_{idx}}}}} IS NULL THEN".format(idx=idx),
+                "    tablename_{idx} := '__null';".format(idx=idx),
+                "    checks_{idx} := '{{{{column_{idx}}}}} IS NULL';".format(idx=idx),
                 "ELSE",
-                "    IF NEW.{{column}} > 0 THEN",
-                "        match := ((NEW.{{column}} - 1) / {constraint}) * {constraint} + 1;",
-                "        tablename := '{{parent_table}}_' || match || '_' || (match + {constraint}) - 1;",
+                "    IF NEW.{{{{column_{idx}}}}} = 0 THEN".format(idx=idx),
+                "        tablename_{idx} := '__0';".format(idx=idx),
+                "        checks_{idx} := '{{{{column_{idx}}}}} = 0';".format(idx=idx),
                 "    ELSE",
-                "        match := FLOOR(NEW.{{column}} :: FLOAT / {constraint} :: FLOAT) * {constraint};",
-                "        tablename := '{{parent_table}}_m' || ABS(match) || '_m' || ABS((match + {constraint}) - 1);",
+                "        IF NEW.{{{{column_{idx}}}}} > 0 THEN".format(idx=idx),
+                "            match_{idx} := ((NEW.{{{{column_{idx}}}}} - 1) / "
+                "{{constraint_{idx}}}) * {{constraint_{idx}}} + 1;".format(idx=idx),
+                "            tablename_{idx} := '__' || match_{idx} || '_' || "
+                "(match_{idx} + {{constraint_{idx}}}) - 1;".format(idx=idx),
+                "        ELSE",
+                "            match_{idx} := FLOOR(NEW.{{{{column_{idx}}}}} :: FLOAT / "
+                "{{constraint_{idx}}} :: FLOAT) * {{constraint_{idx}}};".format(idx=idx),
+                "            tablename_{idx} := '__m' || ABS(match_{idx}) || '_m' || "
+                "ABS((match_{idx} + {{constraint_{idx}}}) - 1);".format(idx=idx),
+                "        END IF;",
+                "        checks_{idx} := '{{{{column_{idx}}}}} >= ' || match_{idx} || "
+                "' AND {{{{column_{idx}}}}} <= ' || (match_{idx} + {{constraint_{idx}}}) - 1;".format(idx=idx),
                 "    END IF;",
-                "    checks := '{{column}} >= ' || match || ' AND {{column}} <= ' || (match + {constraint}) - 1;",
-                "END IF;"
+                "END IF;",
+
             ]
         }
 
-    def _get_string_firstchars_definitions(self):
+    def _get_string_firstchars_definitions(self, idx):
         """
         Returns definitions for string firstchars partition subtype.
         """
-        if not self.constraint.isdigit() or int(self.constraint) < 1:
+        if not self.constraints[idx].isdigit() or int(self.constraints[idx]) < 1:
             raise PartitionConstraintError(
                 model=self.model.__name__,
                 dialect=self.dialect,
-                current=self.constraint,
+                current=self.constraints[idx],
                 allowed=['positive integer'])
 
         return {
+            'formatters': {},
+            'declarations': [
+                'match_{idx} {{{{parent_table}}}}.{{{{column_{idx}}}}}%TYPE;'.format(idx=idx),
+                'tablename_{idx} VARCHAR;'.format(idx=idx),
+                'checks_{idx} TEXT;'.format(idx=idx),
+            ],
             'variables': [
-                "match := LOWER(SUBSTR(NEW.{{column}}, 1, {constraint}));",
-                "tablename := QUOTE_IDENT('{{parent_table}}_' || match);",
-                "checks := 'LOWER(SUBSTR({{column}}, 1, {constraint})) = ''' || match || '''';"
+                "match_{idx} := LOWER(SUBSTR(NEW.{{{{column_{idx}}}}}, 1, {{constraint_{idx}}}));".format(idx=idx),
+                "tablename_{idx} := QUOTE_IDENT('__' || match_{idx});".format(idx=idx),
+                "checks_{idx} := 'LOWER(SUBSTR({{{{column_{idx}}}}}, 1, "
+                "{{constraint_{idx}}})) = ''' || match_{idx} || '''';".format(idx=idx)
             ]
         }
 
-    def _get_string_lastchars_definitions(self):
+    def _get_string_lastchars_definitions(self, idx):
         """
         Returns definitions for string lastchars partition subtype.
         """
-        if not self.constraint.isdigit() or int(self.constraint) < 1:
+        if not self.constraints[idx].isdigit() or int(self.constraints[idx]) < 1:
             raise PartitionConstraintError(
                 model=self.model.__name__,
                 dialect=self.dialect,
-                current=self.constraint,
+                current=self.constraints[idx],
                 allowed=['positive integer'])
 
         return {
+            'formatters': {},
+            'declarations': [
+                'match_{idx} {{{{parent_table}}}}.{{{{column_{idx}}}}}%TYPE;'.format(idx=idx),
+                'tablename_{idx} VARCHAR;'.format(idx=idx),
+                'checks_{idx} TEXT;'.format(idx=idx),
+            ],
             'variables': [
-                "match := LOWER(SUBSTRING(NEW.{{column}} FROM '.{{{{{constraint}}}}}$'));",
-                "tablename := QUOTE_IDENT('{{parent_table}}_' || match);",
-                "checks := 'LOWER(SUBSTRING({{column}} FROM ''.{{{{{constraint}}}}}$'')) = ''' || match || '''';"
+                "match_{idx} := LOWER(SUBSTRING(NEW.{{{{column_{idx}}}}} "
+                "FROM '.{{{{{{{{{{constraint_{idx}}}}}}}}}}}$'));".format(idx=idx),
+                "tablename_{idx} := QUOTE_IDENT('__' || match_{idx});".format(idx=idx),
+                "checks_{idx} := 'LOWER(SUBSTRING({{{{column_{idx}}}}} FROM "
+                "''.{{{{{{{{{{constraint_{idx}}}}}}}}}}}$'')) = ''' || match_{idx} || '''';".format(idx=idx)
             ]
         }

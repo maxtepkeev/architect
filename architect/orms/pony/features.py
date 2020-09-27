@@ -22,7 +22,7 @@ class PartitionFeature(BasePartitionFeature):
             'table': self.model_cls._table_,
             'pk': self.model_cls._pk_columns_,
             'dialect': self.model_cls._database_.provider.dialect.lower(),
-            'column_value': self._column_value(self.model_cls._columns_),
+            'column_values': self._column_values(self.model_cls._columns_),
         }
 
     @staticmethod

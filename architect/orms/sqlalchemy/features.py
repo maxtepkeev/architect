@@ -39,7 +39,7 @@ class PartitionFeature(ConnectionMixin, BasePartitionFeature):
             'table': self.model_cls.__table__.name,
             'pk': self.model_cls.__table__.primary_key.columns.keys(),
             'dialect': self.connection.dialect.name,
-            'column_value': self._column_value(self.model_cls.__table__.columns.keys()),
+            'column_values': self._column_values(self.model_cls.__table__.columns.keys()),
         }
 
     @staticmethod

@@ -16,8 +16,11 @@ class BasePartition(object):
         self.model = model
         self.database = model.architect.operation
         self.table = meta['table']
-        self.column_value = meta['column_value']
-        self.column_name = meta['column']
+        self.column_values = meta['column_values']
+        self.columns = meta['columns']
+        # backward compatibility
+        self.column_value = meta['column_values'][0]
+        self.column_name = meta['columns'][0]
         self.pks = meta['pk'] if isinstance(meta['pk'], list) else [meta['pk']]
 
     def prepare(self):

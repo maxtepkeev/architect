@@ -11,7 +11,7 @@ from architect.orms.bases import BaseOperationFeature, BasePartitionFeature
 class BasePartitionTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.Partition = BasePartition(mock.Mock(), table=None, column_value=None, column=None, pk=None)
+        cls.Partition = BasePartition(mock.Mock(), table=None, column_values=[None], columns=[None], pk=None)
 
     def test_prepare_not_implemented(self):
         self.assertRaises(NotImplementedError, lambda: self.Partition.prepare())
@@ -57,10 +57,10 @@ class BasePartitionFeatureTestCase(unittest.TestCase):
 
     def test_column_value_raises_option_not_set_error(self):
         from architect.exceptions import OptionNotSetError
-        self.assertRaises(OptionNotSetError, lambda: self.PartitionFeature._column_value([]))
+        self.assertRaises(OptionNotSetError, lambda: self.PartitionFeature._column_values([]))
 
     def test_column_value_raises_partition_column_error(self):
         from architect.exceptions import PartitionColumnError
-        self.PartitionFeature.options = {'column': 'foo'}
+        self.PartitionFeature.options = {'columns': ['foo']}
         self.PartitionFeature.model_obj = mock.Mock(spec=[])
-        self.assertRaises(PartitionColumnError, lambda: self.PartitionFeature._column_value([]))
+        self.assertRaises(PartitionColumnError, lambda: self.PartitionFeature._column_values([]))
