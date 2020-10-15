@@ -29,7 +29,7 @@ Features
   - `PostgreSQL <https://www.postgresql.org>`_ >= 8.0
   - `MySQL <https://www.mysql.com>`_ >= 5.5
 
-* Supports Python 2.6 - 3.6
+* Supports Python 2.6 - 3.8
 * Extensively documented
 
 Dependencies
