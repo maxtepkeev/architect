@@ -1,4 +1,5 @@
-sudo: false
+os: linux
+dist: xenial
 language: python
 python:
   - 2.7
@@ -44,7 +45,7 @@ env:
   - DJANGO='django>=2.2.0,<2.3.0' DB='all'
   - DJANGO='django>=3.0.0,<3.1.0' DB='all'
   - DJANGO='django>=3.1.0,<3.2.0' DB='all'
-matrix:
+jobs:
   fast_finish: true
   exclude:
     - python: 2.7
