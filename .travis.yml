@@ -7,9 +7,6 @@ python:
   - 3.7
   - 3.8
 env:
-  - SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB='all'
-  - SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB='all'
-  - SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB='all'
   - SQLOBJECT='sqlobject>=3.0.0,<3.1.0' DB='all'
   - SQLOBJECT='sqlobject>=3.1.0,<3.2.0' DB='all'
   - SQLOBJECT='sqlobject>=3.2.0,<3.3.0' DB='all'
@@ -66,30 +63,6 @@ env:
 matrix:
   fast_finish: true
   exclude:
-    - python: 3.5
-      env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB='all'
-    - python: 3.5
-      env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB='all'
-    - python: 3.5
-      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB='all'
-    - python: 3.6
-      env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB='all'
-    - python: 3.6
-      env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB='all'
-    - python: 3.6
-      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB='all'
-    - python: 3.7
-      env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB='all'
-    - python: 3.7
-      env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB='all'
-    - python: 3.7
-      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB='all'
-    - python: 3.8
-      env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB='all'
-    - python: 3.8
-      env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB='all'
-    - python: 3.8
-      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB='all'
     - python: 2.7
       env: DJANGO='django>=2.0.0,<2.1.0' DB='all'
     - python: 2.7
