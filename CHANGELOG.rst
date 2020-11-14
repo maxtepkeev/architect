@@ -17,7 +17,7 @@ Changelog
 
 **Bugfixes**:
 
-- PostgreSQL: Unquoted function name are case insensitive and always lowercase (`Issue #58
+- PostgreSQL: Tables with uppercase names weren't partitioned correctly (`Issue #58
   <https://github.com/maxtepkeev/architect/issues/58>`__)
 
 0.5.6 (2017-05-01)
