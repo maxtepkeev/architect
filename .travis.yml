@@ -7,9 +7,6 @@ python:
   - 3.7
   - 3.8
 env:
-  - SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB='all'
-  - SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB='all'
-  - SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB='all'
   - SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB='all'
   - SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB='all'
   - SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB='all'
@@ -70,23 +67,11 @@ matrix:
   fast_finish: true
   exclude:
     - python: 3.5
-      env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB='all'
-    - python: 3.5
-      env: SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB='all'
-    - python: 3.5
-      env: SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB='all'
-    - python: 3.5
       env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB='all'
     - python: 3.5
       env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB='all'
     - python: 3.5
       env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB='all'
-    - python: 3.6
-      env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB='all'
-    - python: 3.6
-      env: SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB='all'
-    - python: 3.6
-      env: SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB='all'
     - python: 3.6
       env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB='all'
     - python: 3.6
@@ -94,23 +79,11 @@ matrix:
     - python: 3.6
       env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB='all'
     - python: 3.7
-      env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB='all'
-    - python: 3.7
-      env: SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB='all'
-    - python: 3.7
-      env: SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB='all'
-    - python: 3.7
       env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB='all'
     - python: 3.7
       env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB='all'
     - python: 3.7
       env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB='all'
-    - python: 3.8
-      env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB='all'
-    - python: 3.8
-      env: SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB='all'
-    - python: 3.8
-      env: SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB='all'
     - python: 3.8
       env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB='all'
     - python: 3.8
