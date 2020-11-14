@@ -7,11 +7,6 @@ python:
   - 3.7
   - 3.8
 env:
-  - SQLOBJECT='sqlobject>=3.0.0,<3.1.0' DB='all'
-  - SQLOBJECT='sqlobject>=3.1.0,<3.2.0' DB='all'
-  - SQLOBJECT='sqlobject>=3.2.0,<3.3.0' DB='all'
-  - SQLOBJECT='sqlobject>=3.3.0,<3.4.0' DB='all'
-  - SQLOBJECT='sqlobject>=3.4.0,<3.5.0' DB='all'
   - SQLOBJECT='sqlobject>=3.5.0,<3.6.0' DB='all'
   - SQLOBJECT='sqlobject>=3.6.0,<3.7.0' DB='all'
   - SQLOBJECT='sqlobject>=3.7.0,<3.8.0' DB='all'
@@ -19,11 +14,6 @@ env:
   - PEEWEE='peewee>=2.8.0,<2.9.0' DB='all'
   - PEEWEE='peewee>=2.9.0,<2.10.0' DB='all'
   - PEEWEE='peewee>=2.10.0,<2.11.0' DB='all'
-  - PEEWEE='peewee>=3.0.0,<3.1.0' DB='all'
-  - PEEWEE='peewee>=3.1.0,<3.2.0' DB='all'
-  - PEEWEE='peewee>=3.2.0,<3.3.0' DB='all'
-  - PEEWEE='peewee>=3.3.0,<3.4.0' DB='all'
-  - PEEWEE='peewee>=3.4.0,<3.5.0' DB='all'
   - PEEWEE='peewee>=3.5.0,<3.6.0' DB='all'
   - PEEWEE='peewee>=3.6.0,<3.7.0' DB='all'
   - PEEWEE='peewee>=3.7.0,<3.8.0' DB='all'
