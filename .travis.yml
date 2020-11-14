@@ -162,9 +162,7 @@ services:
   - mysql
 install:
   - travis_retry pip install -r tests/requirements.txt
-  - travis_retry pip install coveralls psycopg2
-  - if [[ $DJANGO == 'django>=3.1.0,<3.2.0' ]]; then travis_retry pip install mysqlclient;
-    else travis_retry pip install pymysql; fi
+  - travis_retry pip install coveralls psycopg2 pymysql
   - if [[ $DJANGO ]]; then travis_retry pip install $DJANGO; fi
   - if [[ $PEEWEE ]]; then travis_retry pip install $PEEWEE; fi
   - if [[ $PONY ]]; then travis_retry pip install $PONY; fi

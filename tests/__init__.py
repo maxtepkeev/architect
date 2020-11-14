@@ -15,6 +15,7 @@ except ImportError:
 
 try:
     import pymysql
+    pymysql.version_info = (2, 0, 0, 'final', 0)
     pymysql.install_as_MySQLdb()
 except ImportError:
     pass
