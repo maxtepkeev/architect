@@ -4,6 +4,7 @@ import os
 
 from peewee import *
 from architect import install
+from architect.orms.peewee.features import names
 
 databases = {
     'sqlite': SqliteDatabase(':memory:'),
@@ -21,7 +22,7 @@ for database in test_databases:
     for item in ('day', 'week', 'month', 'year'):
         class Meta(object):
             database = db
-            db_table = 'TEST_rangedate{0}'.format(item)
+        setattr(Meta, names['meta_table'], 'TEST_rangedate{0}'.format(item))
 
         name = '{0}RangeDate{1}'.format(dbname, item.capitalize())
         partition = install('partition', type='range', subtype='date', constraint=item, column='created')
@@ -39,7 +40,7 @@ for database in test_databases:
         for item in ('2', '5'):
             class Meta(object):
                 database = db
-                db_table = 'TEST_rangeinteger{0}'.format(item)
+            setattr(Meta, names['meta_table'], 'TEST_rangeinteger{0}'.format(item))
 
             name = '{0}RangeInteger{1}'.format(dbname, item)
             partition = install('partition', type='range', subtype='integer', constraint=item, column='num')
@@ -57,7 +58,7 @@ for database in test_databases:
             for item in ('2', '5'):
                 class Meta(object):
                     database = db
-                    db_table = 'TEST_range{0}{1}'.format(subtype, item)
+                setattr(Meta, names['meta_table'], 'TEST_range{0}{1}'.format(subtype, item))
 
                 name = '{0}Range{1}{2}'.format(dbname, ''.join(s.capitalize() for s in subtype.split('_')), item)
                 partition = install('partition', type='range', subtype=subtype, constraint=item, column='title')
