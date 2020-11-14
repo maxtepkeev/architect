@@ -21,7 +21,7 @@ Features
   - `Django <https://www.djangoproject.com>`_ >= 1.4
   - `Peewee <https://peewee.readthedocs.io>`_ >= 2.2.0
   - `Pony <https://ponyorm.com>`_ >= 0.5.0
-  - `SQLAlchemy <https://www.sqlalchemy.org>`_ >= 0.8.0
+  - `SQLAlchemy <https://www.sqlalchemy.org>`_ >= 1.0.0
   - `SQLObject <https://www.sqlobject.org>`_ >= 1.5.0
 
 * Supported DBs
