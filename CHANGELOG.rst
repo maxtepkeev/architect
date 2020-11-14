@@ -4,7 +4,7 @@ Changelog
 Unreleased
 ++++++++++
 
-- Changed: Remove support python 2.6
+- Changed: *Backwards Incompatible:* Removed Python 2.6, 3.2, 3.3, 3.4 support
 - Fixed: PostgreSQL: `Issue #58 <https://github.com/maxtepkeev/architect/issues/58>`__  Unquoted function
   name are case insensitive and always lowercase
 

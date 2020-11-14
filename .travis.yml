@@ -2,7 +2,6 @@ sudo: false
 language: python
 python:
   - 2.7
-  - 3.4
   - 3.5
   - 3.6
   - 3.7
@@ -47,18 +46,6 @@ env:
 matrix:
   fast_finish: true
   exclude:
-    - python: 3.4
-      env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB='all'
-    - python: 3.4
-      env: SQLOBJECT='sqlobject>=1.6.0,<1.7.0' DB='all'
-    - python: 3.4
-      env: SQLOBJECT='sqlobject>=1.7.0,<1.8.0' DB='all'
-    - python: 3.4
-      env: SQLOBJECT='sqlobject>=2.0.0,<2.1.0' DB='all'
-    - python: 3.4
-      env: SQLOBJECT='sqlobject>=2.1.0,<2.2.0' DB='all'
-    - python: 3.4
-      env: SQLOBJECT='sqlobject>=2.2.0,<2.3.0' DB='all'
     - python: 3.5
       env: SQLOBJECT='sqlobject>=1.5.0,<1.6.0' DB='all'
     - python: 3.5
@@ -117,16 +104,6 @@ matrix:
       env: DJANGO='django>=3.0.0,<3.1.0' DB='all'
     - python: 2.7
       env: DJANGO='django>=3.1.0,<3.2.0' DB='all'
-    - python: 3.4
-      env: DJANGO='django>=1.4.0,<1.5.0' DB='all'
-    - python: 3.4
-      env: DJANGO='django>=2.1.0,<2.2.0' DB='all'
-    - python: 3.4
-      env: DJANGO='django>=2.2.0,<2.3.0' DB='all'
-    - python: 3.4
-      env: DJANGO='django>=3.0.0,<3.1.0' DB='all'
-    - python: 3.4
-      env: DJANGO='django>=3.1.0,<3.2.0' DB='all'
     - python: 3.5
       env: DJANGO='django>=1.4.0,<1.5.0' DB='all'
     - python: 3.5
@@ -163,8 +140,6 @@ matrix:
       env: DJANGO='django>=1.6.0,<1.7.0' DB='all'
     - python: 3.8
       env: DJANGO='django>=1.7.0,<1.8.0' DB='all'
-    - python: 3.4
-      env: PONY='pony>=0.5.0,<0.6.0' DB='all'
     - python: 3.5
       env: PONY='pony>=0.5.0,<0.6.0' DB='all'
     - python: 3.6

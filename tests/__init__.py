@@ -1,4 +1,5 @@
 import sys
+import unittest
 import functools
 import contextlib
 
@@ -6,11 +7,6 @@ try:
     from cStringIO import StringIO
 except ImportError:
     from io import StringIO
-
-try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest
 
 try:
     from unittest import mock

@@ -37,23 +37,13 @@ class NoseTests(test):
             del os.environ['DB']
             del os.environ[self.orm.upper()]
 
+
 tests_require = ['nose', 'coverage']
 
-if sys.version_info[:2] < (3, 3):
+if sys.version_info[:2] == (2, 7):
     tests_require.append('mock')
-    if sys.version_info[:2] == (3, 2):
-        tests_require[1] = 'coverage<4.0'
-    if sys.version_info[:2] == (2, 6):
-        tests_require.append('unittest2')
 
 exec(open('architect/version.py').read())
-
-requirements = []
-
-try:
-    import argparse
-except ImportError:
-    requirements.append('argparse>=1.2.1')
 
 setup(
     name='architect',
@@ -66,10 +56,10 @@ setup(
     description='A set of tools which enhances ORMs written in Python with more features',
     long_description=open('README.rst').read() + '\n\n' + open('CHANGELOG.rst').read(),
     keywords='architect,django,pony,peewee,sqlalchemy,sqlobject,partition,partitioning,database,table',
+    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
     tests_require=tests_require,
     cmdclass={'test': NoseTests},
     zip_safe=False,
-    install_requires=requirements,
     entry_points={'console_scripts': ['architect = architect.commands:main']},
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -82,9 +72,7 @@ setup(
         'Environment :: Web Environment',
         'Operating System :: OS Independent',
         'Programming Language :: SQL',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
