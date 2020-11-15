@@ -8,6 +8,7 @@ Changelog
 
 - Peewee: Added support for 3.x branch (`Issue #73 <https://github.com/maxtepkeev/architect/issues/73>`__)
 - Django: Added support for 3.x branch (`Issue #76 <https://github.com/maxtepkeev/architect/issues/76>`__)
+  (thanks to `wakita181009 <https://github.com/wakita181009>`__)
 
 **Changes**:
 
