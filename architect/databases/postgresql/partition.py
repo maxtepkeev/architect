@@ -14,7 +14,7 @@ from ...exceptions import (
 
 
 class Partition(BasePartition):
-    def prepare(self):
+    def prepare(self, schema):
         """
         Prepares needed triggers and functions for those triggers.
         """
@@ -27,6 +27,9 @@ class Partition(BasePartition):
                     definitions[definition][index] = '    ' * indentation[definition] + definitions[definition][index]
 
             definitions[definition] = '\n'.join(definitions[definition]).format(**formatters)
+        if schema:
+            return self.database.execute(
+                f"""SET search_path TO \"{schema}\"""")
 
         execute_sql = """
             -- We need to create a before insert function
@@ -103,7 +106,7 @@ class Partition(BasePartition):
 
         return self.database.execute(execute_sql.format(**definitions).format(
             pk=' AND '.join('{pk} = NEW.{pk}'.format(pk=pk) for pk in self.pks),
-            parent_table=self.table,
+            parent_table=f"{schema if schema else 'public'}.{self.table}",
             column='"{0}"'.format(self.column_name),
             return_val='NULL' if self.return_null else 'NEW'
         ))
