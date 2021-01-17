@@ -1,12 +1,25 @@
 Changelog
 ---------
 
-Unreleased
-++++++++++
+0.6.0 (2020-11-14)
+++++++++++++++++++
 
-- Changed: Remove support python 2.6
-- Fixed: PostgreSQL: `Issue #58 <https://github.com/maxtepkeev/architect/issues/58>`__  Unquoted function
-  name are case insensitive and always lowercase
+**Improvements**:
+
+- Peewee: Added support for 3.x branch (`Issue #73 <https://github.com/maxtepkeev/architect/issues/73>`__)
+- Django: Added support for 3.x branch (`Issue #76 <https://github.com/maxtepkeev/architect/issues/76>`__)
+  (thanks to `wakita181009 <https://github.com/wakita181009>`__)
+
+**Changes**:
+
+- *Backwards Incompatible:* Peewee minimum supported version is 2.8.0
+- *Backwards Incompatible:* SQLObject minimum supported version is 3.5.0
+- *Backwards Incompatible:* Removed Python 2.6, 3.2, 3.3, 3.4 support
+
+**Bugfixes**:
+
+- PostgreSQL: Tables with uppercase names weren't partitioned correctly (`Issue #58
+  <https://github.com/maxtepkeev/architect/issues/58>`__)
 
 0.5.6 (2017-05-01)
 ++++++++++++++++++

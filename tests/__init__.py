@@ -1,4 +1,5 @@
 import sys
+import unittest
 import functools
 import contextlib
 
@@ -8,17 +9,13 @@ except ImportError:
     from io import StringIO
 
 try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest
-
-try:
     from unittest import mock
 except ImportError:
     import mock
 
 try:
     import pymysql
+    pymysql.version_info = (2, 0, 0, 'final', 0)
     pymysql.install_as_MySQLdb()
 except ImportError:
     pass

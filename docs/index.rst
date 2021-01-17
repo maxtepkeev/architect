@@ -19,17 +19,17 @@ Features
 * Supported ORMs
 
   - `Django <https://www.djangoproject.com>`_ >= 1.4
-  - `Peewee <https://peewee.readthedocs.io>`_ >= 2.2.0
+  - `Peewee <https://peewee.readthedocs.io>`_ >= 2.8.0
   - `Pony <https://ponyorm.com>`_ >= 0.5.0
-  - `SQLAlchemy <https://www.sqlalchemy.org>`_ >= 0.8.0
-  - `SQLObject <https://www.sqlobject.org>`_ >= 1.5.0
+  - `SQLAlchemy <https://www.sqlalchemy.org>`_ >= 1.0.0
+  - `SQLObject <https://www.sqlobject.org>`_ >= 3.5.0
 
 * Supported DBs
 
   - `PostgreSQL <https://www.postgresql.org>`_ >= 8.0
   - `MySQL <https://www.mysql.com>`_ >= 5.5
 
-* Supports Python 2.6 - 3.8
+* Supports Python 2.7, 3.5 - 3.8
 * Extensively documented
 
 Dependencies
