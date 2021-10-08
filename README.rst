@@ -18,7 +18,7 @@ Features
 
 * Supported ORMs
 
-  - `Django <https://www.djangoproject.com>`_ >= 1.4
+  - `Django <https://www.djangoproject.com>`_ >= 2.0
   - `Peewee <https://peewee.readthedocs.io>`_ >= 2.8.0
   - `Pony <https://ponyorm.com>`_ >= 0.5.0
   - `SQLAlchemy <https://www.sqlalchemy.org>`_ >= 1.0.0
@@ -29,7 +29,7 @@ Features
   - `PostgreSQL <https://www.postgresql.org>`_ >= 8.0
   - `MySQL <https://www.mysql.com>`_ >= 5.5
 
-* Supports Python 2.7, 3.5 - 3.8
+* Supports Python 2.7, 3.5 - 3.9
 * Extensively documented
 
 Dependencies
