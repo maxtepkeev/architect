@@ -52,10 +52,14 @@ jobs:
       env: DJANGO='django>=3.0.0,<3.1.0' DB='all'
     - python: 2.7
       env: DJANGO='django>=3.1.0,<3.2.0' DB='all'
+    - python: 2.7
+      env: DJANGO='django>=3.2.0,<3.3.0' DB='all'
     - python: 3.5
       env: DJANGO='django>=3.0.0,<3.1.0' DB='all'
     - python: 3.5
       env: DJANGO='django>=3.1.0,<3.2.0' DB='all'
+    - python: 3.5
+      env: DJANGO='django>=3.2.0,<3.3.0' DB='all'
     - python: 3.5
       env: PONY='pony>=0.5.0,<0.6.0' DB='all'
     - python: 3.6
