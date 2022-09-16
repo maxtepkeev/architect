@@ -80,8 +80,8 @@ PremiumSoft for supporting this project by providing `Open Source License
 <https://www.navicat.com/store/open-source>`_ of `Navicat <https://www.navicat.com>`_.
 
 .. image:: https://architect.readthedocs.io/_images/navicat_logo.png
-   :width: 300px
-   :height: 121px
+   :width: 380px
+   :height: 120px
    :target: https://www.navicat.com
 
 Copyright and License
