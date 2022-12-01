@@ -38,7 +38,7 @@ class PartitionFeature(BasePartitionFeature):
             'table': self.model_cls.sqlmeta.table,
             'pk': self.model_cls.sqlmeta.idName,
             'dialect': self.model_cls._connection.dbName,
-            'column_value': self._column_value(self.model_cls.sqlmeta.columns.keys()),
+            'column_values': self._column_values(self.model_cls.sqlmeta.columns.keys()),
         }
 
     @staticmethod

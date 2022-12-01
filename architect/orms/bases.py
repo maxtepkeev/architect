@@ -111,18 +111,26 @@ class BasePartitionFeature(BaseFeature):
         """
         raise NotImplementedError('Property "model_meta" not implemented in: {0}'.format(self.__class__.__name__))
 
-    def _column_value(self, allowed_columns):
+    def _column_values(self, allowed_columns):
         """
         Returns current value for the specified partition column.
 
         :param list allowed_columns: (required). Names of valid columns for current model.
         """
         try:
-            return None if self.model_obj is None else getattr(self.model_obj, self.options['column'])
+            columns = self.options['columns']
+            if self.model_obj is None:
+                return [None] * len(columns)
+            else:
+                return_list = list()
+                for column in columns:
+                    try:
+                        return_list.append(getattr(self.model_obj, column))
+                    except AttributeError:
+                        raise PartitionColumnError(
+                            model=self.model_cls.__name__,
+                            current=column,
+                            allowed=allowed_columns)
+                return return_list
         except KeyError as key:
             raise OptionNotSetError(model=self.model_cls.__name__, current=key)
-        except AttributeError:
-            raise PartitionColumnError(
-                model=self.model_cls.__name__,
-                current=self.options['column'],
-                allowed=allowed_columns)

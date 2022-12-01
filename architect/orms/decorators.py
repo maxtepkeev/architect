@@ -13,6 +13,19 @@ from ..exceptions import (
     FeatureUninstallError,
     MethodAutoDecorateError
 )
+from copy import deepcopy
+
+
+def set_list_vals(key, **options):
+    options = deepcopy(options)
+    val = options.get(key)
+    key_plural = '{}s'.format(key)
+    list_vals = options.get(key_plural, [])
+    if not list_vals:
+        if val and type(val) == str:
+            list_vals = [val]
+        options[key_plural] = list_vals
+    return options
 
 
 class install(object):
@@ -25,6 +38,11 @@ class install(object):
         :param string feature: (required). A feature to install.
         :param dictionary options: (optional). Feature options.
         """
+        # for backward compatibility
+        options = set_list_vals('subtype', **options)
+        options = set_list_vals('constraint', **options)
+        options = set_list_vals('column', **options)
+
         self.features = {}
         self.feature = feature
         self.options = {'feature': options, 'global': dict((k, v) for k, v in options.items() if k in ('db',))}

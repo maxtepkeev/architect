@@ -76,24 +76,27 @@ class PartitionFeature(ConnectionMixin, BasePartitionFeature):
         meta = self.model_cls._meta
 
         try:
-            if self.model_obj is None:
-                column_value = None
-            else:
-                field = meta.get_field(self.options['column'])
-                column_value = field.pre_save(self.model_obj, self.model_obj.pk is None)
+            columns = self.options['columns']
+            column_values = list()
+            for column in columns:
+                try:
+                    field = meta.get_field(column)
+                    if self.model_obj is None:
+                        column_values.append(None)
+                    else:
+                        column_values.append(field.pre_save(self.model_obj, self.model_obj.pk is None))
+                except FieldDoesNotExist:
+                    raise PartitionColumnError(
+                        model=self.model_cls.__name__,
+                        current=column,
+                        allowed=[f.name for f in meta.fields])
         except KeyError as key:
             raise OptionNotSetError(model=self.model_cls.__name__, current=key)
-        except FieldDoesNotExist:
-            raise PartitionColumnError(
-                model=self.model_cls.__name__,
-                current=self.options['column'],
-                allowed=[f.name for f in meta.fields])
-
         return {
             'table': meta.db_table,
             'pk': meta.pk.column,
             'dialect': self.connection.db.vendor,
-            'column_value': column_value,
+            'column_values': column_values,
         }
 
     @staticmethod
